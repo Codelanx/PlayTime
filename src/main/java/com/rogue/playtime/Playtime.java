@@ -16,7 +16,9 @@
  */
 package com.rogue.playtime;
 
+import com.rogue.playtime.Metrics.Graph;
 import java.io.File;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
@@ -45,8 +47,13 @@ public class Playtime extends JavaPlugin {
 
         if (file.exists() && this.getConfig().getBoolean("debug")) {
             this.getLogger().info("Debug mode enabled! Prepare for a lot of spam!");
-        }
-        if (!file.exists()) {
+        }        
+        try {
+            Metrics metrics = new Metrics(this);
+            getLogger().info("Enabling Metrics...");
+            metrics.start();
+            
+            if (!file.exists()) {
             this.getLogger().info("Generating first time config.yml...");
             this.getConfig().addDefault("debug-level", "0");
             this.getConfig().addDefault("mysql.host", "localhost");
@@ -56,6 +63,9 @@ public class Playtime extends JavaPlugin {
             this.getConfig().addDefault("mysql.password", "password");
             this.getConfig().options().copyDefaults(true);
             this.saveConfig();
+        }
+        } catch (IOException ex) {
+            Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         debug = this.getConfig().getInt("debug");

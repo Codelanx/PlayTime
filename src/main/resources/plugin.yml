@@ -3,7 +3,7 @@ name: ${project.name}
 prefix: PlayTime
 description: Keeps track of how long a player has played on the server
 version: ${project.version}
-author: 1Rogue
+authors: [1Rogue, unlucky4ever]
 website: https://github.com/1Rogue
 commands:
   playtime:
