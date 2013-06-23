@@ -24,14 +24,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  *
- * @since
- * @author 1Rogue
+ * @since @author 1Rogue
  * @version
  */
 public class AddRunnable extends BukkitRunnable {
-    
+
     Playtime plugin;
-    
+
     public AddRunnable(Playtime p) {
         plugin = p;
     }
@@ -47,14 +46,17 @@ public class AddRunnable extends BukkitRunnable {
                     sb.append("('").append(p.getName()).append("', 1), ");
                 }
                 plugin.db.update(sb.substring(0, sb.length() - 2) + " ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1");
-                if (plugin.debug) {
-                    Logger.getLogger(Playtime.class.getName()).log(Level.INFO, "SQL Query for update: \n{0} ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1", sb.substring(0, sb.length() - 2));
+                if (plugin.debug >= 1) {
+                    Logger.getLogger(Playtime.class.getName()).info("Players updated!");
+                    if (plugin.debug >= 2) {
+                        Logger.getLogger(Playtime.class.getName()).log(Level.INFO, "SQL Query for update: \n{0} ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1", sb.substring(0, sb.length() - 2));
+                    }
                 }
             }
             plugin.db.close();
         } catch (SQLException ex) {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
-            if (plugin.debug) {
+            if (plugin.debug == 3) {
                 ex.printStackTrace();
             }
         }

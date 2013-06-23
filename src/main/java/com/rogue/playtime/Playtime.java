@@ -35,7 +35,7 @@ public class Playtime extends JavaPlugin {
 
     protected MySQL db;
     protected BukkitTask updater;
-    protected boolean debug = false;
+    protected int debug = 0;
 
     @Override
     public void onEnable() {
@@ -48,7 +48,7 @@ public class Playtime extends JavaPlugin {
         }
         if (!file.exists()) {
             this.getLogger().info("Generating first time config.yml...");
-            this.getConfig().addDefault("debug", false);
+            this.getConfig().addDefault("debug-level", "0");
             this.getConfig().addDefault("mysql.host", "localhost");
             this.getConfig().addDefault("mysql.port", "3306");
             this.getConfig().addDefault("mysql.database", "minecraft");
@@ -58,8 +58,12 @@ public class Playtime extends JavaPlugin {
             this.saveConfig();
         }
 
-        if (this.getConfig().getBoolean("debug")) {
-            debug = true;
+        debug = this.getConfig().getInt("debug");
+        if (debug > 3) {
+            debug = 3;
+        }
+        if (debug < 0) {
+            debug = 0;
         }
 
         setupDatabase();
@@ -77,7 +81,7 @@ public class Playtime extends JavaPlugin {
         }
 
         final long endTime = System.nanoTime();
-        if (file.exists() && debug) {
+        if (file.exists() && debug >= 1) {
             final long duration = endTime - startTime;
             this.getLogger().log(Level.INFO, "Enabled ({0})", this.readableProfile(duration));
         }
@@ -96,7 +100,7 @@ public class Playtime extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (commandLabel.equalsIgnoreCase("playtime")) {
+        if (cmd.getName().equalsIgnoreCase("playtime")) {
             if (args.length == 0 && sender instanceof Player) {
                 if (sender.hasPermission("playtime.use")) {
                     int time = getTime(sender.getName());
@@ -192,7 +196,7 @@ public class Playtime extends JavaPlugin {
                 }
             }
         } catch (Exception e) {
-            if (debug) {
+            if (debug == 3) {
                 e.printStackTrace();
             }
         }
