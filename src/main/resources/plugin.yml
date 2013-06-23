@@ -1,0 +1,26 @@
+main: com.rogue.playtime.Playtime
+name: ${project.name}
+prefix: PlayTime
+description: Keeps track of how long a player has played on the server
+version: ${project.version}
+author: 1Rogue
+website: https://github.com/1Rogue
+commands:
+  playtime:
+    description: Lookup your play time on the server
+permissions:
+    playtime.*:
+        default: op
+        description: Gives access to all commands
+        children:
+            playtime.use: true
+            playtime.use.others: true
+    playtime.use:
+        default: op
+        description: Gives access to look at your play time
+    playtime.use.others:
+        default: op
+        description: Gives access to look at others play time
+        command: "/playtime <playername>"
+        examples:
+          - "/playtime unlucky4ever"
