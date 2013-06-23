@@ -16,7 +16,11 @@
  */
 package com.rogue.playtime;
 
-import com.rogue.playtime.Metrics.Graph;
+import com.rogue.playtime.runnable.AddRunnable;
+import com.rogue.playtime.sql.SQL_Vars;
+import com.rogue.playtime.sql.db.MySQL;
+import com.rogue.playtime.metrics.Metrics;
+import com.rogue.playtime.runnable.UpdateRunnable;
 import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -35,35 +39,31 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class Playtime extends JavaPlugin {
 
-    protected MySQL db;
+    public MySQL db;
     protected BukkitTask updater;
     protected int debug = 0;
 
     @Override
-    public void onEnable() {
-        final long startTime = System.nanoTime();
-
+    public void onLoad() {
         File file = new File(getDataFolder() + File.separator + "config.yml");
 
-        if (file.exists() && this.getConfig().getBoolean("debug")) {
-            this.getLogger().info("Debug mode enabled! Prepare for a lot of spam!");
-        }        
         try {
             Metrics metrics = new Metrics(this);
             getLogger().info("Enabling Metrics...");
             metrics.start();
-            
+
             if (!file.exists()) {
-            this.getLogger().info("Generating first time config.yml...");
-            this.getConfig().addDefault("debug-level", "0");
-            this.getConfig().addDefault("mysql.host", "localhost");
-            this.getConfig().addDefault("mysql.port", "3306");
-            this.getConfig().addDefault("mysql.database", "minecraft");
-            this.getConfig().addDefault("mysql.username", "root");
-            this.getConfig().addDefault("mysql.password", "password");
-            this.getConfig().options().copyDefaults(true);
-            this.saveConfig();
-        }
+                this.getLogger().info("Generating first time config.yml...");
+                this.getConfig().addDefault("debug-level", "0");
+                this.getConfig().addDefault("update-check", true);
+                this.getConfig().addDefault("mysql.host", "localhost");
+                this.getConfig().addDefault("mysql.port", "3306");
+                this.getConfig().addDefault("mysql.database", "minecraft");
+                this.getConfig().addDefault("mysql.username", "root");
+                this.getConfig().addDefault("mysql.password", "password");
+                this.getConfig().options().copyDefaults(true);
+                this.saveConfig();
+            }
         } catch (IOException ex) {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -74,6 +74,15 @@ public class Playtime extends JavaPlugin {
         }
         if (debug < 0) {
             debug = 0;
+        }
+    }
+
+    @Override
+    public void onEnable() {
+        final long startTime = System.nanoTime();
+
+        if (this.getConfig().getBoolean("update-check")) {
+            Bukkit.getScheduler().runTaskLater(this, new UpdateRunnable(this), 1);
         }
 
         setupDatabase();
@@ -91,7 +100,7 @@ public class Playtime extends JavaPlugin {
         }
 
         final long endTime = System.nanoTime();
-        if (file.exists() && debug >= 1) {
+        if (debug >= 1) {
             final long duration = endTime - startTime;
             this.getLogger().log(Level.INFO, "Enabled ({0})", this.readableProfile(duration));
         }
@@ -216,5 +225,9 @@ public class Playtime extends JavaPlugin {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
         return Integer.valueOf(0);
+    }
+
+    public int getDebug() {
+        return debug;
     }
 }

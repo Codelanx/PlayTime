@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime;
+package com.rogue.playtime.sql;
 
 /**
  *
@@ -24,11 +24,11 @@ package com.rogue.playtime;
  */
 public class SQL_Vars {
     
-    protected static String HOST = "";
-    protected static String USER = "";
-    protected static String PASS = "";
-    protected static String DATABASE = "";
-    protected static String PORT = "";
+    public static String HOST = "";
+    public static String USER = "";
+    public static String PASS = "";
+    public static String DATABASE = "";
+    public static String PORT = "";
     
     public void setVars(String host, String user, String pass, String database, String port) {
         HOST = host;
