@@ -195,7 +195,7 @@ public class Playtime extends JavaPlugin {
                     return i;
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             if (debug == 3) {
                 e.printStackTrace();
             }
