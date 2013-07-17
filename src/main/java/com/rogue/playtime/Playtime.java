@@ -120,33 +120,29 @@ public class Playtime extends JavaPlugin {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (cmd.getName().equalsIgnoreCase("playtime")) {
-            if (args.length == 0 && sender instanceof Player || args.length == 1 && args[0].equalsIgnoreCase(sender.getName())) {
-                if (sender.hasPermission("playtime.use")) {
-                    int time = getTime(sender.getName());
-                    int minutes = time % 60;
-                    if (time >= 60) {
-                        int hours = time / 60;
-                        sender.sendMessage(ChatColor.GOLD + "You have played for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
-                    } else {
-                        sender.sendMessage(ChatColor.GOLD + "You have played for " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
-                    }
-                } else {
-                    sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + "You do not have permission to do that!");
-                }
+
+            String check = "";
+            String perm = "playtime.use";
+            if (args.length == 0 && sender instanceof Player) {
+                check = sender.getName();
             } else if (args.length == 1) {
-                if (sender.hasPermission("playtime.use.others")) {
-                    args[0] = this.getBestPlayer(args[0]);
-                    int time = getTime(args[0]);
-                    int minutes = time % 60;
-                    if (time >= 60) {
-                        int hours = time / 60;
-                        sender.sendMessage(ChatColor.GOLD + args[0] + " has played for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
-                    } else {
-                        sender.sendMessage(ChatColor.GOLD + args[0] + " has played for " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
-                    }
+                check = this.getBestPlayer(args[0]);
+                perm += ".others";
+            } else {
+                sender.sendMessage("You cannot check the playtime of a non-player!");
+                return true;
+            }
+            if (sender.hasPermission(perm)) {
+                int time = this.getTime(check);
+                int minutes = time % 60;
+                if (time >= 60) {
+                    int hours = time / 60;
+                    sender.sendMessage(ChatColor.GOLD + args[0] + " has played for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
                 } else {
-                    sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + "You do not have permission to do that!");
+                    sender.sendMessage(ChatColor.GOLD + args[0] + " has played for " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
                 }
+            } else {
+                sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + "You do not have permission to do that!");
             }
         }
         return false;
