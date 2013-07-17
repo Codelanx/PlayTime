@@ -47,14 +47,6 @@ public class Playtime extends JavaPlugin {
     public void onLoad() {
         File file = new File(getDataFolder() + File.separator + "config.yml");
 
-        try {
-            Metrics metrics = new Metrics(this);
-            getLogger().info("Enabling Metrics...");
-            metrics.start();
-        } catch (IOException ex) {
-            Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
         if (!file.exists()) {
             this.getLogger().info("Generating first time config.yml...");
             this.getConfig().addDefault("debug-level", "0");
@@ -80,6 +72,14 @@ public class Playtime extends JavaPlugin {
     @Override
     public void onEnable() {
         final long startTime = System.nanoTime();
+        
+        try {
+            Metrics metrics = new Metrics(this);
+            getLogger().info("Enabling Metrics...");
+            metrics.start();
+        } catch (IOException ex) {
+            Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         if (this.getConfig().getBoolean("update-check")) {
             Bukkit.getScheduler().runTaskLater(this, new UpdateRunnable(this), 1);
