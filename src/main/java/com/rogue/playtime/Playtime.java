@@ -72,7 +72,7 @@ public class Playtime extends JavaPlugin {
     @Override
     public void onEnable() {
         final long startTime = System.nanoTime();
-        
+
         try {
             Metrics metrics = new Metrics(this);
             getLogger().info("Enabling Metrics...");
@@ -120,7 +120,7 @@ public class Playtime extends JavaPlugin {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (cmd.getName().equalsIgnoreCase("playtime")) {
-            if (args.length == 0 && sender instanceof Player) {
+            if (args.length == 0 && sender instanceof Player || args.length == 1 && args[0].equalsIgnoreCase(sender.getName())) {
                 if (sender.hasPermission("playtime.use")) {
                     int time = getTime(sender.getName());
                     int minutes = time % 60;
@@ -135,6 +135,7 @@ public class Playtime extends JavaPlugin {
                 }
             } else if (args.length == 1) {
                 if (sender.hasPermission("playtime.use.others")) {
+                    args[0] = this.getBestPlayer(args[0]);
                     int time = getTime(args[0]);
                     int minutes = time % 60;
                     if (time >= 60) {
@@ -192,14 +193,12 @@ public class Playtime extends JavaPlugin {
     private int getTime(String username) {
         int ret = 0;
         try {
-            Player player = Bukkit.getPlayer(username);
-            Bukkit.broadcast("Checking player: " + player.getName(), "playtime.debug");
 
             db = new MySQL();
             db.open();
-            
-            
-            ResultSet result = db.query("SELECT `playtime` FROM `playTime` WHERE `username`='" + player.getName() + "'");
+
+
+            ResultSet result = db.query("SELECT `playtime` FROM `playTime` WHERE `username`='" + username + "'");
             result.first();
             ret = result.getInt(1);
         } catch (SQLException e) {
@@ -213,6 +212,14 @@ public class Playtime extends JavaPlugin {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ret;
+    }
+
+    private String getBestPlayer(String username) {
+        Player player = Bukkit.getPlayer(username);
+        if (player != null) {
+            username = player.getName();
+        }
+        return username;
     }
 
     public int getDebug() {
