@@ -51,21 +51,21 @@ public class Playtime extends JavaPlugin {
             Metrics metrics = new Metrics(this);
             getLogger().info("Enabling Metrics...");
             metrics.start();
-
-            if (!file.exists()) {
-                this.getLogger().info("Generating first time config.yml...");
-                this.getConfig().addDefault("debug-level", "0");
-                this.getConfig().addDefault("update-check", true);
-                this.getConfig().addDefault("mysql.host", "localhost");
-                this.getConfig().addDefault("mysql.port", "3306");
-                this.getConfig().addDefault("mysql.database", "minecraft");
-                this.getConfig().addDefault("mysql.username", "root");
-                this.getConfig().addDefault("mysql.password", "password");
-                this.getConfig().options().copyDefaults(true);
-                this.saveConfig();
-            }
         } catch (IOException ex) {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (!file.exists()) {
+            this.getLogger().info("Generating first time config.yml...");
+            this.getConfig().addDefault("debug-level", "0");
+            this.getConfig().addDefault("update-check", true);
+            this.getConfig().addDefault("mysql.host", "localhost");
+            this.getConfig().addDefault("mysql.port", "3306");
+            this.getConfig().addDefault("mysql.database", "minecraft");
+            this.getConfig().addDefault("mysql.username", "root");
+            this.getConfig().addDefault("mysql.password", "password");
+            this.getConfig().options().copyDefaults(true);
+            this.saveConfig();
         }
 
         debug = this.getConfig().getInt("debug");
@@ -189,31 +189,19 @@ public class Playtime extends JavaPlugin {
         }
     }
 
-    private Integer getTime(String username) {
+    private int getTime(String username) {
+        int ret = 0;
         try {
             Player player = Bukkit.getPlayer(username);
+            Bukkit.broadcast("Checking player: " + player.getName(), "playtime.debug");
 
             db = new MySQL();
-
             db.open();
-            if (!db.checkTable("playTime")) {
-                return Integer.valueOf(0);
-            } else {
-                ResultSet result = db.query("SELECT COUNT(*) FROM playTime WHERE username='" + player.getName() + "'");
-                result.first();
-                if (result.getInt(1) == 0) {
-                    result.close();
-                    db.close();
-                    return Integer.valueOf(0);
-                } else {
-                    result.close();
-                    result = db.query("SELECT playtime FROM playTime WHERE username='" + player.getName() + "'");
-                    result.first();
-                    int i = Integer.valueOf(result.getInt(1));
-                    db.close();
-                    return i;
-                }
-            }
+            
+            
+            ResultSet result = db.query("SELECT `playtime` FROM `playTime` WHERE `username`='" + player.getName() + "'");
+            result.first();
+            ret = result.getInt(1);
         } catch (SQLException e) {
             if (debug == 3) {
                 e.printStackTrace();
@@ -224,7 +212,7 @@ public class Playtime extends JavaPlugin {
         } catch (SQLException ex) {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return Integer.valueOf(0);
+        return ret;
     }
 
     public int getDebug() {
