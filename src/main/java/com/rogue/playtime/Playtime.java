@@ -120,8 +120,7 @@ public class Playtime extends JavaPlugin {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (cmd.getName().equalsIgnoreCase("playtime")) {
-
-            String check = "";
+            String check;
             String perm = "playtime.use";
             if (args.length == 0 && sender instanceof Player) {
                 check = sender.getName();
@@ -149,7 +148,7 @@ public class Playtime extends JavaPlugin {
     }
 
     public String readableProfile(long time) {
-        int i = 0;
+        int i;
         String[] units = new String[]{"ms", "s", "m", "hr", "day", "week", "mnth", "yr"};
         int[] metric = new int[]{1000, 60, 60, 24, 7, 30, 12};
         long current = TimeUnit.MILLISECONDS.convert(time, TimeUnit.NANOSECONDS);
