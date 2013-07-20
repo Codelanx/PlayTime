@@ -136,9 +136,9 @@ public class Playtime extends JavaPlugin {
                 int minutes = time % 60;
                 if (time >= 60) {
                     int hours = time / 60;
-                    sender.sendMessage(ChatColor.GOLD + args[0] + " has played for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
+                    sender.sendMessage(ChatColor.GOLD + check + " has played for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
                 } else {
-                    sender.sendMessage(ChatColor.GOLD + args[0] + " has played for " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
+                    sender.sendMessage(ChatColor.GOLD + check + " has played for " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
                 }
             } else {
                 sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + "You do not have permission to do that!");
