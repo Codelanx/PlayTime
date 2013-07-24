@@ -29,9 +29,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 /**
  * Adopted from TotalPermissions
  * 
- * @version 0.1
+ * @version 1.1
  * @author Lord_Ralex
- * @since 0.1
+ * @since 1.1
  */
 public class UpdateRunnable extends BukkitRunnable {
 

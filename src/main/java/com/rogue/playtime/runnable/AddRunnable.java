@@ -26,8 +26,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  *
- * @since @author 1Rogue
- * @version
+ * @since 1.1
+ * @author 1Rogue
+ * @version 1.1
  */
 public class AddRunnable extends BukkitRunnable {
 
@@ -36,7 +37,7 @@ public class AddRunnable extends BukkitRunnable {
     public AddRunnable(Playtime p) {
         plugin = p;
     }
-
+    
     public void run() {
         Player[] players = plugin.getServer().getOnlinePlayers();
         plugin.db = new MySQL();

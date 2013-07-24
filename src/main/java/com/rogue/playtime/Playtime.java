@@ -37,12 +37,23 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
+/**
+ * @since 1.0
+ * @author 1Rogue
+ * @version 1.2
+ */
 public class Playtime extends JavaPlugin {
 
     public MySQL db;
     protected BukkitTask updater;
     protected int debug = 0;
-
+    
+    /**
+     * Registers the plugin configuration file.
+     * 
+     * @since 1.0
+     * @version 1.1
+     */
     @Override
     public void onLoad() {
         File file = new File(getDataFolder() + File.separator + "config.yml");
@@ -68,7 +79,14 @@ public class Playtime extends JavaPlugin {
             debug = 0;
         }
     }
-
+    
+    /**
+     * Registers runnables and the listener on plugin start, as well as the
+     * plugin data storage.
+     * 
+     * @since 1.0
+     * @version 1.1
+     */
     @Override
     public void onEnable() {
         final long startTime = System.nanoTime();
@@ -105,7 +123,13 @@ public class Playtime extends JavaPlugin {
             this.getLogger().log(Level.INFO, "Enabled ({0})", this.readableProfile(duration));
         }
     }
-
+    
+    /**
+     * Closes tasks and sql connections on plugin disabling.
+     * 
+     * @since 1.0
+     * @version 1.1
+     */
     @Override
     public void onDisable() {
         updater.cancel();
@@ -116,7 +140,21 @@ public class Playtime extends JavaPlugin {
         }
         db = null;
     }
-
+    
+    /**
+     * Command Executor
+     * 
+     * @since 1.0
+     * @version 1.2
+     * 
+     * @deprecated
+     * 
+     * @param sender The command executor
+     * @param cmd The command object
+     * @param commandLabel The name of the command
+     * @param args Command Arguments
+     * @return Success of command
+     */
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (cmd.getName().equalsIgnoreCase("playtime")) {
@@ -146,7 +184,16 @@ public class Playtime extends JavaPlugin {
         }
         return false;
     }
-
+    
+    /**
+     * Makes a long-type time value into a readable string.
+     * 
+     * @since 1.0
+     * @version 1.0
+     * 
+     * @param time The time value as a long
+     * @return Readable String of the time
+     */
     public String readableProfile(long time) {
         int i;
         String[] units = new String[]{"ms", "s", "m", "hr", "day", "week", "mnth", "yr"};
@@ -159,7 +206,13 @@ public class Playtime extends JavaPlugin {
 
         return current + " " + units[i] + ((current > 1 && i > 1) ? "s" : "");
     }
-
+    
+    /**
+     * Sets up the SQL data from the config values, and validates tables.
+     * 
+     * @since 1.0
+     * @version 1.1
+     */
     private void setupDatabase() {
 
         SQL_Vars.HOST = this.getConfig().getString("mysql.host");
@@ -184,7 +237,16 @@ public class Playtime extends JavaPlugin {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    /**
+     * Gets the time that the player has played the server in total.
+     * 
+     * @since 1.0
+     * @version 1.1
+     * 
+     * @param username The player to look up
+     * @return The time a player has played, 0 if never played.
+     */
     private int getTime(String username) {
         int ret = 0;
         try {
@@ -208,7 +270,16 @@ public class Playtime extends JavaPlugin {
         }
         return ret;
     }
-
+    
+    /**
+     * Finds a match for an online player, or offline if there is no good match.
+     * 
+     * @since 1.1
+     * @version 1.1
+     * 
+     * @param username The player to look up
+     * @return A potential match for a player
+     */
     private String getBestPlayer(String username) {
         Player player = Bukkit.getPlayer(username);
         if (player != null) {
@@ -216,7 +287,15 @@ public class Playtime extends JavaPlugin {
         }
         return username;
     }
-
+    
+    /**
+     * Gets the level of debugging for players
+     * 
+     * @since 1.1
+     * @version 1.1
+     * 
+     * @return The debug level
+     */
     public int getDebug() {
         return debug;
     }
