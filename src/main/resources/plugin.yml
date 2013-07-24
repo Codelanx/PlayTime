@@ -8,19 +8,26 @@ website: https://github.com/1Rogue
 commands:
   playtime:
     description: Lookup your play time on the server
+  deathtime:
+    description: Find out how long someone has been alive on the server
 permissions:
-    playtime.*:
-        default: op
-        description: Gives access to all commands
-        children:
-            playtime.use: true
-            playtime.use.others: true
+  playtime.*:
+    default: op
+    description: Gives access to all commands
+    children:
+      playtime.use: true
+      playtime.use.others: true
+      playtime.death: true
+      playtime.death.others: true
     playtime.use:
-        default: op
-        description: Gives access to look at your play time
+      default: true
+      description: Gives access to look at your play time
     playtime.use.others:
-        default: op
-        description: Gives access to look at others play time
-        command: "/playtime <playername>"
-        examples:
-          - "/playtime unlucky4ever"
+      default: op
+      description: Gives access to look at others play time
+    playtime.death:
+      default: true
+      description: Gives access to how long you've been alive
+    playtime.death.others:
+      default: op
+      description: Gives access to how long others have been alive

@@ -16,6 +16,7 @@
  */
 package com.rogue.playtime;
 
+import com.rogue.playtime.listener.PlaytimeListener;
 import com.rogue.playtime.runnable.AddRunnable;
 import com.rogue.playtime.sql.SQL_Vars;
 import com.rogue.playtime.sql.db.MySQL;
@@ -47,6 +48,7 @@ public class Playtime extends JavaPlugin {
     public MySQL db;
     protected BukkitTask updater;
     protected int debug = 0;
+    protected PlaytimeListener listener;
     
     /**
      * Registers the plugin configuration file.
@@ -102,7 +104,8 @@ public class Playtime extends JavaPlugin {
         if (this.getConfig().getBoolean("update-check")) {
             Bukkit.getScheduler().runTaskLater(this, new UpdateRunnable(this), 1);
         }
-
+        
+        this.getLogger().log(Level.INFO, "Validating Database...");
         setupDatabase();
 
         try {
@@ -116,6 +119,10 @@ public class Playtime extends JavaPlugin {
         } catch (SQLException ex) {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        this.getLogger().log(Level.INFO, "Enabling Listener...");
+        listener = new PlaytimeListener(this);
+        Bukkit.getPluginManager().registerEvents(listener, this);
 
         final long endTime = System.nanoTime();
         if (debug >= 1) {
@@ -170,7 +177,7 @@ public class Playtime extends JavaPlugin {
                 return true;
             }
             if (sender.hasPermission(perm)) {
-                int time = this.getTime(check);
+                int time = this.getValue("playtime", check);
                 int minutes = time % 60;
                 if (time >= 60) {
                     int hours = time / 60;
@@ -181,6 +188,32 @@ public class Playtime extends JavaPlugin {
             } else {
                 sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + "You do not have permission to do that!");
             }
+            return false;
+        } else if (cmd.getName().equalsIgnoreCase("deathtime")) {
+            String check;
+            String perm = "playtime.death";
+            if (args.length == 0 && sender instanceof Player) {
+                check = sender.getName();
+            } else if (args.length == 1) {
+                check = this.getBestPlayer(args[0]);
+                perm += ".others";
+            } else {
+                sender.sendMessage("You cannot check the survival time of a non-player!");
+                return true;
+            }
+            if (sender.hasPermission(perm)) {
+                int time = this.getValue("deathtime", check);
+                int minutes = time % 60;
+                if (time >= 60) {
+                    int hours = time / 60;
+                    sender.sendMessage(ChatColor.GOLD + check + " has been alive for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
+                } else {
+                    sender.sendMessage(ChatColor.GOLD + check + " has been alive for " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
+                }
+            } else {
+                sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + "You do not have permission to do that!");
+            }
+            return false;
         }
         return false;
     }
@@ -229,8 +262,15 @@ public class Playtime extends JavaPlugin {
                 this.getLogger().info("Successfully connected to database!");
                 if (!db.checkTable("playTime")) {
                     this.getLogger().log(Level.INFO, "Creating table ''playTime'' in database {0}", SQL_Vars.DATABASE);
-                    ResultSet result = db.query("CREATE TABLE playTime ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL, PRIMARY KEY (id), UNIQUE KEY (username)) ENtestingGINE=MyISAM;");
+                    ResultSet result = db.query("CREATE TABLE playTime ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL, deathtime int NOT NULL, PRIMARY KEY (id), UNIQUE KEY (username)) ENtestingGINE=MyISAM;");
                     result.close();
+                } else {
+                    try {
+                        db.update("ALTER TABLE `playTime` ADD deathtime int NOT NULL");
+                        this.getLogger().info("Updating SQL table for 1.2");
+                    } catch (SQLException e){
+                        this.getLogger().info("SQL table is up to date!");
+                    }
                 }
             }
         } catch (SQLException ex) {
@@ -239,23 +279,20 @@ public class Playtime extends JavaPlugin {
     }
     
     /**
-     * Gets the time that the player has played the server in total.
+     * Gets the value of a column for a particular player.
      * 
-     * @since 1.0
-     * @version 1.1
+     * @since 1.2.0
+     * @version 1.2.0
      * 
      * @param username The player to look up
-     * @return The time a player has played, 0 if never played.
+     * @return The value of the provided column, 0 if no value found.
      */
-    private int getTime(String username) {
+    private int getValue(String value, String username) {
         int ret = 0;
         try {
-
             db = new MySQL();
             db.open();
-
-
-            ResultSet result = db.query("SELECT `playtime` FROM `playTime` WHERE `username`='" + username + "'");
+            ResultSet result = db.query("SELECT `" + value + "` FROM `playTime` WHERE `username`='" + username + "'");
             result.first();
             ret = result.getInt(1);
         } catch (SQLException e) {
@@ -298,5 +335,13 @@ public class Playtime extends JavaPlugin {
      */
     public int getDebug() {
         return debug;
+    }
+    
+    public static Playtime getPlugin() {
+        return (Playtime)Bukkit.getPluginManager().getPlugin("Playtime");
+    }
+    
+    public PlaytimeListener getListener() {
+        return listener;
     }
 }

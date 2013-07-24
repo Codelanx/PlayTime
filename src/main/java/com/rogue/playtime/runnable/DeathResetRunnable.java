@@ -14,17 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.listener;
+package com.rogue.playtime.runnable;
 
 import com.rogue.playtime.Playtime;
-import com.rogue.playtime.runnable.DeathResetRunnable;
 import com.rogue.playtime.sql.db.MySQL;
 import java.sql.SQLException;
-import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  *
@@ -32,17 +27,24 @@ import org.bukkit.event.entity.PlayerDeathEvent;
  * @author 1Rogue
  * @version 1.2
  */
-public class PlaytimeListener implements Listener {
+public class DeathResetRunnable extends BukkitRunnable {
     
-    private final Playtime plugin;
+    private final String user;
     
-    public PlaytimeListener (Playtime p) {
-        plugin = p;
+    public DeathResetRunnable(String username) {
+        user = username;
     }
-    
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerDeathEvent(PlayerDeathEvent e) {
-        Bukkit.getScheduler().runTaskAsynchronously(Playtime.getPlugin(), new DeathResetRunnable(e.getEntity().getName()));
+
+    public void run() {
+        MySQL db = new MySQL();
+        try {
+            db.open();
+            db.update("UPDATE `playTime` SET `deathtime`=0 WHERE `username`='" + user + "'");
+            db.close();
+        } catch (SQLException ex) {
+            Playtime.getPlugin().getLogger().severe("Error updating player death time");
+            ex.printStackTrace();
+        }
     }
-    
+
 }
