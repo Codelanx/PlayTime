@@ -20,7 +20,6 @@ import com.rogue.playtime.Playtime;
 import com.rogue.playtime.sql.db.MySQL;
 import java.sql.SQLException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -37,27 +36,48 @@ public class AddRunnable extends BukkitRunnable {
     public AddRunnable(Playtime p) {
         plugin = p;
     }
-    
+
     public void run() {
         Player[] players = plugin.getServer().getOnlinePlayers();
-        plugin.db = new MySQL();
+        MySQL db = new MySQL();
         try {
-            plugin.db.open();
-            if (plugin.db.checkConnection() && players.length > 0) {
+            db.open();
+            if (db.checkConnection() && players.length > 0) {
                 StringBuilder sb = new StringBuilder("INSERT INTO `playTime` (`username`, `playtime`, `deathtime`) VALUES ");
                 for (Player p : players) {
-                    sb.append("('").append(p.getName()).append("', 1, 1), ");
+                    if (!(!plugin.isAFKEnabled() && !plugin.isDeathEnabled()) && !plugin.getPlayerHandler().getPlayer(p.getName()).isAFK()) {
+                        if (plugin.isDeathEnabled()) {
+                            sb.append("('").append(p.getName()).append("', 1, 1), ");
+                        } else {
+                            sb.append("('").append(p.getName()).append("', 1, 0), ");
+                        }
+                    } else {
+                        sb.append("('").append(p.getName()).append("', 1, 0), ");
+                    }
                 }
-                plugin.db.update(sb.substring(0, sb.length() - 2) + " ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1, `deathtime`=`deathtime`+1");
-                System.out.println("plugin.getDebug() =" + plugin.getDebug());
+                if (sb.toString().endsWith(" VALUES ")) {
+                    if (plugin.getDebug() >= 1) {
+                        plugin.getLogger().info("No players to update.");
+                    }
+                    return;
+                }
+                if (plugin.isDeathEnabled()) {
+                    db.update(sb.substring(0, sb.length() - 2) + " ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1, `deathtime`=`deathtime`+1");
+                } else {
+                    db.update(sb.substring(0, sb.length() - 2) + " ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1");
+                }
                 if (plugin.getDebug() >= 1) {
                     plugin.getLogger().info("Players updated!");
                     if (plugin.getDebug() >= 2) {
-                        plugin.getLogger().log(Level.INFO, "SQL Query for update: \n {0} ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1, `deathtime`=`deathtime`+1", sb.substring(0, sb.length() - 2));
+                        if (plugin.isDeathEnabled()) {
+                            plugin.getLogger().log(Level.INFO, "SQL Query for update: \n {0} ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1, `deathtime`=`deathtime`+1", sb.substring(0, sb.length() - 2));
+                        } else {
+                            plugin.getLogger().log(Level.INFO, "SQL Query for update: \n {0} ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1", sb.substring(0, sb.length() - 2));
+                        }
                     }
                 }
             }
-            plugin.db.close();
+            db.close();
         } catch (SQLException ex) {
             plugin.getLogger().log(Level.SEVERE, null, ex);
             if (plugin.getDebug() == 3) {

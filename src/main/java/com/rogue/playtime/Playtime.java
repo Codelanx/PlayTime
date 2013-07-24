@@ -21,6 +21,8 @@ import com.rogue.playtime.runnable.AddRunnable;
 import com.rogue.playtime.sql.SQL_Vars;
 import com.rogue.playtime.sql.db.MySQL;
 import com.rogue.playtime.metrics.Metrics;
+import com.rogue.playtime.player.PlayerHandler;
+import com.rogue.playtime.runnable.AFKRunnable;
 import com.rogue.playtime.runnable.UpdateRunnable;
 import java.io.File;
 import java.io.IOException;
@@ -41,18 +43,21 @@ import org.bukkit.scheduler.BukkitTask;
 /**
  * @since 1.0
  * @author 1Rogue
- * @version 1.2
+ * @version 1.2.0
  */
 public class Playtime extends JavaPlugin {
 
-    public MySQL db;
     protected BukkitTask updater;
     protected int debug = 0;
     protected PlaytimeListener listener;
-    
+    protected PlayerHandler phandler;
+    private MySQL db;
+    private boolean afkEnabled = true;
+    private boolean deathEnabled = true;
+
     /**
      * Registers the plugin configuration file.
-     * 
+     *
      * @since 1.0
      * @version 1.1
      */
@@ -62,8 +67,12 @@ public class Playtime extends JavaPlugin {
 
         if (!file.exists()) {
             this.getLogger().info("Generating first time config.yml...");
-            this.getConfig().addDefault("debug-level", "0");
+            this.getConfig().addDefault("debug-level", 0);
             this.getConfig().addDefault("update-check", true);
+            this.getConfig().addDefault("check-deaths", true);
+            this.getConfig().addDefault("afk.enabled", true);
+            this.getConfig().addDefault("afk.interval", 60);
+            this.getConfig().addDefault("afk.timeout", 900);
             this.getConfig().addDefault("mysql.host", "localhost");
             this.getConfig().addDefault("mysql.port", "3306");
             this.getConfig().addDefault("mysql.database", "minecraft");
@@ -81,17 +90,22 @@ public class Playtime extends JavaPlugin {
             debug = 0;
         }
     }
-    
+
     /**
      * Registers runnables and the listener on plugin start, as well as the
      * plugin data storage.
-     * 
+     *
      * @since 1.0
-     * @version 1.1
+     * @version 1.2.0
      */
     @Override
     public void onEnable() {
         final long startTime = System.nanoTime();
+
+        debug = this.getConfig().getInt("debug-level");
+        if (debug >= 1) {
+            this.getLogger().log(Level.INFO, "Debug level set to {0}!", debug);
+        }
 
         try {
             Metrics metrics = new Metrics(this);
@@ -103,8 +117,10 @@ public class Playtime extends JavaPlugin {
 
         if (this.getConfig().getBoolean("update-check")) {
             Bukkit.getScheduler().runTaskLater(this, new UpdateRunnable(this), 1);
+        } else {
+            this.getLogger().info("Update checks disabled!");
         }
-        
+
         this.getLogger().log(Level.INFO, "Validating Database...");
         setupDatabase();
 
@@ -119,10 +135,28 @@ public class Playtime extends JavaPlugin {
         } catch (SQLException ex) {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        this.getLogger().log(Level.INFO, "Enabling Listener...");
-        listener = new PlaytimeListener(this);
-        Bukkit.getPluginManager().registerEvents(listener, this);
+
+        afkEnabled = this.getConfig().getBoolean("afk.enabled");
+        deathEnabled = this.getConfig().getBoolean("check-deaths");
+
+
+        if (afkEnabled) {
+            this.getLogger().log(Level.INFO, "Enabling Player Handler...");
+            phandler = new PlayerHandler(this, this.getConfig().getInt("afk.interval"), this.getConfig().getInt("afk.timeout"));
+            Bukkit.getScheduler().runTaskTimer(this, new AFKRunnable(this), phandler.getAFKCheckInterval() * 20L, phandler.getAFKCheckInterval() * 20L);
+        } else {
+            this.getLogger().log(Level.INFO, "AFK checking disabled!");
+            phandler = null;
+        }
+
+        if (!(!afkEnabled && !deathEnabled)) {
+            this.getLogger().log(Level.INFO, "Enabling Listener...");
+            listener = new PlaytimeListener(this);
+            Bukkit.getPluginManager().registerEvents(listener, this);
+        } else {
+            this.getLogger().log(Level.INFO, "Listener Disabled!");
+            listener = null;
+        }
 
         final long endTime = System.nanoTime();
         if (debug >= 1) {
@@ -130,10 +164,10 @@ public class Playtime extends JavaPlugin {
             this.getLogger().log(Level.INFO, "Enabled ({0})", this.readableProfile(duration));
         }
     }
-    
+
     /**
      * Closes tasks and sql connections on plugin disabling.
-     * 
+     *
      * @since 1.0
      * @version 1.1
      */
@@ -147,15 +181,15 @@ public class Playtime extends JavaPlugin {
         }
         db = null;
     }
-    
+
     /**
      * Command Executor
-     * 
+     *
      * @since 1.0
-     * @version 1.2
-     * 
+     * @version 1.2.0
+     *
      * @deprecated
-     * 
+     *
      * @param sender The command executor
      * @param cmd The command object
      * @param commandLabel The name of the command
@@ -181,9 +215,9 @@ public class Playtime extends JavaPlugin {
                 int minutes = time % 60;
                 if (time >= 60) {
                     int hours = time / 60;
-                    sender.sendMessage(ChatColor.GOLD + check + " has played for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
+                    sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + check + " has played for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
                 } else {
-                    sender.sendMessage(ChatColor.GOLD + check + " has played for " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
+                    sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + check + " has played for " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
                 }
             } else {
                 sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + "You do not have permission to do that!");
@@ -202,14 +236,19 @@ public class Playtime extends JavaPlugin {
                 return true;
             }
             if (sender.hasPermission(perm)) {
-                int time = this.getValue("deathtime", check);
-                int minutes = time % 60;
-                if (time >= 60) {
-                    int hours = time / 60;
-                    sender.sendMessage(ChatColor.GOLD + check + " has been alive for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
+                if (deathEnabled) {
+                    int time = this.getValue("deathtime", check);
+                    int minutes = time % 60;
+                    if (time >= 60) {
+                        int hours = time / 60;
+                        sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + check + " has been alive for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
+                    } else {
+                        sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + check + " has been alive for " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
+                    }
                 } else {
-                    sender.sendMessage(ChatColor.GOLD + check + " has been alive for " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
+                    sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + "Tracking player deaths is disabled!");
                 }
+
             } else {
                 sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + "You do not have permission to do that!");
             }
@@ -217,13 +256,13 @@ public class Playtime extends JavaPlugin {
         }
         return false;
     }
-    
+
     /**
      * Makes a long-type time value into a readable string.
-     * 
+     *
      * @since 1.0
      * @version 1.0
-     * 
+     *
      * @param time The time value as a long
      * @return Readable String of the time
      */
@@ -239,12 +278,12 @@ public class Playtime extends JavaPlugin {
 
         return current + " " + units[i] + ((current > 1 && i > 1) ? "s" : "");
     }
-    
+
     /**
      * Sets up the SQL data from the config values, and validates tables.
-     * 
+     *
      * @since 1.0
-     * @version 1.1
+     * @version 1.2.0
      */
     private void setupDatabase() {
 
@@ -266,13 +305,15 @@ public class Playtime extends JavaPlugin {
                     result.close();
                 } else {
                     try {
-                        db.update("ALTER TABLE `playTime` ADD UNIQUE INDEX `username` (`username`);");
+                        db.update("ALTER TABLE `playTime` ADD UNIQUE INDEX `username` (`username`)");
                         this.getLogger().info("Updating SQL table for 1.1");
-                    } catch (SQLException e){}
+                    } catch (SQLException e) {
+                    }
                     try {
                         db.update("ALTER TABLE `playTime` ADD deathtime int NOT NULL");
-                        this.getLogger().info("Updating SQL table for 1.2");
-                    } catch (SQLException e){}
+                        this.getLogger().info("Updating SQL table for 1.2.0");
+                    } catch (SQLException e) {
+                    }
                     this.getLogger().info("SQL table is up to date!");
                 }
             }
@@ -280,13 +321,13 @@ public class Playtime extends JavaPlugin {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * Gets the value of a column for a particular player.
-     * 
-     * @since 1.2.0
-     * @version 1.2.0
-     * 
+     *
+     * @since 1.2.0.0
+     * @version 1.2.0.0
+     *
      * @param username The player to look up
      * @return The value of the provided column, 0 if no value found.
      */
@@ -310,13 +351,13 @@ public class Playtime extends JavaPlugin {
         }
         return ret;
     }
-    
+
     /**
      * Finds a match for an online player, or offline if there is no good match.
-     * 
+     *
      * @since 1.1
      * @version 1.1
-     * 
+     *
      * @param username The player to look up
      * @return A potential match for a player
      */
@@ -327,24 +368,77 @@ public class Playtime extends JavaPlugin {
         }
         return username;
     }
-    
+
     /**
      * Gets the level of debugging for players
-     * 
+     *
      * @since 1.1
      * @version 1.1
-     * 
+     *
      * @return The debug level
      */
     public int getDebug() {
         return debug;
     }
-    
+
+    /**
+     * Returns an instance of the Playtime Plugin
+     *
+     * @since 1.2.0
+     * @version 1.2.0
+     *
+     * @return The Playtime plugin instance
+     */
     public static Playtime getPlugin() {
-        return (Playtime)Bukkit.getPluginManager().getPlugin("Playtime");
+        return (Playtime) Bukkit.getPluginManager().getPlugin("Playtime");
     }
-    
+
+    /**
+     * Returns Playtime's listener
+     *
+     * @since 1.2.0
+     * @version 1.2.0
+     *
+     * @return The listener for Playtime
+     */
     public PlaytimeListener getListener() {
         return listener;
+    }
+
+    /**
+     * Returns the player handler for Playtime NOTE: If AFK is disabled, this
+     * will return null
+     *
+     * @since 1.2.0
+     * @version 1.2.0
+     *
+     * @return The plugin's player handler
+     */
+    public PlayerHandler getPlayerHandler() {
+        return phandler;
+    }
+
+    /**
+     * Returns whether or not AFK is enabled
+     *
+     * @since 1.2.0
+     * @version 1.2.0
+     *
+     * @return Status of AFK runnable
+     */
+    public boolean isAFKEnabled() {
+        return afkEnabled;
+    }
+
+    /**
+     * Returns whether or not death timing is enabled.
+     *
+     * @since 1.2.0
+     * @version 1.2.0
+     *
+     * @return Status of Death checking
+     */
+    public boolean isDeathEnabled() {
+        return deathEnabled;
     }
 }
