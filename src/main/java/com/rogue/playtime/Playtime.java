@@ -266,11 +266,14 @@ public class Playtime extends JavaPlugin {
                     result.close();
                 } else {
                     try {
+                        db.update("ALTER TABLE `playTime` ADD UNIQUE INDEX `username` (`username`);");
+                        this.getLogger().info("Updating SQL table for 1.1");
+                    } catch (SQLException e){}
+                    try {
                         db.update("ALTER TABLE `playTime` ADD deathtime int NOT NULL");
                         this.getLogger().info("Updating SQL table for 1.2");
-                    } catch (SQLException e){
-                        this.getLogger().info("SQL table is up to date!");
-                    }
+                    } catch (SQLException e){}
+                    this.getLogger().info("SQL table is up to date!");
                 }
             }
         } catch (SQLException ex) {
