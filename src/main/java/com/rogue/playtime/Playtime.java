@@ -176,7 +176,7 @@ public class Playtime extends JavaPlugin {
                 this.getLogger().info("Successfully connected to database!");
                 if (!db.checkTable("playTime")) {
                     this.getLogger().log(Level.INFO, "Creating table ''playTime'' in database {0}", SQL_Vars.DATABASE);
-                    ResultSet result = db.query("CREATE TABLE testing ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL, PRIMARY KEY (id), UNIQUE KEY (username)) ENtestingGINE=MyISAM;");
+                    ResultSet result = db.query("CREATE TABLE playTime ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL, PRIMARY KEY (id), UNIQUE KEY (username)) ENtestingGINE=MyISAM;");
                     result.close();
                 }
             }
