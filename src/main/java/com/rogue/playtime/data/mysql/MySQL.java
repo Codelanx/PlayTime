@@ -35,15 +35,15 @@ public class MySQL {
 
     public Connection open() throws SQLException {
         Properties connectionProps = new Properties();
-        connectionProps.put("user", SQL_Vars.USER);
-        connectionProps.put("password", SQL_Vars.PASS);
+        connectionProps.put("user", MySQL_Vars.USER);
+        connectionProps.put("password", MySQL_Vars.PASS);
 
-        con = DriverManager.getConnection("jdbc:mysql://" + SQL_Vars.HOST + ":" + SQL_Vars.PORT + "/" + SQL_Vars.DATABASE, connectionProps);
+        con = DriverManager.getConnection("jdbc:mysql://" + MySQL_Vars.HOST + ":" + MySQL_Vars.PORT + "/" + MySQL_Vars.DATABASE, connectionProps);
         return con;
     }
 
     public boolean checkTable(String tablename) throws SQLException {
-        ResultSet count = query("SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = '" + SQL_Vars.DATABASE + "') AND (TABLE_NAME = '" + tablename + "')");
+        ResultSet count = query("SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = '" + MySQL_Vars.DATABASE + "') AND (TABLE_NAME = '" + tablename + "')");
         boolean give = count.first();
         count.close();
         return give;

@@ -19,7 +19,6 @@ package com.rogue.playtime;
 import com.rogue.playtime.command.CommandHandler;
 import com.rogue.playtime.data.DataManager;
 import com.rogue.playtime.listener.PlaytimeListener;
-import com.rogue.playtime.runnable.yaml.MySQLAddRunnable;
 import com.rogue.playtime.data.mysql.MySQL;
 import com.rogue.playtime.metrics.Metrics;
 import com.rogue.playtime.player.PlayerHandler;
@@ -27,8 +26,6 @@ import com.rogue.playtime.runnable.AFKRunnable;
 import com.rogue.playtime.runnable.UpdateRunnable;
 import java.io.File;
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,7 +49,6 @@ public class Playtime extends JavaPlugin {
     protected PlayerHandler phandler;
     protected CommandHandler chandler;
     protected DataManager dmanager;
-    private MySQL db;
     private boolean afkEnabled = true;
     private boolean deathEnabled = true;
 
@@ -80,6 +76,7 @@ public class Playtime extends JavaPlugin {
             this.getConfig().addDefault("managers.mysql.database", "minecraft");
             this.getConfig().addDefault("managers.mysql.username", "root");
             this.getConfig().addDefault("managers.mysql.password", "password");
+            this.getConfig().addDefault("managers.sqlite.database", "minecraft");
             this.getConfig().options().copyDefaults(true);
             this.saveConfig();
         }
@@ -169,8 +166,9 @@ public class Playtime extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        afkChecker.cancel();
-        db = null;
+        if (afkChecker != null) {
+            afkChecker.cancel();
+        }
     }
 
     /**

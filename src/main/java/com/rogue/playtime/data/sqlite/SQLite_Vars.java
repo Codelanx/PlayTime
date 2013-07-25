@@ -14,28 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.data.mysql;
+package com.rogue.playtime.data.sqlite;
 
 /**
  *
- * @since 1.1
+ * @since 1.3.0
  * @author 1Rogue
- * @version 1.1
+ * @version 1.3.0
  */
-public class SQL_Vars {
+public class SQLite_Vars {
     
-    public static String HOST = "";
-    public static String USER = "";
-    public static String PASS = "";
     public static String DATABASE = "";
-    public static String PORT = "";
     
-    public void setVars(String host, String user, String pass, String database, String port) {
-        HOST = host;
-        USER = user;
-        PASS = pass;
+    public void setVars(String database) {
         DATABASE = database;
-        PORT = port;
     }
     
 }

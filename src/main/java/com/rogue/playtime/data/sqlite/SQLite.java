@@ -16,7 +16,13 @@
  */
 package com.rogue.playtime.data.sqlite;
 
-import com.rogue.playtime.data.mysql.SQL_Vars;
+import com.rogue.playtime.Playtime;
+import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -26,4 +32,31 @@ import com.rogue.playtime.data.mysql.SQL_Vars;
  */
 public class SQLite {
     
+    Connection con = null;
+    
+    public Connection open() throws SQLException {
+        con = DriverManager.getConnection("jdbc:sqlite:" + Playtime.getPlugin().getDataFolder() + File.separator + "users.db");
+        return con;
+    }
+
+   public boolean checkTable(String tablename) throws SQLException {
+        ResultSet count = query("SELECT name FROM sqlite_master WHERE type='table' AND name='" + tablename + "'");
+        boolean give = count.first();
+        count.close();
+        return give;
+    }
+
+    public ResultSet query(String query) throws SQLException {
+        Statement stmt = con.createStatement();
+        return stmt.executeQuery(query);
+    }
+    
+    public int update(String query) throws SQLException {
+        Statement stmt = con.createStatement();
+        return stmt.executeUpdate(query);
+    }
+
+    public void close() throws SQLException {
+        con.close();
+    }
 }

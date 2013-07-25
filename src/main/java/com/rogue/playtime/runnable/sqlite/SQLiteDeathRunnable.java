@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.runnable.yaml;
+package com.rogue.playtime.runnable.sqlite;
 
 import com.rogue.playtime.Playtime;
-import com.rogue.playtime.data.mysql.MySQL;
+import com.rogue.playtime.data.sqlite.SQLite;
 import java.sql.SQLException;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -25,18 +25,18 @@ import org.bukkit.scheduler.BukkitRunnable;
  *
  * @since 1.2.0
  * @author 1Rogue
- * @version 1.2.0
+ * @version 1.3.0
  */
-public class MySQLDeathRunnable extends BukkitRunnable {
+public class SQLiteDeathRunnable extends BukkitRunnable {
     
     private final String user;
     
-    public MySQLDeathRunnable(String username) {
+    public SQLiteDeathRunnable(String username) {
         user = username;
     }
 
     public void run() {
-        MySQL db = new MySQL();
+        SQLite db = new SQLite();
         try {
             db.open();
             db.update("UPDATE `playTime` SET `deathtime`=0 WHERE `username`='" + user + "'");

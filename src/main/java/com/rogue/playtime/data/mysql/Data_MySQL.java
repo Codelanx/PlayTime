@@ -18,8 +18,8 @@ package com.rogue.playtime.data.mysql;
 
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.DataHandler;
-import com.rogue.playtime.runnable.yaml.MySQLAddRunnable;
-import com.rogue.playtime.runnable.yaml.MySQLDeathRunnable;
+import com.rogue.playtime.runnable.mysql.MySQLAddRunnable;
+import com.rogue.playtime.runnable.mysql.MySQLDeathRunnable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -43,7 +43,6 @@ public class Data_MySQL implements DataHandler {
         db = new MySQL();
         int ret = 0;
         try {
-            db = new MySQL();
             db.open();
             ResultSet result = db.query("SELECT `playtime` FROM `playTime` WHERE `username`='" + username + "'");
             result.first();
@@ -62,9 +61,9 @@ public class Data_MySQL implements DataHandler {
     }
 
     public int getDeathtime(String username) {
+        db = new MySQL();
         int ret = 0;
         try {
-            db = new MySQL();
             db.open();
             ResultSet result = db.query("SELECT `deathtime` FROM `playTime` WHERE `username`='" + username + "'");
             result.first();
@@ -94,7 +93,7 @@ public class Data_MySQL implements DataHandler {
             if (db.checkConnection()) {
                 plugin.getLogger().info("Successfully connected to database!");
                 if (!db.checkTable("playTime")) {
-                    plugin.getLogger().log(Level.INFO, "Creating table ''playTime'' in database {0}", SQL_Vars.DATABASE);
+                    plugin.getLogger().log(Level.INFO, "Creating table ''playTime'' in database {0}", MySQL_Vars.DATABASE);
                     ResultSet result = db.query("CREATE TABLE playTime ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL DEFAULT 0, deathtime int NOT NULL, PRIMARY KEY (id), UNIQUE KEY (username)) ENtestingGINE=MyISAM;");
                     result.close();
                 } else {
@@ -131,11 +130,11 @@ public class Data_MySQL implements DataHandler {
     }
 
     public void setup() {
-        SQL_Vars.HOST = plugin.getConfig().getString("managers.mysql.host");
-        SQL_Vars.DATABASE = plugin.getConfig().getString("managers.mysql.database");
-        SQL_Vars.USER = plugin.getConfig().getString("managers.mysql.username");
-        SQL_Vars.PASS = plugin.getConfig().getString("managers.mysql.password");
-        SQL_Vars.PORT = plugin.getConfig().getString("managers.mysql.port");
+        MySQL_Vars.HOST = plugin.getConfig().getString("managers.mysql.host");
+        MySQL_Vars.DATABASE = plugin.getConfig().getString("managers.mysql.database");
+        MySQL_Vars.USER = plugin.getConfig().getString("managers.mysql.username");
+        MySQL_Vars.PASS = plugin.getConfig().getString("managers.mysql.password");
+        MySQL_Vars.PORT = plugin.getConfig().getString("managers.mysql.port");
     }
 
     public void initiateRunnable() {

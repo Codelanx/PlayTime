@@ -17,7 +17,7 @@
 package com.rogue.playtime.listener;
 
 import com.rogue.playtime.Playtime;
-import com.rogue.playtime.runnable.yaml.MySQLDeathRunnable;
+import com.rogue.playtime.runnable.mysql.MySQLDeathRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
