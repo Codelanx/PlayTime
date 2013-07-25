@@ -14,7 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.data;
+package com.rogue.playtime.runnable;
+
+import com.rogue.playtime.data.yaml.YAML;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  *
@@ -22,19 +25,19 @@ package com.rogue.playtime.data;
  * @author 1Rogue
  * @version 1.3.0
  */
-public interface DataHandler {
+public class YAMLDeathRunnable extends BukkitRunnable {
     
-    public abstract int getPlaytime(String username);
-    
-    public abstract int getDeathtime(String username);
-    
-    public abstract void onDeath(String username);
-    
-    public abstract void verifyFormat();
-    
-    public abstract void setup();
-    
-    public abstract void initiateRunnable();
-    
-    public abstract void cleanup();
+    private final String user;
+    private YAML yaml;
+
+    public YAMLDeathRunnable(String u, YAML y) {
+        user = u;
+        yaml = y;
+    }
+
+    public void run() {
+        yaml.getFile().set("users." + user + ".deathtime", 0);
+        yaml.forceSave();
+    }
+
 }

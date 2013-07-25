@@ -17,7 +17,7 @@
 package com.rogue.playtime.listener;
 
 import com.rogue.playtime.Playtime;
-import com.rogue.playtime.runnable.DeathResetRunnable;
+import com.rogue.playtime.runnable.MySQLDeathRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,7 +32,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
  *
  * @since 1.2.0
  * @author 1Rogue
- * @version 1.2.0
+ * @version 1.3.0
  */
 public class PlaytimeListener implements Listener {
     
@@ -45,7 +45,7 @@ public class PlaytimeListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerDeath(PlayerDeathEvent e) {
         if (plugin.isDeathEnabled()) {
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, new DeathResetRunnable(e.getEntity().getName()));
+            plugin.getDataManager().getDataHandler().onDeath(e.getEntity().getName());
         }
     }
     

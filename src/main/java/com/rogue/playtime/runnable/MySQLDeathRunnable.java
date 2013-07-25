@@ -27,11 +27,11 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @author 1Rogue
  * @version 1.2.0
  */
-public class DeathResetRunnable extends BukkitRunnable {
+public class MySQLDeathRunnable extends BukkitRunnable {
     
     private final String user;
     
-    public DeathResetRunnable(String username) {
+    public MySQLDeathRunnable(String username) {
         user = username;
     }
 
