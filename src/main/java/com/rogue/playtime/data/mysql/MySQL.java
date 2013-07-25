@@ -14,9 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.sql.db;
+package com.rogue.playtime.data.mysql;
 
-import com.rogue.playtime.sql.SQL_Vars;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;

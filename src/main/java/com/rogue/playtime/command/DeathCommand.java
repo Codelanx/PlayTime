@@ -45,7 +45,7 @@ public class DeathCommand implements CommandBase {
         }
         if (sender.hasPermission(perm)) {
             if (plugin.isDeathEnabled()) {
-                int time = plugin.getValue("deathtime", check);
+                int time = plugin.getDataManager().getDataHandler().getDeathtime(check);
                 int minutes = time % 60;
                 if (time >= 60) {
                     int hours = time / 60;
@@ -65,6 +65,6 @@ public class DeathCommand implements CommandBase {
 
     @Override
     public String getName() {
-        return "death";
+        return "deathtime";
     }
 }

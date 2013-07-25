@@ -44,7 +44,7 @@ public class PlaytimeCommand implements CommandBase {
             return true;
         }
         if (sender.hasPermission(perm)) {
-            int time = plugin.getValue("playtime", check);
+            int time = plugin.getDataManager().getDataHandler().getPlaytime(check);
             int minutes = time % 60;
             if (time >= 60) {
                 int hours = time / 60;

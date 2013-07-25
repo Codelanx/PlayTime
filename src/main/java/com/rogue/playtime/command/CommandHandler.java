@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -32,22 +31,22 @@ import org.bukkit.command.CommandSender;
  * @version 1.3.0
  */
 public class CommandHandler implements CommandExecutor {
-    
+
     protected Playtime plugin;
     private Map<String, CommandBase> commands = new HashMap();
-    
+
     public CommandHandler(Playtime p) {
         plugin = p;
-        
+
         PlaytimeCommand playtime = new PlaytimeCommand();
         commands.put(playtime.getName(), playtime);
         DeathCommand death = new DeathCommand();
         commands.put(death.getName(), death);
     }
-    
+
     /**
      * Registers the commands to this command executor.
-     * 
+     *
      * @since 1.3.0
      * @version 1.3.0
      */
@@ -55,26 +54,33 @@ public class CommandHandler implements CommandExecutor {
         plugin.getCommand("playtime").setExecutor(this);
         plugin.getCommand("deathtime").setExecutor(this);
     }
-    
+
     /**
      * Executes the proper command within Playtime
-     * 
+     *
      * @param sender The command executor
      * @param cmd The command instance
      * @param commandLabel The command name
      * @param args The command arguments
-     * 
+     *
      * @return Success of command, false if no command is found
      */
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (plugin.getDebug() >= 1) {
             plugin.getLogger().log(Level.INFO, "onCommand called! commandLabel = {0}", commandLabel);
+            if (plugin.getDebug() >= 2) {
+                for (String s : commands.keySet()) {
+                    plugin.getLogger().log(Level.INFO, "Command key found: {0}", s);
+                }
+            }
         }
         if (commands.containsKey(commandLabel)) {
+            if (plugin.getDebug() >= 1) {
+                plugin.getLogger().info("Executing command!");
+            }
             return commands.get(commandLabel).execute(sender, cmd, commandLabel, args);
         }
         return false;
     }
-    
 }

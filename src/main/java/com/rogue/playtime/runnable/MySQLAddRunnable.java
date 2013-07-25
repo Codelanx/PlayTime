@@ -17,7 +17,7 @@
 package com.rogue.playtime.runnable;
 
 import com.rogue.playtime.Playtime;
-import com.rogue.playtime.sql.db.MySQL;
+import com.rogue.playtime.data.mysql.MySQL;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import org.bukkit.entity.Player;
@@ -29,11 +29,11 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @author 1Rogue
  * @version 1.1
  */
-public class AddRunnable extends BukkitRunnable {
+public class MySQLAddRunnable extends BukkitRunnable {
 
     Playtime plugin;
 
-    public AddRunnable(Playtime p) {
+    public MySQLAddRunnable(Playtime p) {
         plugin = p;
     }
 

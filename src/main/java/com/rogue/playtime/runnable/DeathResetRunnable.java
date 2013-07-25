@@ -17,7 +17,7 @@
 package com.rogue.playtime.runnable;
 
 import com.rogue.playtime.Playtime;
-import com.rogue.playtime.sql.db.MySQL;
+import com.rogue.playtime.data.mysql.MySQL;
 import java.sql.SQLException;
 import org.bukkit.scheduler.BukkitRunnable;
 
