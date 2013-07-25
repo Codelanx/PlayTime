@@ -18,8 +18,8 @@ package com.rogue.playtime.data.yaml;
 
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.DataHandler;
-import com.rogue.playtime.runnable.YAMLAddRunnable;
-import com.rogue.playtime.runnable.YAMLDeathRunnable;
+import com.rogue.playtime.runnable.yaml.YAMLAddRunnable;
+import com.rogue.playtime.runnable.yaml.YAMLDeathRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 

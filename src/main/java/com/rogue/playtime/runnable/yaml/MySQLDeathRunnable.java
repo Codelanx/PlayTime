@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.runnable;
+package com.rogue.playtime.runnable.yaml;
 
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.mysql.MySQL;

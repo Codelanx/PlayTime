@@ -19,7 +19,7 @@ package com.rogue.playtime;
 import com.rogue.playtime.command.CommandHandler;
 import com.rogue.playtime.data.DataManager;
 import com.rogue.playtime.listener.PlaytimeListener;
-import com.rogue.playtime.runnable.MySQLAddRunnable;
+import com.rogue.playtime.runnable.yaml.MySQLAddRunnable;
 import com.rogue.playtime.data.mysql.MySQL;
 import com.rogue.playtime.metrics.Metrics;
 import com.rogue.playtime.player.PlayerHandler;

@@ -18,8 +18,8 @@ package com.rogue.playtime.data.mysql;
 
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.DataHandler;
-import com.rogue.playtime.runnable.MySQLAddRunnable;
-import com.rogue.playtime.runnable.MySQLDeathRunnable;
+import com.rogue.playtime.runnable.yaml.MySQLAddRunnable;
+import com.rogue.playtime.runnable.yaml.MySQLDeathRunnable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
