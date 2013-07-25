@@ -18,9 +18,9 @@ package com.rogue.playtime.sql;
 
 /**
  *
- * @since
+ * @since 1.1
  * @author 1Rogue
- * @version
+ * @version 1.1
  */
 public class SQL_Vars {
     
