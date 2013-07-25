@@ -23,9 +23,9 @@ import org.bukkit.Location;
 
 /**
  *
- * @since 1.2
+ * @since 1.2.0
  * @author 1Rogue
- * @version 1.2
+ * @version 1.2.0
  */
 public class PlayerHandler {
 
@@ -43,8 +43,8 @@ public class PlayerHandler {
     /**
      * Updates the AFK-start time for the provided player.
      *
-     * @since 1.2
-     * @version 1.2
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @param name The relevant player's name
      * @param time The time being AFK started
@@ -58,8 +58,8 @@ public class PlayerHandler {
     /**
      * Updates the AFK-start location for the provided player.
      *
-     * @since 1.2
-     * @version 1.2
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @param name The relevant player's name
      * @param place The place the player was at the start of being AFK
@@ -73,8 +73,8 @@ public class PlayerHandler {
     /**
      * Updates the AFK-status for the provided player.
      *
-     * @since 1.2
-     * @version 1.2
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @param name The relevant player's name
      * @param afk Whether the player is AFK or not
@@ -88,8 +88,8 @@ public class PlayerHandler {
     /**
      * Adds a player to the Plugin's tracked list of players.
      *
-     * @since 1.2
-     * @version 1.2
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @param name The player name
      * @param time The AFK-start time
@@ -102,8 +102,8 @@ public class PlayerHandler {
     /**
      * Adds an PlaytimePlayer to the plugin's tracked list of players.
      *
-     * @since 1.2
-     * @version 1.2
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @param name The player name
      * @param player The PlaytimePlayer object of the player
@@ -115,8 +115,8 @@ public class PlayerHandler {
     /**
      * Removes a player from the plugin's tracked list of players
      *
-     * @since 1.2
-     * @version 1.2
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @param name The player name
      */
@@ -127,8 +127,8 @@ public class PlayerHandler {
     /**
      * Gets the plugin's instance of the player
      *
-     * @since 1.2
-     * @version 1.2
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @param name The player name
      * @return The player instance
@@ -140,8 +140,8 @@ public class PlayerHandler {
     /**
      * Returns whether or not the player is AFK.
      *
-     * @since 1.2
-     * @version 1.2
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @return AFK status
      */
@@ -152,8 +152,8 @@ public class PlayerHandler {
     /**
      * Gets the time the player went AFK. 0 if they are not AFK.
      *
-     * @since 1.2
-     * @version 1.2
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @param name The player name
      * @return AFK Starting time for the player
@@ -166,8 +166,8 @@ public class PlayerHandler {
      * Gets the location where the player went AFK. Returns null if they have
      * never gone AFK.
      *
-     * @since 1.2
-     * @version 1.2
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @param name The player name
      * @return Location where a player went AFK
@@ -179,8 +179,8 @@ public class PlayerHandler {
     /**
      * Sets whether or not the player is AFK.
      *
-     * @since 1.2
-     * @version 1.2
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @param name The player name
      * @param value Whether or not the player is AFK
@@ -210,8 +210,8 @@ public class PlayerHandler {
     /**
      * Returns the map of all PlaytimePlayers.
      *
-     * @since 1.2
-     * @version 1.2
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @return Map of PlaytimePlayers players
      */

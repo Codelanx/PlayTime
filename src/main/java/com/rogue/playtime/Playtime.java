@@ -16,6 +16,7 @@
  */
 package com.rogue.playtime;
 
+import com.rogue.playtime.command.CommandHandler;
 import com.rogue.playtime.listener.PlaytimeListener;
 import com.rogue.playtime.runnable.AddRunnable;
 import com.rogue.playtime.sql.SQL_Vars;
@@ -51,6 +52,7 @@ public class Playtime extends JavaPlugin {
     protected int debug = 0;
     protected PlaytimeListener listener;
     protected PlayerHandler phandler;
+    protected CommandHandler chandler;
     private MySQL db;
     private boolean afkEnabled = true;
     private boolean deathEnabled = true;
@@ -135,6 +137,10 @@ public class Playtime extends JavaPlugin {
         } catch (SQLException ex) {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        this.getLogger().info("Enabling Command Handler...");
+        chandler = new CommandHandler(this);
+        chandler.registerExecs();
 
         afkEnabled = this.getConfig().getBoolean("afk.enabled");
         deathEnabled = this.getConfig().getBoolean("check-deaths");
@@ -180,81 +186,6 @@ public class Playtime extends JavaPlugin {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
         db = null;
-    }
-
-    /**
-     * Command Executor
-     *
-     * @since 1.0
-     * @version 1.2.0
-     *
-     * @deprecated
-     *
-     * @param sender The command executor
-     * @param cmd The command object
-     * @param commandLabel The name of the command
-     * @param args Command Arguments
-     * @return Success of command
-     */
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (cmd.getName().equalsIgnoreCase("playtime")) {
-            String check;
-            String perm = "playtime.use";
-            if (args.length == 0 && sender instanceof Player) {
-                check = sender.getName();
-            } else if (args.length == 1) {
-                check = this.getBestPlayer(args[0]);
-                perm += ".others";
-            } else {
-                sender.sendMessage("You cannot check the playtime of a non-player!");
-                return true;
-            }
-            if (sender.hasPermission(perm)) {
-                int time = this.getValue("playtime", check);
-                int minutes = time % 60;
-                if (time >= 60) {
-                    int hours = time / 60;
-                    sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + check + " has played for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
-                } else {
-                    sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + check + " has played for " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
-                }
-            } else {
-                sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + "You do not have permission to do that!");
-            }
-            return false;
-        } else if (cmd.getName().equalsIgnoreCase("deathtime")) {
-            String check;
-            String perm = "playtime.death";
-            if (args.length == 0 && sender instanceof Player) {
-                check = sender.getName();
-            } else if (args.length == 1) {
-                check = this.getBestPlayer(args[0]);
-                perm += ".others";
-            } else {
-                sender.sendMessage("You cannot check the survival time of a non-player!");
-                return true;
-            }
-            if (sender.hasPermission(perm)) {
-                if (deathEnabled) {
-                    int time = this.getValue("deathtime", check);
-                    int minutes = time % 60;
-                    if (time >= 60) {
-                        int hours = time / 60;
-                        sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + check + " has been alive for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
-                    } else {
-                        sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + check + " has been alive for " + minutes + " minute" + (minutes == 1 ? "" : "s") + ".");
-                    }
-                } else {
-                    sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + "Tracking player deaths is disabled!");
-                }
-
-            } else {
-                sender.sendMessage("[" + ChatColor.YELLOW + "PlayTime" + ChatColor.RESET + "] " + ChatColor.GOLD + "You do not have permission to do that!");
-            }
-            return false;
-        }
-        return false;
     }
 
     /**
@@ -325,13 +256,13 @@ public class Playtime extends JavaPlugin {
     /**
      * Gets the value of a column for a particular player.
      *
-     * @since 1.2.0.0
-     * @version 1.2.0.0
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @param username The player to look up
      * @return The value of the provided column, 0 if no value found.
      */
-    private int getValue(String value, String username) {
+    public int getValue(String value, String username) {
         int ret = 0;
         try {
             db = new MySQL();
@@ -361,7 +292,7 @@ public class Playtime extends JavaPlugin {
      * @param username The player to look up
      * @return A potential match for a player
      */
-    private String getBestPlayer(String username) {
+    public String getBestPlayer(String username) {
         Player player = Bukkit.getPlayer(username);
         if (player != null) {
             username = player.getName();
@@ -440,5 +371,15 @@ public class Playtime extends JavaPlugin {
      */
     public boolean isDeathEnabled() {
         return deathEnabled;
+    }
+    
+    /**
+     * Converts pre-made strings to have chat colors in them
+     * 
+     * @param encoded String with unconverted color codes
+     * @return string with correct chat colors included
+     */
+    public static String _(String encoded) {
+        return ChatColor.translateAlternateColorCodes('&', encoded);
     }
 }

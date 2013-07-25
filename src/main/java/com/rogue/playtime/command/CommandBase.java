@@ -14,37 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.runnable;
+package com.rogue.playtime.command;
 
 import com.rogue.playtime.Playtime;
-import com.rogue.playtime.sql.db.MySQL;
-import java.sql.SQLException;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 
 /**
  *
- * @since 1.2.0
+ * @since 1.3.0
  * @author 1Rogue
- * @version 1.2.0
+ * @version 1.3.0
  */
-public class DeathResetRunnable extends BukkitRunnable {
+public interface CommandBase {
     
-    private final String user;
+    Playtime plugin = Playtime.getPlugin();
+
+    public abstract boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args);
     
-    public DeathResetRunnable(String username) {
-        user = username;
-    }
-
-    public void run() {
-        MySQL db = new MySQL();
-        try {
-            db.open();
-            db.update("UPDATE `playTime` SET `deathtime`=0 WHERE `username`='" + user + "'");
-            db.close();
-        } catch (SQLException ex) {
-            Playtime.getPlugin().getLogger().severe("Error updating player death time");
-            ex.printStackTrace();
-        }
-    }
-
+    public abstract String getName();
+    
 }

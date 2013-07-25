@@ -26,9 +26,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  *
- * @since 1.2
+ * @since 1.2.0
  * @author 1Rogue
- * @version 1.2
+ * @version 1.2.0
  */
 public class AFKRunnable extends BukkitRunnable {
     
