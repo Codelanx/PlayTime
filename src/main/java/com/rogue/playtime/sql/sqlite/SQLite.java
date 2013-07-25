@@ -20,9 +20,9 @@ import com.rogue.playtime.sql.SQL_Vars;
 
 /**
  *
- * @since 1.1
+ * @since 1.3.0
  * @author 1Rogue
- * @version 1.1
+ * @version 1.3.0
  */
 public class SQLite {
     
