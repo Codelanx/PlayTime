@@ -232,16 +232,30 @@ public class Playtime extends JavaPlugin {
                 this.getLogger().info("Successfully connected to database!");
                 if (!db.checkTable("playTime")) {
                     this.getLogger().log(Level.INFO, "Creating table ''playTime'' in database {0}", SQL_Vars.DATABASE);
-                    ResultSet result = db.query("CREATE TABLE playTime ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL, deathtime int NOT NULL, PRIMARY KEY (id), UNIQUE KEY (username)) ENtestingGINE=MyISAM;");
+                    ResultSet result = db.query("CREATE TABLE playTime ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL DEFAULT 0, deathtime int NOT NULL, PRIMARY KEY (id), UNIQUE KEY (username)) ENtestingGINE=MyISAM;");
                     result.close();
                 } else {
+                    try {
+                        db.update("ALTER TABLE `playTime` ADD COLUMN `username` VARCHAR(32) NULL DEFAULT NULL AFTER `id`, ADD UNIQUE INDEX `username` (`username`)");
+                        this.getLogger().info("Missing username column! Recreating table...");
+                        db.update("DROP TABLE `playTime`");
+                        db.update("CREATE TABLE playTime ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL, deathtime int NOT NULL, PRIMARY KEY (id), UNIQUE KEY (username)) ENtestingGINE=MyISAM;");
+                    } catch (SQLException e) {
+                    }
+                    try {
+                        db.update("ALTER TABLE `playTime` ADD `playtime` int NOT NULL DEFAULT 0 AFTER `username`");
+                        this.getLogger().info("Missing playtime column! Repairing...");
+                        
+                        this.getLogger().info("Playtime values reset to 0.");
+                    } catch (SQLException e) {
+                    }
                     try {
                         db.update("ALTER TABLE `playTime` ADD UNIQUE INDEX `username` (`username`)");
                         this.getLogger().info("Updating SQL table for 1.1");
                     } catch (SQLException e) {
                     }
                     try {
-                        db.update("ALTER TABLE `playTime` ADD deathtime int NOT NULL");
+                        db.update("ALTER TABLE `playTime` ADD deathtime int NOT NULL AFTER `playtime`");
                         this.getLogger().info("Updating SQL table for 1.2.0");
                     } catch (SQLException e) {
                     }
