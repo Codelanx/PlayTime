@@ -39,7 +39,6 @@ public class SQLitePrintRunnable extends BukkitRunnable {
     }
 
     public void run() {
-        Player[] players = plugin.getServer().getOnlinePlayers();
         SQLite db = new SQLite();
         try {
             db.open();
@@ -49,7 +48,7 @@ public class SQLitePrintRunnable extends BukkitRunnable {
             boolean end = false;
             while(!end) {
                 if (ret.next()) {
-                    sb.append('\n').append(ret.getInt(1)).append("||").append(ret.getString(2)).append("||").append(ret.getInt(3)).append("||").append(ret.getInt(4));
+                    sb.append('\n').append(ret.getInt(1)).append("\t").append(ret.getString(2)).append("\t").append(ret.getInt(3)).append("\t").append(ret.getInt(4));
                 } else {
                     end = true;
                 }

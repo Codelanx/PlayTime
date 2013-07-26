@@ -22,8 +22,6 @@ import com.rogue.playtime.runnable.sqlite.SQLiteAddRunnable;
 import com.rogue.playtime.runnable.sqlite.SQLiteDeathRunnable;
 import com.rogue.playtime.runnable.sqlite.SQLitePrintRunnable;
 import java.io.File;
-import java.sql.Driver;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -99,7 +97,7 @@ public class Data_SQLite implements DataHandler {
             plugin.getLogger().info("Successfully connected to database!");
             if (!db.checkTable("playTime")) {
                 plugin.getLogger().log(Level.INFO, "Creating table ''playTime'' in database");
-                db.update("CREATE TABLE playTime ( id int NOT NULL PRIMARY KEY, username VARCHAR(32) NOT NULL UNIQUE, playtime int NOT NULL DEFAULT 0, deathtime int NOT NULL DEFAULT 0)");
+                db.update("CREATE TABLE playTime ( id INTEGER NOT NULL PRIMARY KEY, username VARCHAR(32) NOT NULL UNIQUE, playtime INTEGER NOT NULL DEFAULT 0, deathtime INTEGER NOT NULL DEFAULT 0)");
             }
             db.close();
         } catch (SQLException ex) {
@@ -111,24 +109,10 @@ public class Data_SQLite implements DataHandler {
     }
 
     public void setup() {
-        //SQLite_Vars.DATABASE = plugin.getConfig().getString("managers.sqlite.database");
-
-        //File data = new File(plugin.getDataFolder() + File.separator + "users.db");
-        /*if (!data.exists()) {
-            try {
-                Driver d = (Driver) Class.forName("org.sqlite.JDBC").newInstance();
-                DriverManager.registerDriver(d);
-            } catch (Exception e) {
-                plugin.getLogger().log(Level.SEVERE, "Error loading database driver: {0}", e.toString());
-            }
-        }*/
     }
 
     public void initiateRunnable() {
-        updater = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new SQLiteAddRunnable(plugin), 300L, 300L);
-        if (plugin.getDebug() == 3) {
-            Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new SQLitePrintRunnable(plugin), 300L, 300L);
-        }
+        updater = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new SQLiteAddRunnable(plugin), 1200L, 1200L);
     }
 
     public void cleanup() {

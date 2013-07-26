@@ -40,50 +40,67 @@ public class SQLiteAddRunnable extends BukkitRunnable {
     public void run() {
         Player[] players = plugin.getServer().getOnlinePlayers();
         SQLite db = new SQLite();
-        StringBuilder sb2 = new StringBuilder("null  ");
-        try {
-            db.open();
-            if (players.length > 0) {
-                StringBuilder sb = new StringBuilder("INSERT OR IGNORE INTO `playTime` (`username`, `playtime`, `deathtime`) VALUES ");
-                sb2 = new StringBuilder("UPDATE `playTime` ");
-                for (Player p : players) {
-                    
-                    if (!(!plugin.isAFKEnabled() && !plugin.isDeathEnabled()) && !plugin.getPlayerHandler().getPlayer(p.getName()).isAFK()) {
-                        if (plugin.isDeathEnabled()) {
-                            sb2.append("SET `playtime`=`playtime`+1, `deathtime`=`deathtime`+1 WHERE `username`='").append(p.getName()).append("', ");
-                        } else {
-                            sb2.append("SET `playtime`=`playtime`+1 WHERE `username`='").append(p.getName()).append("', ");
-                        }
+        if (players.length > 0) {
+            StringBuilder sb = new StringBuilder("INSERT OR IGNORE INTO `playTime` ");
+            StringBuilder sb2 = new StringBuilder("UPDATE `playTime` SET ");
+            if (!(!plugin.isAFKEnabled() && !plugin.isDeathEnabled())) {
+                if (plugin.isDeathEnabled()) {
+                    sb2.append("`playtime`=`playtime`+1, `deathtime`=`deathtime`+1 WHERE username IN (");
+                } else {
+                    sb2.append("`playtime`=`playtime`+1 WHERE username IN (");
+                }
+            } else {
+                sb2.append("`playtime`=`playtime`+1 WHERE username IN (");
+            }
+            int i = 0;
+            for (Player p : players) {
+                if ((plugin.isAFKEnabled()) && !plugin.getPlayerHandler().getPlayer(p.getName()).isAFK()) {
+                    sb2.append("'").append(p.getName()).append("', ");
+                    if (i > 0) {
+                        sb.append("UNION SELECT NULL, '").append(p.getName()).append("', 0, 0 ");
                     } else {
-                        sb2.append("SET `playtime`=`playtime`+1 WHERE `username`='").append(p.getName()).append("', ");
+                        sb.append("SELECT NULL AS 'column1', '").append(p.getName()).append("' AS 'column2', 0 as 'column3', 0 AS 'column4' ");
+                        i++;
                     }
-                    sb.append("('").append(p.getName()).append("', 0, 0), ");
-                }
-                if (sb.toString().endsWith(" `playTime` ")) {
-                    if (plugin.getDebug() >= 1) {
-                        plugin.getLogger().info("No players to update.");
+                } else if (!plugin.isAFKEnabled()) {
+                    sb2.append("'").append(p.getName()).append("', ");
+                    if (i > 0) {
+                        sb.append("UNION SELECT NULL, '").append(p.getName()).append("', 0, 0 ");
+                    } else {
+                        sb.append("SELECT NULL AS 'column1', '").append(p.getName()).append("' AS 'column2', 0 as 'column3', 0 AS 'column4' ");
+                        i++;
                     }
-                    db.close();
-                    return;
                 }
-                db.update(sb.substring(0, sb.length() - 2));
-                db.update(sb2.substring(0, sb2.length() - 2));
-     
+            }
+            if (sb2.toString().endsWith(" SET ")) {
+                if (plugin.getDebug() >= 1) {
+                    plugin.getLogger().info("No players to update.");
+                }
+                return;
+            }
+            if (plugin.getDebug() >= 2) {
+                plugin.getLogger().log(Level.INFO, "SQL Query 1 for update: \n {0}", sb.substring(0, sb.length() - 1));
+                plugin.getLogger().log(Level.INFO, "SQL Query 2 for update: \n {0}", sb2.substring(0, sb2.length() - 2) + ")");
+            }
+            try {
+                db.open();
+
+                db.update(sb.substring(0, sb.length() - 1));
+                db.update(sb2.substring(0, sb2.length() - 2) + ")");
+
                 if (plugin.getDebug() >= 1) {
                     plugin.getLogger().info("Players updated!");
-                    if (plugin.getDebug() >= 2) {
-                        plugin.getLogger().log(Level.INFO, "SQL Query 1 for update: \n {0}", sb.substring(0, sb.length() - 2));
-                        plugin.getLogger().log(Level.INFO, "SQL Query 2 for update: \n {0}", sb2.substring(0, sb2.length() - 2));
-                    }
+
                 }
+                db.close();
+            } catch (SQLException ex) {
+                plugin.getLogger().log(Level.SEVERE, null, ex);
+                if (plugin.getDebug() == 3) {
+                    ex.printStackTrace();
+                }
+                plugin.getLogger().log(Level.INFO, "SQL Query 1 for update: \n {0}", sb.substring(0, sb.length() - 1));
+                plugin.getLogger().log(Level.INFO, "SQL Query 2 for update: \n {0}", sb2.substring(0, sb2.length() - 2) + ")");
             }
-            db.close();
-        } catch (SQLException ex) {
-            plugin.getLogger().log(Level.SEVERE, null, ex);
-            if (plugin.getDebug() == 3) {
-                ex.printStackTrace();
-            }
-            plugin.getLogger().log(Level.INFO, "SQL Query 2 for update: \n {0}", sb2.substring(0, sb2.length() - 2));
         }
     }
 }
