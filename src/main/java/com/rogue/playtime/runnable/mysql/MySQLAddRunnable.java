@@ -59,6 +59,7 @@ public class MySQLAddRunnable extends BukkitRunnable {
                     if (plugin.getDebug() >= 1) {
                         plugin.getLogger().info("No players to update.");
                     }
+                    db.close();
                     return;
                 }
                 if (plugin.isDeathEnabled()) {
