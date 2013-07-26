@@ -40,40 +40,40 @@ public class SQLiteAddRunnable extends BukkitRunnable {
     public void run() {
         Player[] players = plugin.getServer().getOnlinePlayers();
         SQLite db = new SQLite();
+        StringBuilder sb2 = new StringBuilder("null  ");
         try {
             db.open();
             if (players.length > 0) {
-                StringBuilder sb = new StringBuilder("INSERT INTO `playTime` (`username`, `playtime`, `deathtime`) VALUES ");
+                StringBuilder sb = new StringBuilder("INSERT OR IGNORE INTO `playTime` (`username`, `playtime`, `deathtime`) VALUES ");
+                sb2 = new StringBuilder("UPDATE `playTime` ");
                 for (Player p : players) {
+                    
                     if (!(!plugin.isAFKEnabled() && !plugin.isDeathEnabled()) && !plugin.getPlayerHandler().getPlayer(p.getName()).isAFK()) {
                         if (plugin.isDeathEnabled()) {
-                            sb.append("('").append(p.getName()).append("', 1, 1), ");
+                            sb2.append("SET `playtime`=`playtime`+1, `deathtime`=`deathtime`+1 WHERE `username`='").append(p.getName()).append("', ");
                         } else {
-                            sb.append("('").append(p.getName()).append("', 1, 0), ");
+                            sb2.append("SET `playtime`=`playtime`+1 WHERE `username`='").append(p.getName()).append("', ");
                         }
                     } else {
-                        sb.append("('").append(p.getName()).append("', 1, 0), ");
+                        sb2.append("SET `playtime`=`playtime`+1 WHERE `username`='").append(p.getName()).append("', ");
                     }
+                    sb.append("('").append(p.getName()).append("', 0, 0), ");
                 }
-                if (sb.toString().endsWith(" VALUES ")) {
+                if (sb.toString().endsWith(" `playTime` ")) {
                     if (plugin.getDebug() >= 1) {
                         plugin.getLogger().info("No players to update.");
                     }
+                    db.close();
                     return;
                 }
-                if (plugin.isDeathEnabled()) {
-                    db.update(sb.substring(0, sb.length() - 2) + " ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1, `deathtime`=`deathtime`+1");
-                } else {
-                    db.update(sb.substring(0, sb.length() - 2) + " ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1");
-                }
+                db.update(sb.substring(0, sb.length() - 2));
+                db.update(sb2.substring(0, sb2.length() - 2));
+     
                 if (plugin.getDebug() >= 1) {
                     plugin.getLogger().info("Players updated!");
                     if (plugin.getDebug() >= 2) {
-                        if (plugin.isDeathEnabled()) {
-                            plugin.getLogger().log(Level.INFO, "SQL Query for update: \n {0} ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1, `deathtime`=`deathtime`+1", sb.substring(0, sb.length() - 2));
-                        } else {
-                            plugin.getLogger().log(Level.INFO, "SQL Query for update: \n {0} ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1", sb.substring(0, sb.length() - 2));
-                        }
+                        plugin.getLogger().log(Level.INFO, "SQL Query 1 for update: \n {0}", sb.substring(0, sb.length() - 2));
+                        plugin.getLogger().log(Level.INFO, "SQL Query 2 for update: \n {0}", sb2.substring(0, sb2.length() - 2));
                     }
                 }
             }
@@ -83,6 +83,7 @@ public class SQLiteAddRunnable extends BukkitRunnable {
             if (plugin.getDebug() == 3) {
                 ex.printStackTrace();
             }
+            plugin.getLogger().log(Level.INFO, "SQL Query 2 for update: \n {0}", sb2.substring(0, sb2.length() - 2));
         }
     }
 }

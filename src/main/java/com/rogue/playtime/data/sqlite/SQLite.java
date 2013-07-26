@@ -23,6 +23,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.bukkit.Bukkit;
 
 /**
  *
@@ -32,18 +35,30 @@ import java.sql.Statement;
  */
 public class SQLite {
     
+    private static int connections = 0;
     Connection con = null;
     
     public Connection open() throws SQLException {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SQLite.class.getName()).log(Level.SEVERE, "Error loading sqlite connection, disabling!", ex);
+            Bukkit.getServer().getPluginManager().disablePlugin(Playtime.getPlugin());
+        }
         con = DriverManager.getConnection("jdbc:sqlite:" + Playtime.getPlugin().getDataFolder() + File.separator + "users.db");
+        if (Playtime.getPlugin().getDebug() >= 2) {
+            Playtime.getPlugin().getLogger().log(Level.INFO, "Open connections: {0}", ++connections);
+        }
         return con;
     }
 
    public boolean checkTable(String tablename) throws SQLException {
-        ResultSet count = query("SELECT name FROM sqlite_master WHERE type='table' AND name='" + tablename + "'");
-        boolean give = count.first();
-        count.close();
-        return give;
+        ResultSet count = query("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='" + tablename + "'");
+        int i = count.getInt(1);
+        if (i > 0) {
+            return true;
+        }
+        return false;
     }
 
     public ResultSet query(String query) throws SQLException {
@@ -58,5 +73,8 @@ public class SQLite {
 
     public void close() throws SQLException {
         con.close();
+        if (Playtime.getPlugin().getDebug() >= 2) {
+            Playtime.getPlugin().getLogger().log(Level.INFO, "Open connections: {0}", --connections);
+        }
     }
 }
