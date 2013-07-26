@@ -41,23 +41,33 @@ public class YAMLAddRunnable extends BukkitRunnable {
     public void run() {
         Player[] players = plugin.getServer().getOnlinePlayers();
         for (Player p : players) {
-            if (!(!plugin.isAFKEnabled() && !plugin.isDeathEnabled()) && !plugin.getPlayerHandler().getPlayer(p.getName()).isAFK()) {
+            if (plugin.isAFKEnabled()) {
+                if (!plugin.getPlayerHandler().getPlayer(p.getName()).isAFK()) {
+                    if (plugin.isDeathEnabled()) {
+                        yaml.incrementValue("users." + p.getName() + ".playtime");
+                        yaml.incrementValue("users." + p.getName() + ".deathtime");
+                        if (plugin.getDebug() == 3) {
+                            plugin.getLogger().log(Level.INFO, "Updating playtime and deathtime for {0}!", p.getName());
+                        }
+                    } else {
+                        yaml.incrementValue("users." + p.getName() + ".playtime");
+                        if (plugin.getDebug() == 3) {
+                            plugin.getLogger().log(Level.INFO, "Updating playtime for {0}!");
+                        }
+                    }
+                }
+            } else {
                 if (plugin.isDeathEnabled()) {
                     yaml.incrementValue("users." + p.getName() + ".playtime");
                     yaml.incrementValue("users." + p.getName() + ".deathtime");
-                    if (plugin.getDebug() >= 2) {
+                    if (plugin.getDebug() == 3) {
                         plugin.getLogger().log(Level.INFO, "Updating playtime and deathtime for {0}!", p.getName());
                     }
                 } else {
                     yaml.incrementValue("users." + p.getName() + ".playtime");
-                    if (plugin.getDebug() >= 2) {
+                    if (plugin.getDebug() == 3) {
                         plugin.getLogger().log(Level.INFO, "Updating playtime for {0}!");
                     }
-                }
-            } else {
-                yaml.incrementValue("users." + p.getName() + ".playtime");
-                if (plugin.getDebug() >= 2) {
-                    plugin.getLogger().log(Level.INFO, "Updating playtime for {0}!");
                 }
             }
         }

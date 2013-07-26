@@ -21,14 +21,13 @@ import com.rogue.playtime.data.sqlite.SQLite;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  *
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.1
+ * @version 1.3.0
  */
 public class SQLitePrintRunnable extends BukkitRunnable {
 

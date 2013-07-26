@@ -27,7 +27,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  *
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.1
+ * @version 1.3.0
  */
 public class SQLiteAddRunnable extends BukkitRunnable {
 
@@ -39,19 +39,10 @@ public class SQLiteAddRunnable extends BukkitRunnable {
 
     public void run() {
         Player[] players = plugin.getServer().getOnlinePlayers();
-        SQLite db = new SQLite();
         if (players.length > 0) {
             StringBuilder sb = new StringBuilder("INSERT OR IGNORE INTO `playTime` ");
-            StringBuilder sb2 = new StringBuilder("UPDATE `playTime` SET ");
-            if (!(!plugin.isAFKEnabled() && !plugin.isDeathEnabled())) {
-                if (plugin.isDeathEnabled()) {
-                    sb2.append("`playtime`=`playtime`+1, `deathtime`=`deathtime`+1 WHERE username IN (");
-                } else {
-                    sb2.append("`playtime`=`playtime`+1 WHERE username IN (");
-                }
-            } else {
-                sb2.append("`playtime`=`playtime`+1 WHERE username IN (");
-            }
+            StringBuilder sb2 = new StringBuilder("UPDATE `playTime` SET `playtime`=`playtime`+1");
+            sb2.append((plugin.isDeathEnabled()) ? ", `deathtime`=`deathtime`+1" : "").append(" WHERE username IN (");
             int i = 0;
             for (Player p : players) {
                 if ((plugin.isAFKEnabled()) && !plugin.getPlayerHandler().getPlayer(p.getName()).isAFK()) {
@@ -72,7 +63,7 @@ public class SQLiteAddRunnable extends BukkitRunnable {
                     }
                 }
             }
-            if (sb2.toString().endsWith(" SET ")) {
+            if (sb.toString().endsWith(" `playTime` ")) {
                 if (plugin.getDebug() >= 1) {
                     plugin.getLogger().info("No players to update.");
                 }
@@ -82,6 +73,7 @@ public class SQLiteAddRunnable extends BukkitRunnable {
                 plugin.getLogger().log(Level.INFO, "SQL Query 1 for update: \n {0}", sb.substring(0, sb.length() - 1));
                 plugin.getLogger().log(Level.INFO, "SQL Query 2 for update: \n {0}", sb2.substring(0, sb2.length() - 2) + ")");
             }
+            SQLite db = new SQLite();
             try {
                 db.open();
 
@@ -90,7 +82,6 @@ public class SQLiteAddRunnable extends BukkitRunnable {
 
                 if (plugin.getDebug() >= 1) {
                     plugin.getLogger().info("Players updated!");
-
                 }
                 db.close();
             } catch (SQLException ex) {
@@ -98,8 +89,6 @@ public class SQLiteAddRunnable extends BukkitRunnable {
                 if (plugin.getDebug() == 3) {
                     ex.printStackTrace();
                 }
-                plugin.getLogger().log(Level.INFO, "SQL Query 1 for update: \n {0}", sb.substring(0, sb.length() - 1));
-                plugin.getLogger().log(Level.INFO, "SQL Query 2 for update: \n {0}", sb2.substring(0, sb2.length() - 2) + ")");
             }
         }
     }

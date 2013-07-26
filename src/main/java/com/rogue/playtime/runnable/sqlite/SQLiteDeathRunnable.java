@@ -23,7 +23,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  *
- * @since 1.2.0
+ * @since 1.3.0
  * @author 1Rogue
  * @version 1.3.0
  */
@@ -43,7 +43,9 @@ public class SQLiteDeathRunnable extends BukkitRunnable {
             db.close();
         } catch (SQLException ex) {
             Playtime.getPlugin().getLogger().severe("Error updating player death time");
-            ex.printStackTrace();
+            if (Playtime.getPlugin().getDebug() == 3) {
+                ex.printStackTrace();
+            }
         }
     }
 

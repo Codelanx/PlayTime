@@ -27,7 +27,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  *
  * @since 1.1
  * @author 1Rogue
- * @version 1.1
+ * @version 1.3.0
  */
 public class MySQLAddRunnable extends BukkitRunnable {
 
@@ -40,43 +40,36 @@ public class MySQLAddRunnable extends BukkitRunnable {
     public void run() {
         Player[] players = plugin.getServer().getOnlinePlayers();
         MySQL db = new MySQL();
+        boolean complete = false;
+        StringBuilder sb = new StringBuilder("INSERT INTO `playTime` (`username`, `playtime`, `deathtime`) VALUES ");;
+        if (players.length > 0) {
+            for (Player p : players) {
+                if (plugin.isAFKEnabled()) {
+                    if (!plugin.getPlayerHandler().getPlayer(p.getName()).isAFK()) {
+                        sb.append("('").append(p.getName()).append("', 1, ").append((plugin.isDeathEnabled()) ? "1" : "0").append("), ");
+                    }
+                } else {
+                    sb.append("('").append(p.getName()).append("', 1, ").append((plugin.isDeathEnabled()) ? "1" : "0").append("), ");
+                }
+            }
+            if (sb.toString().endsWith(" VALUES ")) {
+                if (plugin.getDebug() >= 1) {
+                    plugin.getLogger().info("No players to update.");
+                }
+                return;
+            }
+            if (plugin.getDebug() >= 1) {
+                plugin.getLogger().info("Players updated!");
+                if (plugin.getDebug() >= 2) {
+                    plugin.getLogger().log(Level.INFO, "SQL Query for update: \n {0} ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1" + (plugin.isDeathEnabled() ? ", `deathtime`=`deathtime`+1" : ""), sb.substring(0, sb.length() - 2));
+                }
+            }
+            complete = true;
+        }
         try {
             db.open();
-            if (db.checkConnection() && players.length > 0) {
-                StringBuilder sb = new StringBuilder("INSERT INTO `playTime` (`username`, `playtime`, `deathtime`) VALUES ");
-                for (Player p : players) {
-                    if (!(!plugin.isAFKEnabled() && !plugin.isDeathEnabled()) && !plugin.getPlayerHandler().getPlayer(p.getName()).isAFK()) {
-                        if (plugin.isDeathEnabled()) {
-                            sb.append("('").append(p.getName()).append("', 1, 1), ");
-                        } else {
-                            sb.append("('").append(p.getName()).append("', 1, 0), ");
-                        }
-                    } else {
-                        sb.append("('").append(p.getName()).append("', 1, 0), ");
-                    }
-                }
-                if (sb.toString().endsWith(" VALUES ")) {
-                    if (plugin.getDebug() >= 1) {
-                        plugin.getLogger().info("No players to update.");
-                    }
-                    db.close();
-                    return;
-                }
-                if (plugin.isDeathEnabled()) {
-                    db.update(sb.substring(0, sb.length() - 2) + " ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1, `deathtime`=`deathtime`+1");
-                } else {
-                    db.update(sb.substring(0, sb.length() - 2) + " ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1");
-                }
-                if (plugin.getDebug() >= 1) {
-                    plugin.getLogger().info("Players updated!");
-                    if (plugin.getDebug() >= 2) {
-                        if (plugin.isDeathEnabled()) {
-                            plugin.getLogger().log(Level.INFO, "SQL Query for update: \n {0} ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1, `deathtime`=`deathtime`+1", sb.substring(0, sb.length() - 2));
-                        } else {
-                            plugin.getLogger().log(Level.INFO, "SQL Query for update: \n {0} ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1", sb.substring(0, sb.length() - 2));
-                        }
-                    }
-                }
+            if (db.checkConnection() && complete) {
+                db.update(sb.substring(0, sb.length() - 2) + " ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1" + (plugin.isDeathEnabled() ? ", `deathtime`=`deathtime`+1" : ""));
             }
             db.close();
         } catch (SQLException ex) {
