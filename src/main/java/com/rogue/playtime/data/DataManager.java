@@ -38,12 +38,12 @@ public class DataManager {
 
     public void select(String type) {
         type = type.toLowerCase();
-        if (type.equals("yaml")) {
-            data = new Data_YAML();
+        if (type.equals("mysql")) {
+            data = new Data_MySQL();
         } else if (type.equals("sqlite")) {
             data = new Data_SQLite();
         } else {
-            data = new Data_MySQL();
+            data = new Data_YAML();
         }
     }
     
