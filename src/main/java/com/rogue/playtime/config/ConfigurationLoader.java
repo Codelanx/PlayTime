@@ -18,6 +18,9 @@ package com.rogue.playtime.config;
 
 import com.rogue.playtime.Playtime;
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
@@ -27,44 +30,70 @@ import org.bukkit.configuration.file.YamlConfiguration;
  * @version 1.3.0
  */
 public class ConfigurationLoader {
-    
+
     private Playtime plugin;
-    private File file = new File(plugin.getDataFolder() + File.separator + "config.yml");
-    
+    YamlConfiguration yaml = null;
+    private File file;
+
     public ConfigurationLoader(Playtime p) {
         plugin = p;
+        file = new File(plugin.getDataFolder() + File.separator + "config.yml");
     }
-    
+
     public void verifyConfig() {
+        if (plugin.getDataFolder().exists()) {
+            plugin.getDataFolder().mkdir();
+        }
         if (!file.exists()) {
-            //Add default config from resources
+            plugin.saveResource("config.yml", true);
             return;
         }
-        YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
-        if (!yaml.isSet("debug-level")) {
-            yaml.set("debug-level", 0);
-        }
-        if (!yaml.isSet("update-check")) {
-            yaml.set("update-check", true);
-        }
-        if (!yaml.isSet("check-deaths")) {
-            yaml.set("check-deaths", true);
-        }
-        if (!yaml.isSet("afk.enabled")) {
-            yaml.set("afk.enabled", true);
-        }
-        if (!yaml.isSet("afk.interval")) {
-            yaml.set("afk.interval", 60);
-        }
-        if (!yaml.isSet("afk.timeout")) {
-            yaml.set("afk.timeout", 900);
-        }
-        if (!yaml.isSet("data.manager")) {
-            yaml.set("data.manager", "mysql");
-        }
-        if (!yaml.isSet("managers.mysql.host")) {
-            yaml.set("managers.mysql.host", "localhost");
+        yaml = YamlConfiguration.loadConfiguration(file);
+        if (!yaml.isSet("debug-level")) { yaml.set("debug-level", 0); }
+        if (!yaml.isSet("update-check")) { yaml.set("update-check", true); }
+        if (!yaml.isSet("check-deaths")) { yaml.set("check-deaths", true); }
+        if (!yaml.isSet("afk.enabled")) { yaml.set("afk.enabled", true); }
+        if (!yaml.isSet("afk.interval")) { yaml.set("afk.interval", 60); }
+        if (!yaml.isSet("afk.timeout")) { yaml.set("afk.timeout", 900); }
+        if (!yaml.isSet("data.manager")) { yaml.set("data.manager", "flatfile"); }
+        if (!yaml.isSet("managers.mysql.host")) { yaml.set("managers.mysql.host", "localhost"); }
+        if (!yaml.isSet("managers.mysql.port")) { yaml.set("managers.mysql.port", "3306"); }
+        if (!yaml.isSet("managers.mysql.database")) { yaml.set("managers.mysql.database", "minecraft"); }
+        if (!yaml.isSet("managers.mysql.username")) { yaml.set("managers.mysql.username", "root"); }
+        if (!yaml.isSet("managers.mysql.password")) { yaml.set("managers.mysql.password", "password"); }
+
+        this.saveConfig();
+    }
+
+    public void saveConfig() {
+        try {
+            yaml.save(file);
+        } catch (IOException ex) {
+            Logger.getLogger(ConfigurationLoader.class.getName()).log(Level.SEVERE, "Error saving configuration file!", ex);
         }
     }
 
+    /**
+     * Gets the configuration file for Playtime
+     *
+     * @since 1.3.0
+     * @version 1.3.0
+     *
+     * @return YamlConfiguration file, null if verifyConfig() has not been run
+     */
+    public YamlConfiguration getConfig() {
+        return yaml;
+    }
+    
+    public synchronized String getString(String path) {
+        return yaml.getString(path);
+    }
+    
+    public synchronized int getInt(String path) {
+        return yaml.getInt(path);
+    }
+    
+    public synchronized boolean getBoolean(String path) {
+        return yaml.getBoolean(path);
+    }
 }

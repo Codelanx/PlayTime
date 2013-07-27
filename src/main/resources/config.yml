@@ -1,0 +1,16 @@
+debug-level: 0
+update-check: true
+check-deaths: true
+afk:
+  enabled: true
+  interval: 60
+  timeout: 900
+data:
+  manager: 'flatfile'
+managers:
+  mysql:
+    host: localhost
+    port: '3306'
+    database: minecraft
+    username: root
+    password: password

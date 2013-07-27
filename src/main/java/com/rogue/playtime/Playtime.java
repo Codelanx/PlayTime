@@ -17,6 +17,7 @@
 package com.rogue.playtime;
 
 import com.rogue.playtime.command.CommandHandler;
+import com.rogue.playtime.config.ConfigurationLoader;
 import com.rogue.playtime.data.DataManager;
 import com.rogue.playtime.listener.PlaytimeListener;
 import com.rogue.playtime.data.mysql.MySQL;
@@ -49,6 +50,7 @@ public class Playtime extends JavaPlugin {
     protected PlayerHandler phandler;
     protected CommandHandler chandler;
     protected DataManager dmanager;
+    protected ConfigurationLoader cloader;
     private boolean afkEnabled = true;
     private boolean deathEnabled = true;
 
@@ -56,37 +58,24 @@ public class Playtime extends JavaPlugin {
      * Registers the plugin configuration file.
      *
      * @since 1.0
-     * @version 1.1
+     * @version 1.3.0
      */
     @Override
     public void onLoad() {
         File file = new File(getDataFolder() + File.separator + "config.yml");
 
-        if (!file.exists()) {
-            this.getLogger().info("Generating first time config.yml...");
-            this.getConfig().addDefault("debug-level", 0);
-            this.getConfig().addDefault("update-check", true);
-            this.getConfig().addDefault("check-deaths", true);
-            this.getConfig().addDefault("afk.enabled", true);
-            this.getConfig().addDefault("afk.interval", 60);
-            this.getConfig().addDefault("afk.timeout", 900);
-            this.getConfig().addDefault("data.manager", "mysql");
-            this.getConfig().addDefault("managers.mysql.host", "localhost");
-            this.getConfig().addDefault("managers.mysql.port", "3306");
-            this.getConfig().addDefault("managers.mysql.database", "minecraft");
-            this.getConfig().addDefault("managers.mysql.username", "root");
-            this.getConfig().addDefault("managers.mysql.password", "password");
-            this.getConfig().addDefault("managers.sqlite.database", "minecraft");
-            this.getConfig().options().copyDefaults(true);
-            this.saveConfig();
-        }
+        cloader = new ConfigurationLoader(this);
+        cloader.verifyConfig();
 
-        debug = this.getConfig().getInt("debug");
+        debug = cloader.getInt("debug-level");
         if (debug > 3) {
             debug = 3;
         }
         if (debug < 0) {
             debug = 0;
+        }
+        if (debug >= 1) {
+            this.getLogger().log(Level.INFO, "Debug level set to {0}!", debug);
         }
     }
 
@@ -95,16 +84,11 @@ public class Playtime extends JavaPlugin {
      * plugin data storage.
      *
      * @since 1.0
-     * @version 1.2.0
+     * @version 1.3.0
      */
     @Override
     public void onEnable() {
         final long startTime = System.nanoTime();
-
-        debug = this.getConfig().getInt("debug-level");
-        if (debug >= 1) {
-            this.getLogger().log(Level.INFO, "Debug level set to {0}!", debug);
-        }
 
         try {
             Metrics metrics = new Metrics(this);
@@ -272,7 +256,7 @@ public class Playtime extends JavaPlugin {
     }
 
     /**
-     * Returns whether or not death timing is enabled.
+     * Returns whether or not death timing is enabled
      *
      * @since 1.2.0
      * @version 1.2.0
@@ -293,7 +277,27 @@ public class Playtime extends JavaPlugin {
         return ChatColor.translateAlternateColorCodes('&', encoded);
     }
     
+    /**
+     * Returns Playtime's abstract data manager
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @return abstract data manager for Playtime
+     */
     public DataManager getDataManager() {
         return dmanager;
+    }
+    
+    /**
+     * Gets the configuration manager for Playtime
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @return The main ConfigurationLoader
+     */
+    public ConfigurationLoader getConfigurationLoader() {
+        return cloader;
     }
 }
