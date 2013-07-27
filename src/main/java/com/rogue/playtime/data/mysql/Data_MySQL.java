@@ -81,9 +81,8 @@ public class Data_MySQL implements DataHandler {
             if (db.checkConnection()) {
                 plugin.getLogger().info("Successfully connected to database!");
                 if (!db.checkTable("playTime")) {
-                    plugin.getLogger().log(Level.INFO, "Creating table ''playTime'' in database {0}", MySQL_Vars.DATABASE);
-                    ResultSet result = db.query("CREATE TABLE playTime ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL DEFAULT 0, deathtime int NOT NULL DEFAULT 0, onlinetime int NOT NULL DEFAULT 0, PRIMARY KEY (id), UNIQUE KEY (username)) ENtestingGINE=MyISAM;");
-                    result.close();
+                    plugin.getLogger().log(Level.INFO, "Creating table 'playTime' in database {0}", MySQL_Vars.DATABASE);
+                    int result = db.update("CREATE TABLE `playTime` ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL DEFAULT 0, deathtime int NOT NULL DEFAULT 0, onlinetime int NOT NULL DEFAULT 0, PRIMARY KEY (id), UNIQUE KEY (username)) ENGINE=MyISAM;");
                 } else {
                     try {
                         db.update("ALTER TABLE `playTime` ADD COLUMN `username` VARCHAR(32) NULL DEFAULT NULL AFTER `id`, ADD UNIQUE INDEX `username` (`username`)");
