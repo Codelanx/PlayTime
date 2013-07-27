@@ -37,9 +37,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
+ * The main class
+ * 
  * @since 1.0
  * @author 1Rogue
- * @version 1.2.0
+ * @version 1.3.0
  */
 public class Playtime extends JavaPlugin {
     
@@ -70,8 +72,7 @@ public class Playtime extends JavaPlugin {
     }
 
     /**
-     * Registers runnables and the listener on plugin start, as well as the
-     * plugin data storage.
+     * Registers debug, metrics, commands, data management, and listeners.
      *
      * @since 1.0
      * @version 1.3.0
@@ -148,10 +149,11 @@ public class Playtime extends JavaPlugin {
      * Closes tasks and sql connections on plugin disabling.
      *
      * @since 1.0
-     * @version 1.1
+     * @version 1.3.0
      */
     @Override
     public void onDisable() {
+        dmanager.getDataHandler().cleanup();
         if (afkChecker != null) {
             afkChecker.cancel();
         }

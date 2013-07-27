@@ -24,6 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
+ * YAML Data Manager. Check DataHandler for information about each method
  *
  * @since 1.3.0
  * @author 1Rogue
@@ -31,9 +32,9 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public class Data_YAML implements DataHandler {
     
-    YAML yaml;
-    BukkitTask updater;
-    Playtime plugin;
+    private YAML yaml;
+    private BukkitTask updater;
+    private Playtime plugin;
 
     public int getValue(String data, String username) {
         if (data.equals("onlinetime") && !Bukkit.getPlayer(username).isOnline()) {

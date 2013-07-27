@@ -17,7 +17,9 @@
 package com.rogue.playtime.data.mysql;
 
 /**
- *
+ * Static class storing the SQL information for the MySQL instance of the
+ * plugin. Only contains data if the config is set to use MySQL.
+ * 
  * @since 1.1
  * @author 1Rogue
  * @version 1.1

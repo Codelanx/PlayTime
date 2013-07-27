@@ -28,7 +28,8 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 
 /**
- *
+ * Instantiable MySQL connector
+ * 
  * @since 1.3.0
  * @author 1Rogue
  * @version 1.3.0
@@ -36,8 +37,19 @@ import org.bukkit.Bukkit;
 public class SQLite {
     
     private static int connections = 0;
-    Connection con = null;
+    private Connection con = null;
     
+    /**
+     * Opens a connection to the SQLite database. Make sure to call
+     * SQLite.close() after you are finished working with the database for your
+     * segment of your code.
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @return The Connection object
+     * @throws SQLException 
+     */
     public Connection open() throws SQLException {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -52,6 +64,16 @@ public class SQLite {
         return con;
     }
 
+   /**
+     * Checks if a table exists within the set database
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @param tablename Name of the table to check for
+     * @return true if exists, false otherwise
+     * @throws SQLException 
+     */
    public boolean checkTable(String tablename) throws SQLException {
         ResultSet count = query("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='" + tablename + "'");
         int i = count.getInt(1);
@@ -61,16 +83,46 @@ public class SQLite {
         return false;
     }
 
+    /**
+     * Executes a query, but does not update any information nor lock the
+     * database
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @param query The string query to execute
+     * @return A ResultSet from the query
+     * @throws SQLException 
+     */
     public ResultSet query(String query) throws SQLException {
         Statement stmt = con.createStatement();
         return stmt.executeQuery(query);
     }
     
+    /**
+     * Executes a query that can change values, and will lock the database for
+     * the duration of the query
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @param query The string query to execute
+     * @return 0 for no returned results, or the number of returned rows
+     * @throws SQLException 
+     */
     public int update(String query) throws SQLException {
         Statement stmt = con.createStatement();
         return stmt.executeUpdate(query);
     }
-
+    
+    /**
+     * Closes the SQLite connection. Must be open first.
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @throws SQLException 
+     */
     public void close() throws SQLException {
         con.close();
         if (Playtime.getPlugin().getDebug() >= 2) {

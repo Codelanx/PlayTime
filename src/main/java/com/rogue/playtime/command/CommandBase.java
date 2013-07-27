@@ -28,10 +28,32 @@ import org.bukkit.command.CommandSender;
  */
 public interface CommandBase {
     
-    Playtime plugin = Playtime.getPlugin();
+    public Playtime plugin = Playtime.getPlugin();
 
+    /**
+     * Executes a relevant command grabbed from the CommandHandler.
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @param sender The command executor
+     * @param cmd The Command object
+     * @param commandLabel The string name of the command executed
+     * @param args The command arguments
+     * 
+     * @return true on success, false if failed
+     */
     public abstract boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args);
     
+    /**
+     * Returns the name of the command, used for storing a hashmap of the
+     * commands
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @return The command's name
+     */
     public abstract String getName();
     
 }

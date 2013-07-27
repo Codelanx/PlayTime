@@ -189,6 +189,14 @@ public class PlayerHandler {
         this.getPlayer(name.toLowerCase()).setAFK(value);
     }
 
+    /**
+     * Increments the value for a player's AFK time.
+     * 
+     * @since 1.2.0
+     * @version 1.2.0
+     * 
+     * @param name The username to increment time for
+     */
     public void incrementTime(String name) {
         this.getPlayer(name.toLowerCase()).setTime(this.getPlayer(name.toLowerCase()).getTime() + timer);
         if (checkTime(name) >= timeEnd) {
@@ -198,11 +206,27 @@ public class PlayerHandler {
             plugin.getPlayerHandler().updatePlayer(name, true);
         }
     }
-
+    
+    /**
+     * Gets the timeout value for AFK management in seconds
+     * 
+     * @since 1.2.0
+     * @version 1.2.0
+     * 
+     * @return The int value of the AFK timeout
+     */
     public int getAFKTimeout() {
         return timeEnd;
     }
 
+    /**
+     * Gets the interval at which the plugin checks for AFK people in seconds
+     * 
+     * @since 1.2.0
+     * @version 1.2.0
+     * 
+     * @return The int value of the AFK checking interval
+     */
     public int getAFKCheckInterval() {
         return timer;
     }

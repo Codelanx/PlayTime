@@ -33,6 +33,7 @@ public class YAML {
     
     private YamlConfiguration yaml;
     private final String path;
+    private Playtime plugin = Playtime.getPlugin();
     
     public YAML() {
         path = plugin.getDataFolder() + File.separator + "users.yml";
@@ -44,17 +45,37 @@ public class YAML {
         }
     }
     
-    Playtime plugin = Playtime.getPlugin();
-    
+    /**
+     * Increases an int value within the data file by 1
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @param key The path to the data to edit
+     */
     public void incrementValue(String key) {
         int i = yaml.getInt(key);
         yaml.set(key, ++i);
     }
     
+    /**
+     * Returns a YamlConfiguration of the data file.
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @return The YamlConfiguration
+     */
     public YamlConfiguration getFile() {
         return yaml;
     }
     
+    /**
+     * Forces a save of the current yaml data file in memory.
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     */
     public void forceSave() {
         try {
             yaml.save(path);
@@ -62,7 +83,18 @@ public class YAML {
             Logger.getLogger(YAML.class.getName()).log(Level.SEVERE, "Error saving user yaml configuration!", ex);
         }
     }
-
+    
+    /**
+     * Creates a YAML file if none exists yet, and returns it as a
+     * YamlConfiguration
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @param yaml The path to the file
+     * @return the file path made into a YamlConfiguratino
+     * @throws IOException 
+     */
     private YamlConfiguration makeYAML(File yaml) throws IOException {
         if (yaml.exists()) {
             return YamlConfiguration.loadConfiguration(yaml);

@@ -20,9 +20,9 @@ import org.bukkit.Location;
 
 /**
  *
- * @since
+ * @since 1.2.0
  * @author 1Rogue
- * @version
+ * @version 1.2.0
  */
 public class PlaytimePlayer {
 
@@ -40,8 +40,8 @@ public class PlaytimePlayer {
     /**
      * Sets the player's starting AFK time.
      *
-     * @since 0.1
-     * @version 0.1
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @param time The supplied time
      */
@@ -52,8 +52,8 @@ public class PlaytimePlayer {
     /**
      * Sets the player's location at the time of going AFK.
      *
-     * @since 0.1
-     * @version 0.1
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @param location The saved location
      */
@@ -64,8 +64,8 @@ public class PlaytimePlayer {
     /**
      * Gets the player's starting AFK time.
      *
-     * @since 0.1
-     * @version 0.1
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @return Starting AFK time
      */
@@ -76,8 +76,8 @@ public class PlaytimePlayer {
     /**
      * Gets the player's location at the time of going AFK.
      *
-     * @since 0.1
-     * @version 0.1
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @return The saved location
      */
@@ -88,8 +88,8 @@ public class PlaytimePlayer {
     /**
      * Sets whether or not the player is AFK.
      *
-     * @since 0.1
-     * @version 0.1
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @param value Value to set AFK for
      */
@@ -112,8 +112,8 @@ public class PlaytimePlayer {
     /**
      * Gets the name value for the player.
      *
-     * @since 0.1
-     * @version 0.1
+     * @since 1.2.0
+     * @version 1.2.0
      *
      * @return The name of the player
      */

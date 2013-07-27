@@ -24,12 +24,13 @@ import org.bukkit.entity.Player;
 
 /**
  *
- * @since
+ * @since 1.3.0
  * @author 1Rogue
- * @version
+ * @version 1.3.0
  */
 public class OnlineCommand implements CommandBase {
 
+    @Override
     public boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         String check;
         String perm = "playtime.use";

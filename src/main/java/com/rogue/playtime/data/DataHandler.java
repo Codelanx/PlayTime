@@ -24,17 +24,70 @@ package com.rogue.playtime.data;
  */
 public interface DataHandler {
     
+    /**
+     * Gets a value based on name of a particular user
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @param data In SQL, this would be the column. In YAML, this is the key under the pertinent user.
+     * @param username The username to look for
+     * @return The integer value, or 0 if it is not found
+     */
     public abstract int getValue(String data, String username);
     
+    /**
+     * Calls an Asynchronous task that resets the player's death timer
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @param username The username to reset
+     */
     public abstract void onDeath(String username);
     
+    /**
+     * Calls an Asynchronous task that resets the player's online timer
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @param username The username to reset
+     */
     public abstract void onLogout(String username);
     
+    /**
+     * A void method used to double-check that the files/sql databases are
+     * correctly formatted, and will not cause errors in the future.
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     */
     public abstract void verifyFormat();
     
+    /**
+     * Sets any necessary variables before dealing with data management.
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     */
     public abstract void setup();
     
+    /**
+     * Starts the runnable that will add data to the relevant storage location
+     * at 1-minute intervals
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     */
     public abstract void initiateRunnable();
     
+    /**
+     * Does any necessary operations before closing down, such as closing
+     * sql connections, or stopping runnables.
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     */
     public abstract void cleanup();
 }

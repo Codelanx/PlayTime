@@ -35,7 +35,17 @@ public class DataManager {
     public DataManager(Playtime p) {
         plugin = p;
     }
-
+    
+    /**
+     * Selects the proper data manager to use, based on the configuration set
+     * by the user. By default, it will use flatfile if the user enters
+     * something that isn't compatible.
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @param type The type of data manager to use
+     */
     public void select(String type) {
         type = type.toLowerCase();
         if (type.equals("mysql")) {
@@ -47,6 +57,12 @@ public class DataManager {
         }
     }
     
+    /**
+     * Runs the startup process for the data manager at hand.
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     */
     public void start() {
         data.setup();
         data.verifyFormat();

@@ -26,6 +26,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 
 /**
+ * Instantiable MySQL connector
  *
  * @since 1.1
  * @author 1Rogue
@@ -34,8 +35,19 @@ import java.util.logging.Level;
 public class MySQL {
 
     private static int connections = 0;
-    Connection con = null;
+    private Connection con = null;
 
+    /**
+     * Opens a connection to the MySQL database. Make sure to call MySQL.close()
+     * after you are finished working with the database for your segment of your
+     * code.
+     * 
+     * @since 1.1
+     * @version 1.1
+     * 
+     * @return The Connection object
+     * @throws SQLException 
+     */
     public Connection open() throws SQLException {
         Properties connectionProps = new Properties();
         connectionProps.put("user", MySQL_Vars.USER);
@@ -48,6 +60,16 @@ public class MySQL {
         return con;
     }
 
+    /**
+     * Checks if a table exists within the set database
+     * 
+     * @since 1.1
+     * @version 1.1
+     * 
+     * @param tablename Name of the table to check for
+     * @return true if exists, false otherwise
+     * @throws SQLException 
+     */
     public boolean checkTable(String tablename) throws SQLException {
         ResultSet count = query("SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = '" + MySQL_Vars.DATABASE + "') AND (TABLE_NAME = '" + tablename + "')");
         boolean give = count.first();
@@ -55,23 +77,60 @@ public class MySQL {
         return give;
     }
 
+    /**
+     * Executes a query, but does not update any information
+     * 
+     * @since 1.1
+     * @version 1.1
+     * 
+     * @param query The string query to execute
+     * @return A ResultSet from the query
+     * @throws SQLException 
+     */
     public ResultSet query(String query) throws SQLException {
         Statement stmt = con.createStatement();
         return stmt.executeQuery(query);
     }
     
+    /**
+     * Executes a query that can change values
+     * 
+     * @since 1.1
+     * @version 1.1
+     * 
+     * @param query The string query to execute
+     * @return 0 for no returned results, or the number of returned rows
+     * @throws SQLException 
+     */
     public int update(String query) throws SQLException {
         Statement stmt = con.createStatement();
         return stmt.executeUpdate(query);
     }
-
+    
+    /**
+     * Closes the MySQL connection. Must be open first.
+     * 
+     * @since 1.1
+     * @version 1.1
+     * 
+     * @throws SQLException 
+     */
     public void close() throws SQLException {
         con.close();
         if (Playtime.getPlugin().getDebug() >= 2) {
             Playtime.getPlugin().getLogger().log(Level.INFO, "Open connections: {0}", --connections);
         }
     }
-
+    
+    /**
+     * Checks to make sure the connection is active to the MySQL server
+     * 
+     * @since 1.1
+     * @version 1.1
+     * 
+     * @return true if connected, false otherwise
+     * @throws SQLException 
+     */
     public boolean checkConnection() throws SQLException {
         ResultSet count = query("SELECT count(*) FROM information_schema.SCHEMATA");
         boolean give = count.first();

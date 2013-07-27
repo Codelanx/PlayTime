@@ -22,7 +22,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- *
+ * 
  * @since 1.3.0
  * @author 1Rogue
  * @version 1.3.0

@@ -29,6 +29,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
+ * SQLite Data Manager. See DataHandler for information on each method.
  *
  * @since 1.3.0
  * @author 1Rogue

@@ -24,7 +24,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 /**
- *
+ * Manages commands abstractly for the plugin
+ * 
  * @since 1.3.0
  * @author 1Rogue
  * @version 1.3.0
@@ -55,6 +56,8 @@ public class CommandHandler implements CommandExecutor {
         plugin.getCommand("playtime").setExecutor(this);
         plugin.getCommand("deathtime").setExecutor(this);
         plugin.getCommand("onlinetime").setExecutor(this);
+        
+        //NOTE: For use in 1.4.0 , I got a little ahead of myself
         //plugin.getCommand("playtimetop").setExecutor(this);
         //plugin.getCommand("deathtimetop").setExecutor(this);
         //plugin.getCommand("onlinetimetop").setExecutor(this);
@@ -63,6 +66,9 @@ public class CommandHandler implements CommandExecutor {
     /**
      * Executes the proper command within Playtime
      *
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
      * @param sender The command executor
      * @param cmd The command instance
      * @param commandLabel The command name

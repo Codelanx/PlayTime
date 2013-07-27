@@ -28,7 +28,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
- *
+ * MySQL Data manager. See DataHandler for information about each method.
+ * 
  * @since 1.3.0
  * @author 1Rogue
  * @version 1.3.0

@@ -17,7 +17,6 @@
 package com.rogue.playtime.command;
 
 import static com.rogue.playtime.Playtime._;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
