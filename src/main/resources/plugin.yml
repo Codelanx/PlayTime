@@ -19,6 +19,7 @@ permissions:
       playtime.use.others: true
       playtime.death: true
       playtime.death.others: true
+      playtime.updatenotice: true
     playtime.use:
       default: true
       description: Gives access to look at your play time

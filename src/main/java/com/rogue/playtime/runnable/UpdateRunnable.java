@@ -29,9 +29,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 /**
  * Adopted from TotalPermissions
  * 
- * @version 1.1
- * @author Lord_Ralex
  * @since 1.1
+ * @author Lord_Ralex
+ * @version 1.3.0
  */
 public class UpdateRunnable extends BukkitRunnable {
 
@@ -64,6 +64,7 @@ public class UpdateRunnable extends BukkitRunnable {
             } else {
                 isLatest = false;
             }
+            plugin.setUpdateStatus(!isLatest);
         } catch (MalformedURLException ex) {
             plugin.getLogger().log(Level.SEVERE, "Error occured while checking for an update", ex);
         } catch (IOException ex) {

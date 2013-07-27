@@ -16,9 +16,8 @@
  */
 package com.rogue.playtime.listener;
 
+import static com.rogue.playtime.Playtime._;
 import com.rogue.playtime.Playtime;
-import com.rogue.playtime.runnable.mysql.MySQLDeathRunnable;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -35,41 +34,47 @@ import org.bukkit.event.player.PlayerQuitEvent;
  * @version 1.3.0
  */
 public class PlaytimeListener implements Listener {
-    
+
     private final Playtime plugin;
-    
-    public PlaytimeListener (Playtime p) {
+
+    public PlaytimeListener(Playtime p) {
         plugin = p;
     }
-    
+
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerDeath(PlayerDeathEvent e) {
         if (plugin.isDeathEnabled()) {
             plugin.getDataManager().getDataHandler().onDeath(e.getEntity().getName());
         }
     }
-    
+
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerJoin (PlayerJoinEvent e) {
+    public void onPlayerJoin(PlayerJoinEvent e) {
         if (plugin.isAFKEnabled()) {
             plugin.getPlayerHandler().putPlayer(e.getPlayer().getName(), 0, e.getPlayer().getLocation());
         }
+        if (e.getPlayer().isOp() || e.getPlayer().hasPermission("playtime.updatenotice"));
+        if (plugin.getConfigurationLoader().getBoolean("update-check")) {
+            if (plugin.isUpdateAvailable()) {
+                e.getPlayer().sendMessage(_("[&ePlaytime&f] &6An update is available for Playtime!"));
+            }
+        }
     }
-    
+
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerQuit(PlayerQuitEvent e) {
         if (plugin.isAFKEnabled()) {
             plugin.getPlayerHandler().remPlayer(e.getPlayer().getName());
         }
     }
-    
+
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerMove(PlayerMoveEvent e) {
         if (plugin.isAFKEnabled()) {
             plugin.getPlayerHandler().updatePlayer(e.getPlayer().getName(), false);
         }
     }
-    
+
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerInteract(PlayerInteractEvent e) {
         if (plugin.isAFKEnabled()) {

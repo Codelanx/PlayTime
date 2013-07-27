@@ -29,9 +29,9 @@ import org.bukkit.scheduler.BukkitTask;
 
 /**
  *
- * @since
+ * @since 1.3.0
  * @author 1Rogue
- * @version
+ * @version 1.3.0
  */
 public class Data_MySQL implements DataHandler {
     
@@ -86,7 +86,7 @@ public class Data_MySQL implements DataHandler {
     }
 
     public void verifyFormat() {
-         db = new MySQL();
+        db = new MySQL();
         plugin.getLogger().info("Connecting to MySQL database...");
         try {
             db.open();

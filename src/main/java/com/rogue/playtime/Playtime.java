@@ -53,6 +53,7 @@ public class Playtime extends JavaPlugin {
     protected ConfigurationLoader cloader;
     private boolean afkEnabled = true;
     private boolean deathEnabled = true;
+    private boolean isUpdate = false;
 
     /**
      * Registers the plugin configuration file.
@@ -66,17 +67,6 @@ public class Playtime extends JavaPlugin {
 
         cloader = new ConfigurationLoader(this);
         cloader.verifyConfig();
-
-        debug = cloader.getInt("debug-level");
-        if (debug > 3) {
-            debug = 3;
-        }
-        if (debug < 0) {
-            debug = 0;
-        }
-        if (debug >= 1) {
-            this.getLogger().log(Level.INFO, "Debug level set to {0}!", debug);
-        }
     }
 
     /**
@@ -89,6 +79,17 @@ public class Playtime extends JavaPlugin {
     @Override
     public void onEnable() {
         final long startTime = System.nanoTime();
+        
+        debug = cloader.getInt("debug-level");
+        if (debug > 3) {
+            debug = 3;
+        }
+        if (debug < 0) {
+            debug = 0;
+        }
+        if (debug >= 1) {
+            this.getLogger().log(Level.INFO, "Debug level set to {0}!", debug);
+        }
 
         try {
             Metrics metrics = new Metrics(this);
@@ -115,6 +116,7 @@ public class Playtime extends JavaPlugin {
 
         afkEnabled = this.getConfig().getBoolean("afk.enabled");
         deathEnabled = this.getConfig().getBoolean("check-deaths");
+        
 
 
         if (afkEnabled) {
@@ -126,7 +128,7 @@ public class Playtime extends JavaPlugin {
             phandler = null;
         }
 
-        if (!(!afkEnabled && !deathEnabled)) {
+        if (!(!afkEnabled && !deathEnabled && !this.cloader.getBoolean("update-check"))) {
             this.getLogger().log(Level.INFO, "Enabling Listener...");
             listener = new PlaytimeListener(this);
             Bukkit.getPluginManager().registerEvents(listener, this);
@@ -265,6 +267,33 @@ public class Playtime extends JavaPlugin {
      */
     public boolean isDeathEnabled() {
         return deathEnabled;
+    }
+    
+    /**
+     * Returns the status of the update check
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @return true if update, false if none or no check made.
+     */
+    public boolean isUpdateAvailable() {
+        return isUpdate;
+    }
+    
+    /**
+     * Sets whether or not an update is available. Should only be called by
+     * the update task.
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @param status true if latest version, otherwise false
+     * @return The updated value
+     */
+    public boolean setUpdateStatus(boolean status) {
+        isUpdate = status;
+        return isUpdate;
     }
     
     /**
