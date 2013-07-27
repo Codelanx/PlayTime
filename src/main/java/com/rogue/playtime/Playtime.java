@@ -20,7 +20,6 @@ import com.rogue.playtime.command.CommandHandler;
 import com.rogue.playtime.config.ConfigurationLoader;
 import com.rogue.playtime.data.DataManager;
 import com.rogue.playtime.listener.PlaytimeListener;
-import com.rogue.playtime.data.mysql.MySQL;
 import com.rogue.playtime.metrics.Metrics;
 import com.rogue.playtime.player.PlayerHandler;
 import com.rogue.playtime.runnable.AFKRunnable;
@@ -53,6 +52,7 @@ public class Playtime extends JavaPlugin {
     protected ConfigurationLoader cloader;
     private boolean afkEnabled = true;
     private boolean deathEnabled = true;
+    private boolean onlineEnabled = true;
     private boolean isUpdate = false;
 
     /**
@@ -114,9 +114,9 @@ public class Playtime extends JavaPlugin {
         chandler = new CommandHandler(this);
         chandler.registerExecs();
 
-        afkEnabled = this.getConfig().getBoolean("afk.enabled");
-        deathEnabled = this.getConfig().getBoolean("check-deaths");
-        
+        afkEnabled = this.cloader.getBoolean("afk.enabled");
+        deathEnabled = this.cloader.getBoolean("check.death-time");
+        onlineEnabled = this.cloader.getBoolean("check.online-time");
 
 
         if (afkEnabled) {
@@ -128,7 +128,7 @@ public class Playtime extends JavaPlugin {
             phandler = null;
         }
 
-        if (!(!afkEnabled && !deathEnabled && !this.cloader.getBoolean("update-check"))) {
+        if (!(!afkEnabled && !deathEnabled && !onlineEnabled && !this.cloader.getBoolean("update-check"))) {
             this.getLogger().log(Level.INFO, "Enabling Listener...");
             listener = new PlaytimeListener(this);
             Bukkit.getPluginManager().registerEvents(listener, this);
@@ -267,6 +267,18 @@ public class Playtime extends JavaPlugin {
      */
     public boolean isDeathEnabled() {
         return deathEnabled;
+    }
+    
+    /**
+     * Returns whether or not online timing is enabled
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @return Status of online tracking
+     */
+    public boolean isOnlineEnabled() {
+        return onlineEnabled;
     }
     
     /**

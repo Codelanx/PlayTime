@@ -41,16 +41,23 @@ public class MySQLAddRunnable extends BukkitRunnable {
         Player[] players = plugin.getServer().getOnlinePlayers();
         MySQL db = new MySQL();
         boolean complete = false;
-        StringBuilder sb = new StringBuilder("INSERT INTO `playTime` (`username`, `playtime`, `deathtime`) VALUES ");;
+        StringBuilder sb = new StringBuilder("INSERT INTO `playTime` (`username`) VALUES ");
         if (players.length > 0) {
             for (Player p : players) {
                 if (plugin.isAFKEnabled()) {
+                    if (!plugin.getPlayerHandler().getPlayer(p.getName()).isAFK()) {
+                        sb.append("('").append(p.getName()).append("'), ");
+                    }
+                } else {
+                    sb.append("('").append(p.getName()).append("'), ");
+                }
+                /*if (plugin.isAFKEnabled()) {
                     if (!plugin.getPlayerHandler().getPlayer(p.getName()).isAFK()) {
                         sb.append("('").append(p.getName()).append("', 1, ").append((plugin.isDeathEnabled()) ? "1" : "0").append("), ");
                     }
                 } else {
                     sb.append("('").append(p.getName()).append("', 1, ").append((plugin.isDeathEnabled()) ? "1" : "0").append("), ");
-                }
+                }*/
             }
             if (sb.toString().endsWith(" VALUES ")) {
                 if (plugin.getDebug() >= 1) {
@@ -61,7 +68,7 @@ public class MySQLAddRunnable extends BukkitRunnable {
             if (plugin.getDebug() >= 1) {
                 plugin.getLogger().info("Players updated!");
                 if (plugin.getDebug() >= 2) {
-                    plugin.getLogger().log(Level.INFO, "SQL Query for update: \n {0} ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1" + (plugin.isDeathEnabled() ? ", `deathtime`=`deathtime`+1" : ""), sb.substring(0, sb.length() - 2));
+                    plugin.getLogger().log(Level.INFO, "SQL Query for update: \n {0} ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1" + (plugin.isDeathEnabled() ? ", `deathtime`=`deathtime`+1" : "") + ", `onlinetime`=`onlinetime`+1", sb.substring(0, sb.length() - 2));
                 }
             }
             complete = true;
@@ -69,10 +76,10 @@ public class MySQLAddRunnable extends BukkitRunnable {
         try {
             db.open();
             if (db.checkConnection() && complete) {
-                db.update(sb.substring(0, sb.length() - 2) + " ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1" + (plugin.isDeathEnabled() ? ", `deathtime`=`deathtime`+1" : ""));
+                db.update(sb.substring(0, sb.length() - 2) + " ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1" + (plugin.isDeathEnabled() ? ", `deathtime`=`deathtime`+1" : "") + ", `onlinetime`=`onlinetime`+1");
             }
             db.close();
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             plugin.getLogger().log(Level.SEVERE, null, ex);
             if (plugin.getDebug() == 3) {
                 ex.printStackTrace();

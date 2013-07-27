@@ -14,35 +14,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.runnable.sqlite;
+package com.rogue.playtime.runnable.mysql;
 
 import com.rogue.playtime.Playtime;
-import com.rogue.playtime.data.sqlite.SQLite;
+import com.rogue.playtime.data.mysql.MySQL;
 import java.sql.SQLException;
+import java.util.logging.Level;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  *
- * @since 1.3.0
+ * @since 1.2.0
  * @author 1Rogue
  * @version 1.3.0
  */
-public class SQLiteDeathRunnable extends BukkitRunnable {
+public class MySQLResetRunnable extends BukkitRunnable {
     
     private final String user;
+    private final String value;
     
-    public SQLiteDeathRunnable(String username) {
+    public MySQLResetRunnable(String username, String column) {
         user = username;
+        value = column;
     }
 
     public void run() {
-        SQLite db = new SQLite();
+        MySQL db = new MySQL();
         try {
             db.open();
-            db.update("UPDATE `playTime` SET `deathtime`=0 WHERE `username`='" + user + "'");
+            db.update("UPDATE `playTime` SET `" + value + "`=0 WHERE `username`='" + user + "'");
             db.close();
         } catch (SQLException ex) {
-            Playtime.getPlugin().getLogger().severe("Error updating player death time");
+            Playtime.getPlugin().getLogger().log(Level.SEVERE, "Error updating player {0} time", value.substring(0, value.length() - 5));
             if (Playtime.getPlugin().getDebug() == 3) {
                 ex.printStackTrace();
             }

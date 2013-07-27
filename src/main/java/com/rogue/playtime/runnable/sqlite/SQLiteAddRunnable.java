@@ -31,7 +31,8 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class SQLiteAddRunnable extends BukkitRunnable {
 
-    Playtime plugin;
+    private Playtime plugin;
+    
 
     public SQLiteAddRunnable(Playtime p) {
         plugin = p;
@@ -42,23 +43,23 @@ public class SQLiteAddRunnable extends BukkitRunnable {
         if (players.length > 0) {
             StringBuilder sb = new StringBuilder("INSERT OR IGNORE INTO `playTime` ");
             StringBuilder sb2 = new StringBuilder("UPDATE `playTime` SET `playtime`=`playtime`+1");
-            sb2.append((plugin.isDeathEnabled()) ? ", `deathtime`=`deathtime`+1" : "").append(" WHERE username IN (");
+            sb2.append((plugin.isDeathEnabled()) ? ", `deathtime`=`deathtime`+1" : "").append(", `onlinetime`=`onlinetime`+1 WHERE username IN (");
             int i = 0;
             for (Player p : players) {
                 if ((plugin.isAFKEnabled()) && !plugin.getPlayerHandler().getPlayer(p.getName()).isAFK()) {
                     sb2.append("'").append(p.getName()).append("', ");
                     if (i > 0) {
-                        sb.append("UNION SELECT NULL, '").append(p.getName()).append("', 0, 0 ");
+                        sb.append("UNION SELECT NULL, '").append(p.getName()).append("', 0, 0, 0 ");
                     } else {
-                        sb.append("SELECT NULL AS 'column1', '").append(p.getName()).append("' AS 'column2', 0 as 'column3', 0 AS 'column4' ");
+                        sb.append("SELECT NULL AS 'column1', '").append(p.getName()).append("' AS 'column2', 0 AS 'column3', 0 AS 'column4', 0 AS 'column5' ");
                         i++;
                     }
                 } else if (!plugin.isAFKEnabled()) {
                     sb2.append("'").append(p.getName()).append("', ");
                     if (i > 0) {
-                        sb.append("UNION SELECT NULL, '").append(p.getName()).append("', 0, 0 ");
+                        sb.append("UNION SELECT NULL, '").append(p.getName()).append("', 0, 0, 0 ");
                     } else {
-                        sb.append("SELECT NULL AS 'column1', '").append(p.getName()).append("' AS 'column2', 0 as 'column3', 0 AS 'column4' ");
+                        sb.append("SELECT NULL AS 'column1', '").append(p.getName()).append("' AS 'column2', 0 AS 'column3', 0 AS 'column4', 0 AS 'column5' ");
                         i++;
                     }
                 }

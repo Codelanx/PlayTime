@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
+ * Manages the configuration for the plugin
  *
  * @since 1.3.0
  * @author 1Rogue
@@ -40,6 +41,12 @@ public class ConfigurationLoader {
         file = new File(plugin.getDataFolder() + File.separator + "config.yml");
     }
 
+    /**
+     * Verifies the values within the configuration, and the file itself
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     */
     public void verifyConfig() {
         if (plugin.getDataFolder().exists()) {
             plugin.getDataFolder().mkdir();
@@ -51,7 +58,8 @@ public class ConfigurationLoader {
         yaml = YamlConfiguration.loadConfiguration(file);
         if (!yaml.isSet("debug-level")) { yaml.set("debug-level", 0); }
         if (!yaml.isSet("update-check")) { yaml.set("update-check", true); }
-        if (!yaml.isSet("check-deaths")) { yaml.set("check-deaths", true); }
+        if (!yaml.isSet("check.death-time")) { yaml.set("check.death-time", true); }
+        if (!yaml.isSet("check.online-time")) { yaml.set("check.online-time", true); }
         if (!yaml.isSet("afk.enabled")) { yaml.set("afk.enabled", true); }
         if (!yaml.isSet("afk.interval")) { yaml.set("afk.interval", 60); }
         if (!yaml.isSet("afk.timeout")) { yaml.set("afk.timeout", 900); }
@@ -65,6 +73,12 @@ public class ConfigurationLoader {
         this.saveConfig();
     }
 
+    /**
+     * Saves the current configuration from memory
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     */
     public void saveConfig() {
         try {
             yaml.save(file);
@@ -85,14 +99,41 @@ public class ConfigurationLoader {
         return yaml;
     }
     
+    /**
+     * Gets a string value from the config
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @param path Path to string value
+     * @return String value
+     */
     public synchronized String getString(String path) {
         return yaml.getString(path);
     }
     
+    /**
+     * Gets an int value from the config
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @param path Path to int value
+     * @return int value
+     */
     public synchronized int getInt(String path) {
         return yaml.getInt(path);
     }
     
+    /**
+     * Gets a boolean value from the config
+     * 
+     * @since 1.3.0
+     * @version 1.3.0
+     * 
+     * @param path Path to boolean value
+     * @return boolean value
+     */
     public synchronized boolean getBoolean(String path) {
         return yaml.getBoolean(path);
     }

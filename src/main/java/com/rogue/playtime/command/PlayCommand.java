@@ -17,7 +17,6 @@
 package com.rogue.playtime.command;
 
 import static com.rogue.playtime.Playtime._;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,7 +27,7 @@ import org.bukkit.entity.Player;
  * @author 1Rogue
  * @version 1.3.0
  */
-public class PlaytimeCommand implements CommandBase {
+public class PlayCommand implements CommandBase {
 
     @Override
     public boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -44,7 +43,7 @@ public class PlaytimeCommand implements CommandBase {
             return true;
         }
         if (sender.hasPermission(perm)) {
-            int time = plugin.getDataManager().getDataHandler().getPlaytime(check);
+            int time = plugin.getDataManager().getDataHandler().getValue("playtime", check);
             int minutes = time % 60;
             if (time >= 60) {
                 int hours = time / 60;

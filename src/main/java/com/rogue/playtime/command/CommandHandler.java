@@ -19,7 +19,6 @@ package com.rogue.playtime.command;
 import com.rogue.playtime.Playtime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -38,10 +37,12 @@ public class CommandHandler implements CommandExecutor {
     public CommandHandler(Playtime p) {
         plugin = p;
 
-        PlaytimeCommand playtime = new PlaytimeCommand();
+        PlayCommand playtime = new PlayCommand();
         commands.put(playtime.getName(), playtime);
         DeathCommand death = new DeathCommand();
         commands.put(death.getName(), death);
+        OnlineCommand online = new OnlineCommand();
+        commands.put(online.getName(), online);
     }
 
     /**
@@ -53,6 +54,10 @@ public class CommandHandler implements CommandExecutor {
     public void registerExecs() {
         plugin.getCommand("playtime").setExecutor(this);
         plugin.getCommand("deathtime").setExecutor(this);
+        plugin.getCommand("onlinetime").setExecutor(this);
+        //plugin.getCommand("playtimetop").setExecutor(this);
+        //plugin.getCommand("deathtimetop").setExecutor(this);
+        //plugin.getCommand("onlinetimetop").setExecutor(this);
     }
 
     /**
@@ -67,18 +72,7 @@ public class CommandHandler implements CommandExecutor {
      */
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (plugin.getDebug() >= 1) {
-            plugin.getLogger().log(Level.INFO, "onCommand called! commandLabel = {0}", commandLabel);
-            if (plugin.getDebug() >= 2) {
-                for (String s : commands.keySet()) {
-                    plugin.getLogger().log(Level.INFO, "Command key found: {0}", s);
-                }
-            }
-        }
         if (commands.containsKey(commandLabel)) {
-            if (plugin.getDebug() >= 1) {
-                plugin.getLogger().info("Executing command!");
-            }
             return commands.get(commandLabel).execute(sender, cmd, commandLabel, args);
         }
         return false;

@@ -66,6 +66,9 @@ public class PlaytimeListener implements Listener {
         if (plugin.isAFKEnabled()) {
             plugin.getPlayerHandler().remPlayer(e.getPlayer().getName());
         }
+        if (plugin.isOnlineEnabled()) {
+            plugin.getDataManager().getDataHandler().onLogout(e.getPlayer().getName());
+        }
     }
 
     @EventHandler(priority = EventPriority.NORMAL)

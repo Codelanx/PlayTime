@@ -19,7 +19,7 @@ package com.rogue.playtime.data.yaml;
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.DataHandler;
 import com.rogue.playtime.runnable.yaml.YAMLAddRunnable;
-import com.rogue.playtime.runnable.yaml.YAMLDeathRunnable;
+import com.rogue.playtime.runnable.yaml.YAMLResetRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -35,16 +35,19 @@ public class Data_YAML implements DataHandler {
     BukkitTask updater;
     Playtime plugin;
 
-    public int getPlaytime(String username) {
-        return yaml.getFile().getInt("users." + username + ".playtime");
-    }
-
-    public int getDeathtime(String username) {
-        return yaml.getFile().getInt("users." + username + ".deathtime");
+    public int getValue(String data, String username) {
+        if (data.equals("onlinetime") && !Bukkit.getPlayer(username).isOnline()) {
+            return -1;
+        }
+        return yaml.getFile().getInt("users." + plugin.getBestPlayer(username) + "." + data);
     }
     
     public void onDeath(String username) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new YAMLDeathRunnable(username, yaml));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new YAMLResetRunnable(username, "deathtime", yaml));
+    }
+    
+    public void onLogout(String username) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new YAMLResetRunnable(username, "onlinetime", yaml));
     }
 
     public void verifyFormat() {
@@ -64,5 +67,4 @@ public class Data_YAML implements DataHandler {
         yaml.forceSave();
         yaml = null;
     }
-
 }

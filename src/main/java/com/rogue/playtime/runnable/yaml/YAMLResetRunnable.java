@@ -25,18 +25,20 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @author 1Rogue
  * @version 1.3.0
  */
-public class YAMLDeathRunnable extends BukkitRunnable {
+public class YAMLResetRunnable extends BukkitRunnable {
     
     private final String user;
+    private final String value;
     private YAML yaml;
 
-    public YAMLDeathRunnable(String u, YAML y) {
+    public YAMLResetRunnable(String u, String feild, YAML y) {
         user = u;
         yaml = y;
+        value = feild;
     }
 
     public void run() {
-        yaml.getFile().set("users." + user + ".deathtime", 0);
+        yaml.getFile().set("users." + user + "." + value, 0);
         yaml.forceSave();
     }
 

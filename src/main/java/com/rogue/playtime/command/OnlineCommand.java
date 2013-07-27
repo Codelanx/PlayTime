@@ -17,54 +17,48 @@
 package com.rogue.playtime.command;
 
 import static com.rogue.playtime.Playtime._;
-import org.bukkit.ChatColor;
+import static com.rogue.playtime.command.CommandBase.plugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
  *
- * @since 1.3.0
+ * @since
  * @author 1Rogue
- * @version 1.3.0
+ * @version
  */
-public class DeathCommand implements CommandBase {
+public class OnlineCommand implements CommandBase {
 
-    @Override
     public boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         String check;
-        String perm = "playtime.death";
+        String perm = "playtime.use";
         if (args.length == 0 && sender instanceof Player) {
             check = sender.getName();
         } else if (args.length == 1) {
             check = plugin.getBestPlayer(args[0]);
             perm += ".others";
         } else {
-            sender.sendMessage("You cannot check the survival time of a non-player!");
+            sender.sendMessage("You cannot check the online time of a non-player!");
             return true;
         }
         if (sender.hasPermission(perm)) {
-            if (plugin.isDeathEnabled()) {
-                int time = plugin.getDataManager().getDataHandler().getValue("deathtime", check);
-                int minutes = time % 60;
-                if (time >= 60) {
-                    int hours = time / 60;
-                    sender.sendMessage(_("[&ePlayTime&f] &6" + check + " has been alive for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
-                } else {
-                    sender.sendMessage(_("[&ePlayTime&f] &6" + check + " has been alive for " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
-                }
+            int time = plugin.getDataManager().getDataHandler().getValue("onlinetime", check);
+            int minutes = time % 60;
+            if (time >= 60) {
+                int hours = time / 60;
+                sender.sendMessage(_("[&ePlayTime&f] &6" + check + " has been online for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
             } else {
-                sender.sendMessage(_("[&ePlayTime&f] &6Tracking player deaths is disabled!"));
+                sender.sendMessage(_("[&ePlayTime&f] &6" + check + " has been online for " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
             }
-
         } else {
             sender.sendMessage(_("[&ePlayTime&f] &6You do not have permission to do that!"));
         }
         return false;
     }
 
-    @Override
     public String getName() {
-        return "deathtime";
+        return "onlinetime";
     }
+
 }

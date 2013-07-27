@@ -46,13 +46,15 @@ public class YAMLAddRunnable extends BukkitRunnable {
                     if (plugin.isDeathEnabled()) {
                         yaml.incrementValue("users." + p.getName() + ".playtime");
                         yaml.incrementValue("users." + p.getName() + ".deathtime");
+                        yaml.incrementValue("users." + p.getName() + ".onlinetime");
                         if (plugin.getDebug() == 3) {
-                            plugin.getLogger().log(Level.INFO, "Updating playtime and deathtime for {0}!", p.getName());
+                            plugin.getLogger().log(Level.INFO, "Updating values for {0}!", p.getName());
                         }
                     } else {
                         yaml.incrementValue("users." + p.getName() + ".playtime");
+                        yaml.incrementValue("users." + p.getName() + ".onlinetime");
                         if (plugin.getDebug() == 3) {
-                            plugin.getLogger().log(Level.INFO, "Updating playtime for {0}!");
+                            plugin.getLogger().log(Level.INFO, "Updating values for {0}!");
                         }
                     }
                 }
@@ -60,13 +62,15 @@ public class YAMLAddRunnable extends BukkitRunnable {
                 if (plugin.isDeathEnabled()) {
                     yaml.incrementValue("users." + p.getName() + ".playtime");
                     yaml.incrementValue("users." + p.getName() + ".deathtime");
+                    yaml.incrementValue("users." + p.getName() + ".onlinetime");
                     if (plugin.getDebug() == 3) {
-                        plugin.getLogger().log(Level.INFO, "Updating playtime and deathtime for {0}!", p.getName());
+                        plugin.getLogger().log(Level.INFO, "Updating onlinetime for {0}!", p.getName());
                     }
                 } else {
                     yaml.incrementValue("users." + p.getName() + ".playtime");
+                    yaml.incrementValue("users." + p.getName() + ".onlinetime");
                     if (plugin.getDebug() == 3) {
-                        plugin.getLogger().log(Level.INFO, "Updating playtime for {0}!");
+                        plugin.getLogger().log(Level.INFO, "Updating onlinetime for {0}!");
                     }
                 }
             }

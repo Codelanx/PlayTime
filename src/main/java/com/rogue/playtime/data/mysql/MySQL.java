@@ -16,12 +16,14 @@
  */
 package com.rogue.playtime.data.mysql;
 
+import com.rogue.playtime.Playtime;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import java.util.logging.Level;
 
 /**
  *
@@ -31,6 +33,7 @@ import java.util.Properties;
  */
 public class MySQL {
 
+    private static int connections = 0;
     Connection con = null;
 
     public Connection open() throws SQLException {
@@ -39,6 +42,9 @@ public class MySQL {
         connectionProps.put("password", MySQL_Vars.PASS);
 
         con = DriverManager.getConnection("jdbc:mysql://" + MySQL_Vars.HOST + ":" + MySQL_Vars.PORT + "/" + MySQL_Vars.DATABASE, connectionProps);
+        if (Playtime.getPlugin().getDebug() >= 2) {
+            Playtime.getPlugin().getLogger().log(Level.INFO, "Open connections: {0}", ++connections);
+        }
         return con;
     }
 
@@ -61,6 +67,9 @@ public class MySQL {
 
     public void close() throws SQLException {
         con.close();
+        if (Playtime.getPlugin().getDebug() >= 2) {
+            Playtime.getPlugin().getLogger().log(Level.INFO, "Open connections: {0}", --connections);
+        }
     }
 
     public boolean checkConnection() throws SQLException {

@@ -19,7 +19,7 @@ package com.rogue.playtime.data.mysql;
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.DataHandler;
 import com.rogue.playtime.runnable.mysql.MySQLAddRunnable;
-import com.rogue.playtime.runnable.mysql.MySQLDeathRunnable;
+import com.rogue.playtime.runnable.mysql.MySQLResetRunnable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -39,33 +39,16 @@ public class Data_MySQL implements DataHandler {
     private Playtime plugin = Playtime.getPlugin();
     private MySQL db;
 
-    public int getPlaytime(String username) {
+    public int getValue(String data, String username) {
+        username = plugin.getBestPlayer(username);
+        if (data.equals("onlinetime") && !Bukkit.getPlayer(username).isOnline()) {
+            return -1;
+        }
         db = new MySQL();
         int ret = 0;
         try {
             db.open();
-            ResultSet result = db.query("SELECT `playtime` FROM `playTime` WHERE `username`='" + username + "'");
-            result.first();
-            ret = result.getInt(1);
-        } catch (SQLException e) {
-            if (Playtime.getPlugin().getDebug() == 3) {
-                e.printStackTrace();
-            }
-        }
-        try {
-            db.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return ret;
-    }
-
-    public int getDeathtime(String username) {
-        db = new MySQL();
-        int ret = 0;
-        try {
-            db.open();
-            ResultSet result = db.query("SELECT `deathtime` FROM `playTime` WHERE `username`='" + username + "'");
+            ResultSet result = db.query("SELECT `" + data + "` FROM `playTime` WHERE `username`='" + username + "'");
             result.first();
             ret = result.getInt(1);
         } catch (SQLException e) {
@@ -82,7 +65,11 @@ public class Data_MySQL implements DataHandler {
     }
     
     public void onDeath (String username) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new MySQLDeathRunnable(username));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new MySQLResetRunnable(username, "deathtime"));
+    }
+    
+    public void onLogout (String username) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new MySQLResetRunnable(username, "onlinetime"));
     }
 
     public void verifyFormat() {
@@ -94,7 +81,7 @@ public class Data_MySQL implements DataHandler {
                 plugin.getLogger().info("Successfully connected to database!");
                 if (!db.checkTable("playTime")) {
                     plugin.getLogger().log(Level.INFO, "Creating table ''playTime'' in database {0}", MySQL_Vars.DATABASE);
-                    ResultSet result = db.query("CREATE TABLE playTime ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL DEFAULT 0, deathtime int NOT NULL, PRIMARY KEY (id), UNIQUE KEY (username)) ENtestingGINE=MyISAM;");
+                    ResultSet result = db.query("CREATE TABLE playTime ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL DEFAULT 0, deathtime int NOT NULL DEFAULT 0, onlinetime int NOT NULL DEFAULT 0, PRIMARY KEY (id), UNIQUE KEY (username)) ENtestingGINE=MyISAM;");
                     result.close();
                 } else {
                     try {
@@ -107,7 +94,6 @@ public class Data_MySQL implements DataHandler {
                     try {
                         db.update("ALTER TABLE `playTime` ADD `playtime` int NOT NULL DEFAULT 0 AFTER `username`");
                         plugin.getLogger().info("Missing playtime column! Repairing...");
-                        
                         plugin.getLogger().info("Playtime values reset to 0.");
                     } catch (SQLException e) {
                     }
@@ -120,6 +106,32 @@ public class Data_MySQL implements DataHandler {
                         db.update("ALTER TABLE `playTime` ADD deathtime int NOT NULL AFTER `playtime`");
                         plugin.getLogger().info("Updating SQL table for 1.2.0");
                     } catch (SQLException e) {
+                    }
+                    try {
+                        db.update("ALTER TABLE `playTime` ADD onlinetime int NOT NULL DEFAULT 1 AFTER `deathtime`");
+                        plugin.getLogger().info("Updating SQL table for 1.3.0");
+                    } catch (SQLException e) {
+                    }
+                    try {
+                        db.update("ALTER TABLE `playTime` CHANGE COLUMN `playtime` `playtime` int NOT NULL DEFAULT 0 AFTER `username`");
+                        if (plugin.getDebug() >= 1) {
+                            plugin.getLogger().info("Setting defaults for column `playtime`");
+                        }
+                    } catch (SQLException e) { 
+                    }
+                    try {
+                        db.update("ALTER TABLE `playTime` CHANGE COLUMN `deathtime` `deathtime` int NOT NULL DEFAULT 0 AFTER `playtime`");
+                        if (plugin.getDebug() >= 1) {
+                            plugin.getLogger().info("Setting defaults for column `deathtime`");
+                        }
+                    } catch (SQLException e) { 
+                    }
+                    try {
+                        db.update("ALTER TABLE `playTime` CHANGE COLUMN `onlinetime` `onlinetime` int NOT NULL DEFAULT 0 AFTER `deathtime`");
+                        if (plugin.getDebug() >= 1) {
+                            plugin.getLogger().info("Setting defaults for column `onlinetime`");
+                        }
+                    } catch (SQLException e) { 
                     }
                     plugin.getLogger().info("SQL table is up to date!");
                 }

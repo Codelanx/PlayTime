@@ -19,8 +19,7 @@ package com.rogue.playtime.data.sqlite;
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.DataHandler;
 import com.rogue.playtime.runnable.sqlite.SQLiteAddRunnable;
-import com.rogue.playtime.runnable.sqlite.SQLiteDeathRunnable;
-import com.rogue.playtime.runnable.sqlite.SQLitePrintRunnable;
+import com.rogue.playtime.runnable.sqlite.SQLiteResetRunnable;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,34 +40,16 @@ public class Data_SQLite implements DataHandler {
     private Playtime plugin = Playtime.getPlugin();
     private SQLite db;
 
-    public int getPlaytime(String username) {
+    public int getValue(String data, String username) {
+        username = plugin.getBestPlayer(username);
+        if (data.equals("onlinetime") && !Bukkit.getPlayer(username).isOnline()) {
+            return -1;
+        }
         db = new SQLite();
         int ret = 0;
         try {
             db.open();
-            ResultSet result = db.query("SELECT `playtime` FROM `playTime` WHERE `username`='" + username + "'");
-            if (result.next()) {
-                ret = result.getInt(1);
-            }
-        } catch (SQLException e) {
-            if (Playtime.getPlugin().getDebug() == 3) {
-                e.printStackTrace();
-            }
-        }
-        try {
-            db.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return ret;
-    }
-
-    public int getDeathtime(String username) {
-        db = new SQLite();
-        int ret = 0;
-        try {
-            db.open();
-            ResultSet result = db.query("SELECT `deathtime` FROM `playTime` WHERE `username`='" + username + "'");
+            ResultSet result = db.query("SELECT `" + data + "` FROM `playTime` WHERE `username`='" + username + "'");
             if (result.next()) {
                 ret = result.getInt(1);
             }
@@ -86,7 +67,11 @@ public class Data_SQLite implements DataHandler {
     }
 
     public void onDeath(String username) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new SQLiteDeathRunnable(username));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new SQLiteResetRunnable(username, "deathtime"));
+    }
+    
+    public void onLogout(String username) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new SQLiteResetRunnable(username, "onlinetime"));
     }
 
     public void verifyFormat() {
@@ -96,8 +81,8 @@ public class Data_SQLite implements DataHandler {
             db.open();
             plugin.getLogger().info("Successfully connected to database!");
             if (!db.checkTable("playTime")) {
-                plugin.getLogger().log(Level.INFO, "Creating table ''playTime'' in database");
-                db.update("CREATE TABLE playTime ( id INTEGER NOT NULL PRIMARY KEY, username VARCHAR(32) NOT NULL UNIQUE, playtime INTEGER NOT NULL DEFAULT 0, deathtime INTEGER NOT NULL DEFAULT 0)");
+                plugin.getLogger().log(Level.INFO, "Creating table 'playTime' in database");
+                db.update("CREATE TABLE playTime ( id INTEGER NOT NULL PRIMARY KEY, username VARCHAR(32) NOT NULL UNIQUE, playtime INTEGER NOT NULL DEFAULT 0, deathtime INTEGER NOT NULL DEFAULT 0, onlinetime INTEGER NOT NULL DEFAULT 0)");
             }
             db.close();
         } catch (SQLException ex) {

@@ -24,11 +24,11 @@ package com.rogue.playtime.data;
  */
 public interface DataHandler {
     
-    public abstract int getPlaytime(String username);
-    
-    public abstract int getDeathtime(String username);
+    public abstract int getValue(String data, String username);
     
     public abstract void onDeath(String username);
+    
+    public abstract void onLogout(String username);
     
     public abstract void verifyFormat();
     
