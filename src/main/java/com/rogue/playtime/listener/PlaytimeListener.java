@@ -51,13 +51,6 @@ public class PlaytimeListener implements Listener {
      */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerDeath(PlayerDeathEvent e) {
-        String msg = e.getDeathMessage();
-        msg = msg.substring(msg.indexOf(" "));
-        if (msg.equals("fellt to their death")) {
-            
-        } else if (msg.equals("drowned")) {
-            
-        }
         if (plugin.isDeathEnabled()) {
             plugin.getDataManager().getDataHandler().onDeath(e.getEntity().getName());
         }
