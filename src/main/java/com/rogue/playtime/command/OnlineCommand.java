@@ -33,7 +33,7 @@ public class OnlineCommand implements CommandBase {
     @Override
     public boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         String check;
-        String perm = "playtime.use";
+        String perm = "playtime.online";
         if (args.length == 0 && sender instanceof Player) {
             check = sender.getName();
         } else if (args.length == 1) {
