@@ -12,6 +12,12 @@ commands:
     description: Find out how long someone has been alive on the server
   onlinetime:
     description: Shows how long the player has been online
+  playtimetop:
+    description: Gets and displays the top 5 players for playtime
+  deathtimetop:
+    description: Gets and displays the top 5 players for deathtime
+  onlinetimetop:
+    description: Gets and displays the top 5 players for onlinetimetop
 permissions:
   playtime.*:
     default: op
@@ -19,26 +25,56 @@ permissions:
     children:
       playtime.use: true
       playtime.use.others: true
+      playtime.use.top: true
       playtime.death: true
       playtime.death.others: true
+      playtime.death.top: true
       playtime.online: true
+      playtime.online.others: true
       playtime.online.top: true
       playtime.updatenotice: true
+    playtime.use.*:
+      default: op
+      children:
+        playtime.use: true
+        playtime.use.others: true
+        playtime.use.top: true
+    playtime.death.*:
+      default: op
+      children:
+        playtime.death: true
+        playtime.death.others: true
+        playtime.death.top: true
+    playtime.online.*:
+      default: op
+      children:
+        playtime.online: true
+        playtime.online.others: true
+        playtime.online.top: true
     playtime.use:
       default: true
       description: Gives access to look at your play time
     playtime.use.others:
       default: op
       description: Gives access to look at others play time
+    playtime.use.top:
+      default: true
+      description: Gives access to look at the top playtimes
     playtime.death:
       default: true
       description: Gives access to how long you've been alive
     playtime.death.others:
       default: op
       description: Gives access to how long others have been alive
+    playtime.death.top:
+      default: true
+      description: Gives access to look at the top deathtimes
     playtime.online:
       default: true
       description: Gives access to how long you have been online
     playtime.online.others:
       default: op
       description: Gives access to how long others have been online
+    playtime.online.top:
+      default: true
+      description: Gives access to look at the top onlinetimes
