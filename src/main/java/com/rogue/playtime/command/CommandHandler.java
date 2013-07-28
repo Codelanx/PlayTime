@@ -44,6 +44,12 @@ public class CommandHandler implements CommandExecutor {
         commands.put(death.getName(), death);
         OnlineCommand online = new OnlineCommand();
         commands.put(online.getName(), online);
+        PlayTopCommand playtop = new PlayTopCommand();
+        commands.put(playtop.getName(), playtop);
+        DeathTopCommand deathtop = new DeathTopCommand();
+        commands.put(deathtop.getName(), deathtop);
+        OnlineTopCommand onlinetop = new OnlineTopCommand();
+        commands.put(onlinetop.getName(), onlinetop);
     }
 
     /**
@@ -56,11 +62,9 @@ public class CommandHandler implements CommandExecutor {
         plugin.getCommand("playtime").setExecutor(this);
         plugin.getCommand("deathtime").setExecutor(this);
         plugin.getCommand("onlinetime").setExecutor(this);
-        
-        //NOTE: For use in 1.4.0 , I got a little ahead of myself
-        //plugin.getCommand("playtimetop").setExecutor(this);
-        //plugin.getCommand("deathtimetop").setExecutor(this);
-        //plugin.getCommand("onlinetimetop").setExecutor(this);
+        plugin.getCommand("playtimetop").setExecutor(this);
+        plugin.getCommand("deathtimetop").setExecutor(this);
+        plugin.getCommand("onlinetimetop").setExecutor(this);
     }
 
     /**

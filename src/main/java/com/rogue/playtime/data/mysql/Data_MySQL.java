@@ -22,6 +22,8 @@ import com.rogue.playtime.runnable.mysql.MySQLAddRunnable;
 import com.rogue.playtime.runnable.mysql.MySQLResetRunnable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
@@ -29,13 +31,13 @@ import org.bukkit.scheduler.BukkitTask;
 
 /**
  * MySQL Data manager. See DataHandler for information about each method.
- * 
+ *
  * @since 1.3.0
  * @author 1Rogue
  * @version 1.3.0
  */
 public class Data_MySQL implements DataHandler {
-    
+
     private BukkitTask updater;
     private Playtime plugin = Playtime.getPlugin();
     private MySQL db;
@@ -50,8 +52,9 @@ public class Data_MySQL implements DataHandler {
         try {
             db.open();
             ResultSet result = db.query("SELECT `" + data + "` FROM `playTime` WHERE `username`='" + username + "'");
-            result.first();
-            ret = result.getInt(1);
+            if (result.next()) {
+                ret = result.getInt(1);
+            }
         } catch (SQLException e) {
             if (Playtime.getPlugin().getDebug() == 3) {
                 e.printStackTrace();
@@ -64,12 +67,35 @@ public class Data_MySQL implements DataHandler {
         }
         return ret;
     }
-    
-    public void onDeath (String username) {
+
+    public Map<String, Integer> getTopPlayers(String data, int amount) {
+        db = new MySQL();
+        Map<String, Integer> players = new HashMap();
+        try {
+            db.open();
+            ResultSet result = db.query("SELECT * FROM `playTime` ORDER BY `" + data + "` DESC LIMIT " + amount);
+            boolean end = false;
+            while (!end) {
+                if (result.next()) {
+                    players.put(result.getString("username"), result.getInt(data));
+                } else {
+                    end = true;
+                }
+            }
+            db.close();
+        } catch (SQLException e) {
+            if (Playtime.getPlugin().getDebug() == 3) {
+                e.printStackTrace();
+            }
+        }
+        return players;
+    }
+
+    public void onDeath(String username) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, new MySQLResetRunnable(username, "deathtime"));
     }
-    
-    public void onLogout (String username) {
+
+    public void onLogout(String username) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, new MySQLResetRunnable(username, "onlinetime"));
     }
 
@@ -117,21 +143,21 @@ public class Data_MySQL implements DataHandler {
                         if (plugin.getDebug() >= 1) {
                             plugin.getLogger().info("Setting defaults for column `playtime`");
                         }
-                    } catch (SQLException e) { 
+                    } catch (SQLException e) {
                     }
                     try {
                         db.update("ALTER TABLE `playTime` CHANGE COLUMN `deathtime` `deathtime` int NOT NULL DEFAULT 0 AFTER `playtime`");
                         if (plugin.getDebug() >= 1) {
                             plugin.getLogger().info("Setting defaults for column `deathtime`");
                         }
-                    } catch (SQLException e) { 
+                    } catch (SQLException e) {
                     }
                     try {
                         db.update("ALTER TABLE `playTime` CHANGE COLUMN `onlinetime` `onlinetime` int NOT NULL DEFAULT 0 AFTER `deathtime`");
                         if (plugin.getDebug() >= 1) {
                             plugin.getLogger().info("Setting defaults for column `onlinetime`");
                         }
-                    } catch (SQLException e) { 
+                    } catch (SQLException e) {
                     }
                     plugin.getLogger().info("SQL table is up to date!");
                 }
@@ -168,5 +194,4 @@ public class Data_MySQL implements DataHandler {
         updater = null;
         db = null;
     }
-
 }

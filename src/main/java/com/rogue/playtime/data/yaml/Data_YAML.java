@@ -20,6 +20,7 @@ import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.DataHandler;
 import com.rogue.playtime.runnable.yaml.YAMLAddRunnable;
 import com.rogue.playtime.runnable.yaml.YAMLResetRunnable;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -41,6 +42,10 @@ public class Data_YAML implements DataHandler {
             return -1;
         }
         return yaml.getFile().getInt("users." + plugin.getBestPlayer(username) + "." + data);
+    }
+    
+    public Map<String, Integer> getTopPlayers(String data, int amount) {
+        return null;
     }
     
     public void onDeath(String username) {

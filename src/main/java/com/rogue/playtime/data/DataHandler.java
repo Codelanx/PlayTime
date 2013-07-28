@@ -16,6 +16,8 @@
  */
 package com.rogue.playtime.data;
 
+import java.util.Map;
+
 /**
  *
  * @since 1.3.0
@@ -35,6 +37,19 @@ public interface DataHandler {
      * @return The integer value, or 0 if it is not found
      */
     public abstract int getValue(String data, String username);
+    
+    /**
+     * Gets the top players within a data category (e.g. deathtime)
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @param data The data type to select, used in the query
+     * @param amount The amount of players to return
+     * 
+     * @return A map object containing the strings for the top players, and an integer value of their time
+     */
+    public abstract Map<String, Integer> getTopPlayers(String data, int amount);
     
     /**
      * Calls an Asynchronous task that resets the player's death timer

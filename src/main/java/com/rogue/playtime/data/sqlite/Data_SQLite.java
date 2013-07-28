@@ -23,6 +23,8 @@ import com.rogue.playtime.runnable.sqlite.SQLiteResetRunnable;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
@@ -65,6 +67,29 @@ public class Data_SQLite implements DataHandler {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ret;
+    }
+    
+    public Map<String, Integer> getTopPlayers(String data, int amount) {
+        db = new SQLite();
+        Map<String, Integer> players = new HashMap();
+        try {
+            db.open();
+            ResultSet result = db.query("SELECT * FROM `playTime` ORDER BY `" + data + "` DESC LIMIT " + amount);
+            boolean end = false;
+            while (!end) {
+                if (result.next()) {
+                    players.put(result.getString("username"), result.getInt(data));
+                } else {
+                    end = true;
+                }
+            }
+            db.close();
+        } catch (SQLException e) {
+            if (Playtime.getPlugin().getDebug() == 3) {
+                e.printStackTrace();
+            }
+        }
+        return players;
     }
 
     public void onDeath(String username) {

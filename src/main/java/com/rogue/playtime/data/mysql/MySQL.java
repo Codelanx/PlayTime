@@ -72,9 +72,12 @@ public class MySQL {
      */
     public boolean checkTable(String tablename) throws SQLException {
         ResultSet count = query("SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = '" + MySQL_Vars.DATABASE + "') AND (TABLE_NAME = '" + tablename + "')");
-        boolean give = count.first();
+        int i = 0;
+        if (count.next()) {
+            i = count.getInt(1);
+        }
         count.close();
-        return give;
+        return (i == 1) ? true : false;
     }
 
     /**
