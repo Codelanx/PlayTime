@@ -60,7 +60,7 @@ public class PlayTopCommand implements CommandBase {
         }
         Map<String, Integer> players = plugin.getDataManager().getDataHandler().getTopPlayers("playtime", i);
         if (players == null) {
-            sender.sendMessage(_("[&ePlaytime&f] &6Playtimetop is disabled with flatfile data!"));
+            sender.sendMessage(_("[&ePlayTime&f] &6Playtimetop is disabled with flatfile data!"));
         }
         if (scoreboard) {
             Player p = (Player) sender;
@@ -75,7 +75,7 @@ public class PlayTopCommand implements CommandBase {
                 score.setScore(players.get(s) / 60);
             }
             p.setScoreboard(scoreBoard);
-            p.sendMessage(_("[&ePlaytime&f] &6Use &e/playtimetop clear &6to remove the leaderboard."));
+            p.sendMessage(_("[&ePlayTime&f] &6Use &e/playtimetop clear &6to remove the leaderboard."));
 
         } else {
             StringBuilder sb = new StringBuilder("Top ").append(i).append(" players for Playtime (in hours):");

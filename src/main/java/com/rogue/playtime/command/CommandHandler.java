@@ -50,6 +50,8 @@ public class CommandHandler implements CommandExecutor {
         commands.put(deathtop.getName(), deathtop);
         OnlineTopCommand onlinetop = new OnlineTopCommand();
         commands.put(onlinetop.getName(), onlinetop);
+        ReloadCommand reload = new ReloadCommand();
+        commands.put(reload.getName(), reload);
     }
 
     /**
@@ -65,6 +67,7 @@ public class CommandHandler implements CommandExecutor {
         plugin.getCommand("playtimetop").setExecutor(this);
         plugin.getCommand("deathtimetop").setExecutor(this);
         plugin.getCommand("onlinetimetop").setExecutor(this);
+        plugin.getCommand("playtimereload").setExecutor(this);
     }
 
     /**

@@ -61,7 +61,7 @@ public class DeathTopCommand implements CommandBase {
         }
         Map<String, Integer> players = plugin.getDataManager().getDataHandler().getTopPlayers("deathtime", i);
         if (players == null) {
-            sender.sendMessage(_("[&ePlaytime&f] &6Deathtimetop is disabled with flatfile data!"));
+            sender.sendMessage(_("[&ePlayTime&f] &6Deathtimetop is disabled with flatfile data!"));
         }
         if (scoreboard) {
             Player p = (Player)sender;
@@ -76,7 +76,7 @@ public class DeathTopCommand implements CommandBase {
                 score.setScore(players.get(s)/60);
             }
             p.setScoreboard(scoreBoard);
-            p.sendMessage(_("[&ePlaytime&f] &6Use &e/deathtimetop clear &6to remove the leaderboard."));
+            p.sendMessage(_("[&ePlayTime&f] &6Use &e/deathtimetop clear &6to remove the leaderboard."));
             
         } else {
             StringBuilder sb = new StringBuilder("Top ").append(i).append(" players for Deathtime (in hours):");

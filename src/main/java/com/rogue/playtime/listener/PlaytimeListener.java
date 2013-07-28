@@ -73,7 +73,7 @@ public class PlaytimeListener implements Listener {
         if (e.getPlayer().isOp() || e.getPlayer().hasPermission("playtime.updatenotice"));
         if (plugin.getConfigurationLoader().getBoolean("update-check")) {
             if (plugin.isUpdateAvailable()) {
-                e.getPlayer().sendMessage(_("[&ePlaytime&f] &6An update is available for Playtime!"));
+                e.getPlayer().sendMessage(_("[&ePlayTime&f] &6An update is available for Playtime!"));
             }
         }
     }

@@ -67,6 +67,7 @@ public class Playtime extends JavaPlugin {
     public void onLoad() {
         File file = new File(getDataFolder() + File.separator + "config.yml");
 
+        this.getLogger().info("Loading Configuration mananger...");
         cloader = new ConfigurationLoader(this);
         cloader.verifyConfig();
     }
@@ -100,7 +101,7 @@ public class Playtime extends JavaPlugin {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if (this.getConfig().getBoolean("update-check")) {
+        if (cloader.getBoolean("update-check")) {
             Bukkit.getScheduler().runTaskLater(this, new UpdateRunnable(this), 1);
         } else {
             this.getLogger().info("Update checks disabled!");
@@ -108,7 +109,7 @@ public class Playtime extends JavaPlugin {
 
         this.getLogger().log(Level.INFO, "Enabling Data Manager...");
         dmanager = new DataManager(this);
-        dmanager.select(this.getConfig().getString("data.manager"));
+        dmanager.select(cloader.getString("data.manager"));
         dmanager.start();
         
         this.getLogger().info("Enabling Command Handler...");
@@ -122,14 +123,14 @@ public class Playtime extends JavaPlugin {
 
         if (afkEnabled) {
             this.getLogger().log(Level.INFO, "Enabling Player Handler...");
-            phandler = new PlayerHandler(this, this.getConfig().getInt("afk.interval"), this.getConfig().getInt("afk.timeout"));
+            phandler = new PlayerHandler(this, cloader.getInt("afk.interval"), cloader.getInt("afk.timeout"));
             afkChecker = Bukkit.getScheduler().runTaskTimer(this, new AFKRunnable(this), phandler.getAFKCheckInterval() * 20L, phandler.getAFKCheckInterval() * 20L);
         } else {
             this.getLogger().log(Level.INFO, "AFK checking disabled!");
             phandler = null;
         }
 
-        if (!(!afkEnabled && !deathEnabled && !onlineEnabled && !this.cloader.getBoolean("update-check"))) {
+        if (!(!afkEnabled && !deathEnabled && !onlineEnabled && !cloader.getBoolean("update-check"))) {
             this.getLogger().log(Level.INFO, "Enabling Listener...");
             listener = new PlaytimeListener(this);
             Bukkit.getPluginManager().registerEvents(listener, this);
@@ -154,8 +155,36 @@ public class Playtime extends JavaPlugin {
     @Override
     public void onDisable() {
         dmanager.getDataHandler().cleanup();
-        if (afkChecker != null) {
-            afkChecker.cancel();
+        this.getServer().getScheduler().cancelTasks(this);
+    }
+    
+    /**
+     * Reloads the plugin
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @param names Players to notify when the reload is complete
+     */
+    public void reload(String... names) {
+        this.onDisable();
+        afkChecker = null;
+        debug = 0;
+        listener = null;
+        phandler = null;
+        chandler = null;
+        dmanager = null;
+        cloader = null;
+        afkEnabled = true;
+        deathEnabled = true;
+        onlineEnabled = true;
+        isUpdate = false;
+        this.onLoad();
+        this.onEnable();
+        
+        this.getLogger().info("Playtime reloaded!");
+        for (String s : names) {
+            this.getServer().getPlayer(s).sendMessage(_("[&ePlayTime&f] &6Playtime Reloaded!"));
         }
     }
 
