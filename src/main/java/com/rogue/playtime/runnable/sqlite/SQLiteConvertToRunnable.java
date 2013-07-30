@@ -33,7 +33,7 @@ public class SQLiteConvertToRunnable extends BukkitRunnable {
     private Playtime plugin;
     private final String[] player;
     private final String query;
-    
+
     public SQLiteConvertToRunnable(Playtime p, String inQuery, String... players) {
         plugin = p;
         query = inQuery;
@@ -51,7 +51,13 @@ public class SQLiteConvertToRunnable extends BukkitRunnable {
         try {
             db.open();
             db.update("DELETE FROM `playTime`");
-            db.update(query);
+            String[] queries = query.split("\n");
+            /*for (String p : player) {
+             plugin.sendThreadedMessage(p, "[&ePlaytime&f] &6Adding " + queries.length + " rows to SQLite database. Estimated time: " + getTime(queries.length));
+             }*/
+            for (String s : queries) {
+                db.update(s);
+            }
             db.close();
         } catch (SQLException e) {
             if (plugin.getDebug() == 3) {
@@ -60,5 +66,15 @@ public class SQLiteConvertToRunnable extends BukkitRunnable {
         }
         dm.getDataHandler().cleanup();
         plugin.reload();
+        plugin.setBusy(false);
+        /*for (String p : player) {
+            plugin.sendThreadedMessage(p, "[&ePlaytime&f] &6Conversion complete!");
+        }*/
+    }
+
+    private String getTime(int rows) {
+        long seconds = Math.round(rows / (369 + ((2 / 3) - 0.2)));
+        long minutes = seconds / 60;
+        return ((minutes >= 1) ? ((minutes != 1) ? minutes + " minutes" : minutes + " minute") : "") + " " + (seconds % 60);
     }
 }

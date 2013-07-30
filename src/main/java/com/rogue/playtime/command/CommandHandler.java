@@ -16,6 +16,7 @@
  */
 package com.rogue.playtime.command;
 
+import static com.rogue.playtime.Playtime._;
 import com.rogue.playtime.command.commands.*;
 import com.rogue.playtime.Playtime;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ import org.bukkit.command.CommandSender;
 
 /**
  * Manages commands abstractly for the plugin
- * 
+ *
  * @since 1.3.0
  * @author 1Rogue
  * @version 1.3.0
@@ -59,7 +60,7 @@ public class CommandHandler implements CommandExecutor {
      * Registers the commands to this command executor.
      *
      * @since 1.3.0
-     * @version 1.3.0
+     * @version 1.4.0
      */
     public void registerExecs() {
         plugin.getCommand("playtime").setExecutor(this);
@@ -75,8 +76,8 @@ public class CommandHandler implements CommandExecutor {
      * Executes the proper command within Playtime
      *
      * @since 1.3.0
-     * @version 1.3.0
-     * 
+     * @version 1.4.0
+     *
      * @param sender The command executor
      * @param cmd The command instance
      * @param commandLabel The command name
@@ -86,8 +87,12 @@ public class CommandHandler implements CommandExecutor {
      */
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (commands.containsKey(commandLabel)) {
-            return commands.get(commandLabel).execute(sender, cmd, commandLabel, args);
+        if (!plugin.isBusy()) {
+            if (commands.containsKey(commandLabel)) {
+                return commands.get(commandLabel).execute(sender, cmd, commandLabel, args);
+            }
+        } else {
+            sender.sendMessage(_("[&ePlaytime&f] &6Playtime is currently busy with an operation, try again in a minute!"));
         }
         return false;
     }

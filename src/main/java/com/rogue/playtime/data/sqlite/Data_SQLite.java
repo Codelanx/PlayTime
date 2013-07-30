@@ -132,6 +132,7 @@ public class Data_SQLite implements DataHandler {
     }
     
     public void startConversion(String newType, String... players) {
+        plugin.onDisable();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, new SQLiteStartConvertRunnable(plugin, newType, players));
     }
 

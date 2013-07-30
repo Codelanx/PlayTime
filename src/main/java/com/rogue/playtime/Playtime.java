@@ -56,6 +56,7 @@ public class Playtime extends JavaPlugin {
     private boolean deathEnabled = true;
     private boolean onlineEnabled = true;
     private boolean isUpdate = false;
+    private boolean isBusy = false;
 
     /**
      * Registers the plugin configuration file.
@@ -156,6 +157,10 @@ public class Playtime extends JavaPlugin {
     @Override
     public void onDisable() {
         dmanager.getDataHandler().cleanup();
+        if (afkChecker != null) {
+            afkChecker.cancel();
+        }
+        afkChecker = null;
         this.getServer().getScheduler().cancelTasks(this);
     }
     
@@ -372,5 +377,18 @@ public class Playtime extends JavaPlugin {
      */
     public ConfigurationLoader getConfigurationLoader() {
         return cloader;
+    }
+    
+    /*public void sendThreadedMessage(String playername, String message) {
+        Bukkit.getPlayer(playername).sendMessage(_(message));
+    }*/
+    
+    public boolean isBusy() {
+        return isBusy;
+    }
+    
+    public boolean setBusy(boolean busy) {
+        isBusy = busy;
+        return isBusy;
     }
 }

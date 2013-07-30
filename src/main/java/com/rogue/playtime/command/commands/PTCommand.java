@@ -49,6 +49,8 @@ public class PTCommand implements CommandBase {
                     if (converters.get(sender) != null) {
                         plugin.getDataManager().convertData(converters.get(sender));
                         converters.remove(sender);
+                        sender.sendMessage(_("[&ePlaytime&f] &6Please note that this may take up to 1 minute to complete, depending on the size of your database."));
+                        plugin.setBusy(true);
                     }
                 } else if (args[0].equalsIgnoreCase("cancel")) {
                     if (converters.get(sender) != null) {

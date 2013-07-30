@@ -42,19 +42,17 @@ public class MySQLStartConvertRunnable extends BukkitRunnable {
 
     public void run() {
         MySQL db = new MySQL();
-        StringBuilder sb = new StringBuilder("INSERT INTO `playTime` ");
+        StringBuilder sb = new StringBuilder();
+        /*for (String p : player) {
+            plugin.sendThreadedMessage(p, "[&ePlaytime&f] &6Downloading MySQL database...");
+        }*/
         try {
             db.open();
-            
+
             ResultSet ret = db.query("SELECT * FROM `playTime`");
             int i = 1;
             while (ret.next()) {
-                if (i > 1) {
-                    sb.append("UNION SELECT ").append(i).append(", '").append(ret.getString(2)).append("', ").append(ret.getInt(3)).append(", ").append(ret.getInt(4)).append(", ").append(ret.getInt(5)).append(" ");
-                } else {
-                    sb.append("SELECT ").append(i).append(" AS 'column1', '").append(ret.getString(2)).append("' AS 'column2', ").append(ret.getInt(3)).append(" AS 'column3', ").append(ret.getInt(4)).append(" AS 'column4', ").append(ret.getInt(5)).append(" AS 'column5' ");
-                }
-                i++;
+                sb.append("INSERT OR IGNORE INTO `playTime` (`id`, `username`, `playtime`, `deathtime`, `onlinetime`) VALUES (").append(i++).append(", '").append(ret.getString(2)).append("', ").append(ret.getInt(3)).append(", ").append(ret.getInt(4)).append(", ").append(ret.getInt(5)).append(");\n");
             }
             db.close();
         } catch (SQLException e) {

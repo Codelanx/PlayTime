@@ -74,6 +74,7 @@ public class Data_YAML implements DataHandler {
     }
     
     public void startConversion(String newType, String... players) {
+        plugin.onDisable();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, new YAMLStartConvertRunnable(plugin, newType, players));
     }
 

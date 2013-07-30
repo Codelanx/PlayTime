@@ -56,12 +56,7 @@ public class YAMLStartConvertRunnable extends BukkitRunnable {
         } else if (convertTo.equals("sqlite")) {
             sb = new StringBuilder("INSERT INTO `playTime` ");
             for (String s : users.getKeys(false)) {
-                if (i > 1) {
-                    sb.append("UNION SELECT ").append(i).append(", '").append(s).append("', ").append(yaml.getFile().getInt("users." + s + ".playtime")).append(", ").append(yaml.getFile().getInt("users." + s + ".deathtime")).append(", ").append(yaml.getFile().getInt("users." + s + ".onlinetime")).append(" ");
-                } else {
-                    sb.append("SELECT ").append(i).append(" AS 'column1', '").append(s).append("' AS 'column2', ").append(yaml.getFile().getInt("users." + s + ".playtime")).append(" AS 'column3', ").append(yaml.getFile().getInt("users." + s + ".deathtime")).append(" AS 'column4', ").append(yaml.getFile().getInt("users." + s + ".onlinetime")).append(" AS 'column5' ");
-                }
-                i++;
+                sb.append("INSERT OR IGNORE INTO `playTime` (`id`, `username`, `playtime`, `deathtime`, `onlinetime`) VALUES (").append(i).append(", '").append(s).append("', ").append(yaml.getFile().getInt("users." + s + ".playtime")).append(", ").append(yaml.getFile().getInt("users." + s + ".deathtime")).append(", ").append(yaml.getFile().getInt("users." + s + ".onlinetime")).append(");\n");
             }
             out = sb.substring(0, sb.length() - 1);
         }

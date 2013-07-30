@@ -41,7 +41,7 @@ public class MySQLConvertToRunnable extends BukkitRunnable {
     }
 
     public void run() {
-        plugin.getConfigurationLoader().getConfig().set("data.manager", "sqlite");
+        plugin.getConfigurationLoader().getConfig().set("data.manager", "mysql");
         plugin.getConfigurationLoader().saveConfig();
         DataManager dm = new DataManager(plugin);
         dm.select("mysql");
@@ -60,5 +60,6 @@ public class MySQLConvertToRunnable extends BukkitRunnable {
         }
         dm.getDataHandler().cleanup();
         plugin.reload();
+        plugin.setBusy(false);
     }
 }
