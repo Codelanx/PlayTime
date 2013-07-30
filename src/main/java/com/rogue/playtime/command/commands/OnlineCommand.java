@@ -14,42 +14,44 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.command;
+package com.rogue.playtime.command.commands;
 
+import com.rogue.playtime.command.CommandBase;
 import static com.rogue.playtime.Playtime._;
+import static com.rogue.playtime.command.CommandBase.plugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * 
+ *
  * @since 1.3.0
  * @author 1Rogue
  * @version 1.3.0
  */
-public class PlayCommand implements CommandBase {
+public class OnlineCommand implements CommandBase {
 
     @Override
     public boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         String check;
-        String perm = "playtime.use";
+        String perm = "playtime.online";
         if (args.length == 0 && sender instanceof Player) {
             check = sender.getName();
         } else if (args.length == 1) {
             check = plugin.getBestPlayer(args[0]);
             perm += ".others";
         } else {
-            sender.sendMessage("You cannot check the playtime of a non-player!");
+            sender.sendMessage("You cannot check the online time of a non-player!");
             return true;
         }
         if (sender.hasPermission(perm)) {
-            int time = plugin.getDataManager().getDataHandler().getValue("playtime", check);
+            int time = plugin.getDataManager().getDataHandler().getValue("onlinetime", check);
             int minutes = time % 60;
             if (time >= 60) {
                 int hours = time / 60;
-                sender.sendMessage(_("[&ePlayTime&f] &6" + check + " has played for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
+                sender.sendMessage(_("[&ePlayTime&f] &6" + check + " has been online for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
             } else {
-                sender.sendMessage(_("[&ePlayTime&f] &6" + check + " has played for " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
+                sender.sendMessage(_("[&ePlayTime&f] &6" + check + " has been online for " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
             }
         } else {
             sender.sendMessage(_("[&ePlayTime&f] &6You do not have permission to do that!"));
@@ -57,8 +59,8 @@ public class PlayCommand implements CommandBase {
         return false;
     }
 
-    @Override
     public String getName() {
-        return "playtime";
+        return "onlinetime";
     }
+
 }

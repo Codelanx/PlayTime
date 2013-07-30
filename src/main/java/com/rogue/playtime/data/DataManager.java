@@ -16,10 +16,15 @@
  */
 package com.rogue.playtime.data;
 
+import static com.rogue.playtime.Playtime._;
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.mysql.Data_MySQL;
 import com.rogue.playtime.data.sqlite.Data_SQLite;
 import com.rogue.playtime.data.yaml.Data_YAML;
+import com.rogue.playtime.runnable.mysql.MySQLConvertToRunnable;
+import com.rogue.playtime.runnable.sqlite.SQLiteConvertToRunnable;
+import java.util.Map;
+import org.bukkit.Bukkit;
 
 /**
  *
@@ -63,14 +68,41 @@ public class DataManager {
      * @since 1.3.0
      * @version 1.3.0
      */
-    public void start() {
+    public void setup() {
         data.setup();
         data.verifyFormat();
+    }
+    
+    /**
+     * Starts the data updating process
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     */
+    public void start() {
         data.initiateRunnable();
     }
     
     public DataHandler getDataHandler() {
         return data;
+    }
+    
+    public void convertData(String newType, String... players) {
+        if (!data.getName().equals(newType)) {
+            data.startConversion(newType, players);
+        } else {
+            for (String s : players) {
+                Bukkit.getServer().getPlayer(s).sendMessage(_("[&ePlaytime&f] &6Data manager already being used!"));
+            }
+        }
+    }
+    
+    public void convertTo(String newType, String query, String... players) {
+        if (newType.equals("mysql")) {
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, new MySQLConvertToRunnable(plugin, query, players));
+        } else if (newType.equals("sqlite")) {
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, new SQLiteConvertToRunnable(plugin, query, players));
+        }
     }
 
 }

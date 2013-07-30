@@ -51,13 +51,6 @@ public class MySQLAddRunnable extends BukkitRunnable {
                 } else {
                     sb.append("('").append(p.getName()).append("'), ");
                 }
-                /*if (plugin.isAFKEnabled()) {
-                    if (!plugin.getPlayerHandler().getPlayer(p.getName()).isAFK()) {
-                        sb.append("('").append(p.getName()).append("', 1, ").append((plugin.isDeathEnabled()) ? "1" : "0").append("), ");
-                    }
-                } else {
-                    sb.append("('").append(p.getName()).append("', 1, ").append((plugin.isDeathEnabled()) ? "1" : "0").append("), ");
-                }*/
             }
             if (sb.toString().endsWith(" VALUES ")) {
                 if (plugin.getDebug() >= 1) {

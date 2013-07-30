@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.command;
+package com.rogue.playtime.command.commands;
 
+import com.rogue.playtime.command.CommandBase;
 import static com.rogue.playtime.Playtime._;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

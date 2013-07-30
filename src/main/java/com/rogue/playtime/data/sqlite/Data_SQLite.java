@@ -18,6 +18,7 @@ package com.rogue.playtime.data.sqlite;
 
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.DataHandler;
+import com.rogue.playtime.runnable.sqlite.SQLiteStartConvertRunnable;
 import com.rogue.playtime.runnable.sqlite.SQLiteAddRunnable;
 import com.rogue.playtime.runnable.sqlite.SQLiteResetRunnable;
 import java.io.File;
@@ -42,6 +43,10 @@ public class Data_SQLite implements DataHandler {
     private BukkitTask updater;
     private Playtime plugin = Playtime.getPlugin();
     private SQLite db;
+    
+    public String getName() {
+        return "sqlite";
+    }
 
     public int getValue(String data, String username) {
         username = plugin.getBestPlayer(username);
@@ -125,9 +130,15 @@ public class Data_SQLite implements DataHandler {
     public void initiateRunnable() {
         updater = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new SQLiteAddRunnable(plugin), 1200L, 1200L);
     }
+    
+    public void startConversion(String newType, String... players) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new SQLiteStartConvertRunnable(plugin, newType, players));
+    }
 
     public void cleanup() {
-        updater.cancel();
+        if (updater != null) {
+            updater.cancel();
+        }
         updater = null;
         db = null;
     }

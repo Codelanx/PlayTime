@@ -27,6 +27,16 @@ import java.util.Map;
 public interface DataHandler {
     
     /**
+     * Gets the name for the data type in use
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @return The data type name, all lowercase
+     */
+    public abstract String getName();
+    
+    /**
      * Gets a value based on name of a particular user
      * 
      * @since 1.3.0
@@ -96,6 +106,19 @@ public interface DataHandler {
      * @version 1.3.0
      */
     public abstract void initiateRunnable();
+    
+    /**
+     * Runs an asynchronous class that will get the entirety of the currently
+     * used data storage method. This will in turn set a new runnable for
+     * writing to the new form.
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @param newType The new type of data manager to use in String form
+     * @param players Players to notify on conversion end
+     */
+    public abstract void startConversion(String newType, String... players);
     
     /**
      * Does any necessary operations before closing down, such as closing

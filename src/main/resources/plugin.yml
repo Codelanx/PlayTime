@@ -18,8 +18,8 @@ commands:
     description: Gets and displays the top 5 players for deathtime
   onlinetimetop:
     description: Gets and displays the top 5 players for onlinetimetop
-  playtimereload:
-    description: Reloads the playtime plugin
+  pt:
+    description: Main interface for playtime
 permissions:
   playtime.*:
     default: op
@@ -36,6 +36,7 @@ permissions:
       playtime.online.top: true
       playtime.updatenotice: true
       playtime.reload: true
+      playtime.convert: true
     playtime.use.*:
       default: op
       children:

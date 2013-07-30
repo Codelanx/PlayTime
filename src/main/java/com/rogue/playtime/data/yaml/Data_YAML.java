@@ -18,6 +18,7 @@ package com.rogue.playtime.data.yaml;
 
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.DataHandler;
+import com.rogue.playtime.runnable.yaml.YAMLStartConvertRunnable;
 import com.rogue.playtime.runnable.yaml.YAMLAddRunnable;
 import com.rogue.playtime.runnable.yaml.YAMLResetRunnable;
 import java.util.Map;
@@ -36,6 +37,10 @@ public class Data_YAML implements DataHandler {
     private YAML yaml;
     private BukkitTask updater;
     private Playtime plugin;
+    
+    public String getName() {
+        return "flatfile";
+    }
 
     public int getValue(String data, String username) {
         if (data.equals("onlinetime") && !Bukkit.getPlayer(username).isOnline()) {
@@ -66,6 +71,10 @@ public class Data_YAML implements DataHandler {
 
     public void initiateRunnable() {
         updater = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new YAMLAddRunnable(plugin, yaml), 1200L, 1200L);
+    }
+    
+    public void startConversion(String newType, String... players) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new YAMLStartConvertRunnable(plugin, newType, players));
     }
 
     public void cleanup() {

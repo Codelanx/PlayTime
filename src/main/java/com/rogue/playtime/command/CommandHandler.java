@@ -16,6 +16,7 @@
  */
 package com.rogue.playtime.command;
 
+import com.rogue.playtime.command.commands.*;
 import com.rogue.playtime.Playtime;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,8 +51,8 @@ public class CommandHandler implements CommandExecutor {
         commands.put(deathtop.getName(), deathtop);
         OnlineTopCommand onlinetop = new OnlineTopCommand();
         commands.put(onlinetop.getName(), onlinetop);
-        ReloadCommand reload = new ReloadCommand();
-        commands.put(reload.getName(), reload);
+        PTCommand pt = new PTCommand();
+        commands.put(pt.getName(), pt);
     }
 
     /**
@@ -67,7 +68,7 @@ public class CommandHandler implements CommandExecutor {
         plugin.getCommand("playtimetop").setExecutor(this);
         plugin.getCommand("deathtimetop").setExecutor(this);
         plugin.getCommand("onlinetimetop").setExecutor(this);
-        plugin.getCommand("playtimereload").setExecutor(this);
+        plugin.getCommand("pt").setExecutor(this);
     }
 
     /**

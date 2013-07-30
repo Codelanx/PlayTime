@@ -20,6 +20,7 @@ import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.DataHandler;
 import com.rogue.playtime.runnable.mysql.MySQLAddRunnable;
 import com.rogue.playtime.runnable.mysql.MySQLResetRunnable;
+import com.rogue.playtime.runnable.mysql.MySQLStartConvertRunnable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -41,6 +42,10 @@ public class Data_MySQL implements DataHandler {
     private BukkitTask updater;
     private Playtime plugin = Playtime.getPlugin();
     private MySQL db;
+    
+    public String getName() {
+        return "mysql";
+    }
 
     public int getValue(String data, String username) {
         username = plugin.getBestPlayer(username);
@@ -188,9 +193,15 @@ public class Data_MySQL implements DataHandler {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void startConversion(String newType, String... players) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new MySQLStartConvertRunnable(plugin, newType, players));
+    }
 
     public void cleanup() {
-        updater.cancel();
+        if (updater != null) {
+            updater.cancel();
+        }
         updater = null;
         db = null;
     }

@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.command;
+package com.rogue.playtime.command.commands;
 
+import com.rogue.playtime.command.CommandBase;
 import static com.rogue.playtime.Playtime._;
 import static com.rogue.playtime.command.CommandBase.plugin;
 import java.util.Map;
@@ -35,7 +36,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
  * @author 1Rogue
  * @version 1.4.0
  */
-public class DeathTopCommand implements CommandBase {
+public class OnlineTopCommand implements CommandBase {
 
     public boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         boolean scoreboard = false;
@@ -59,27 +60,27 @@ public class DeathTopCommand implements CommandBase {
                 }
             } catch (NumberFormatException e) {}
         }
-        Map<String, Integer> players = plugin.getDataManager().getDataHandler().getTopPlayers("deathtime", i);
+        Map<String, Integer> players = plugin.getDataManager().getDataHandler().getTopPlayers("onlinetime", i);
         if (players == null) {
-            sender.sendMessage(_("[&ePlayTime&f] &6Deathtimetop is disabled with flatfile data!"));
+            sender.sendMessage(_("[&ePlayTime&f] &6Onlinetimetop is disabled with flatfile data!"));
         }
         if (scoreboard) {
             Player p = (Player)sender;
             ScoreboardManager sbm = Bukkit.getScoreboardManager();
             Scoreboard scoreBoard = sbm.getNewScoreboard();
-            Objective objv = scoreBoard.registerNewObjective("Top Deathtimes", "dummy");
+            Objective objv = scoreBoard.registerNewObjective("Top Onlinetimes", "dummy");
             objv.setDisplaySlot(DisplaySlot.SIDEBAR);
-            objv.setDisplayName("Top Deathtimes (in hours):");
+            objv.setDisplayName("Top Onlinetimes (in hours):");
             Score score;
             for (String s : players.keySet()) {
                 score = objv.getScore(Bukkit.getOfflinePlayer(s));
                 score.setScore(players.get(s)/60);
             }
             p.setScoreboard(scoreBoard);
-            p.sendMessage(_("[&ePlayTime&f] &6Use &e/deathtimetop clear &6to remove the leaderboard."));
+            p.sendMessage(_("[&ePlayTime&f] &6Use &e/onlinetimetop clear &6to remove the leaderboard."));
             
         } else {
-            StringBuilder sb = new StringBuilder("Top ").append(i).append(" players for Deathtime (in hours):");
+            StringBuilder sb = new StringBuilder("Top ").append(i).append(" players for Onlinetime (in hours):");
             for (String s : players.keySet()) {
                 sb.append('\n').append(s).append(" - ").append(players.get(s)/60);
             }
@@ -89,7 +90,7 @@ public class DeathTopCommand implements CommandBase {
     }
 
     public String getName() {
-        return "deathtimetop";
+        return "onlinetimetop";
     }
 
 }
