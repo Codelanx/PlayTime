@@ -21,9 +21,7 @@ import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.mysql.Data_MySQL;
 import com.rogue.playtime.data.sqlite.Data_SQLite;
 import com.rogue.playtime.data.yaml.Data_YAML;
-import com.rogue.playtime.runnable.mysql.MySQLConvertToRunnable;
-import com.rogue.playtime.runnable.sqlite.SQLiteConvertToRunnable;
-import java.util.Map;
+import com.rogue.playtime.runnable.ConvertToRunnable;
 import org.bukkit.Bukkit;
 
 /**
@@ -99,11 +97,7 @@ public class DataManager {
     }
     
     public void convertTo(String newType, String query, String... players) {
-        if (newType.equals("mysql")) {
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, new MySQLConvertToRunnable(plugin, query, players));
-        } else if (newType.equals("sqlite")) {
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, new SQLiteConvertToRunnable(plugin, query, players));
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new ConvertToRunnable(newType, plugin, query, players));
     }
 
 }

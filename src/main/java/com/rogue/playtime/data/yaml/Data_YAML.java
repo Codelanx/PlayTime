@@ -18,9 +18,9 @@ package com.rogue.playtime.data.yaml;
 
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.DataHandler;
-import com.rogue.playtime.runnable.yaml.YAMLStartConvertRunnable;
-import com.rogue.playtime.runnable.yaml.YAMLAddRunnable;
-import com.rogue.playtime.runnable.yaml.YAMLResetRunnable;
+import com.rogue.playtime.runnable.StartConvertRunnable;
+import com.rogue.playtime.runnable.AddRunnable;
+import com.rogue.playtime.runnable.ResetRunnable;
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
@@ -54,11 +54,11 @@ public class Data_YAML implements DataHandler {
     }
     
     public void onDeath(String username) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new YAMLResetRunnable(username, "deathtime", yaml));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new ResetRunnable(plugin, username, "deathtime"));
     }
     
     public void onLogout(String username) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new YAMLResetRunnable(username, "onlinetime", yaml));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new ResetRunnable(plugin, username, "onlinetime"));
     }
 
     public void verifyFormat() {
@@ -70,12 +70,12 @@ public class Data_YAML implements DataHandler {
     }
 
     public void initiateRunnable() {
-        updater = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new YAMLAddRunnable(plugin, yaml), 1200L, 1200L);
+        updater = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new AddRunnable(plugin), 1200L, 1200L);
     }
     
     public void startConversion(String newType, String... players) {
         plugin.onDisable();
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new YAMLStartConvertRunnable(plugin, newType, players));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new StartConvertRunnable(plugin, newType, players));
     }
 
     public void cleanup() {

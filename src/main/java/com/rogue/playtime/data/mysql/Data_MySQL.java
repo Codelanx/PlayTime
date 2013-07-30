@@ -18,9 +18,9 @@ package com.rogue.playtime.data.mysql;
 
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.DataHandler;
-import com.rogue.playtime.runnable.mysql.MySQLAddRunnable;
-import com.rogue.playtime.runnable.mysql.MySQLResetRunnable;
-import com.rogue.playtime.runnable.mysql.MySQLStartConvertRunnable;
+import com.rogue.playtime.runnable.AddRunnable;
+import com.rogue.playtime.runnable.ResetRunnable;
+import com.rogue.playtime.runnable.StartConvertRunnable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -97,11 +97,11 @@ public class Data_MySQL implements DataHandler {
     }
 
     public void onDeath(String username) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new MySQLResetRunnable(username, "deathtime"));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new ResetRunnable(plugin, username, "deathtime"));
     }
 
     public void onLogout(String username) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new MySQLResetRunnable(username, "onlinetime"));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new ResetRunnable(plugin, username, "onlinetime"));
     }
 
     public void verifyFormat() {
@@ -183,7 +183,7 @@ public class Data_MySQL implements DataHandler {
     public void initiateRunnable() {
         try {
             if (db.checkConnection()) {
-                updater = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new MySQLAddRunnable(plugin), 1200L, 1200L);
+                updater = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new AddRunnable(plugin), 1200L, 1200L);
                 db.close();
             } else {
                 plugin.getLogger().info("Error connecting to MySQL database... shutting down!");
@@ -196,7 +196,7 @@ public class Data_MySQL implements DataHandler {
     
     public void startConversion(String newType, String... players) {
         plugin.onDisable();
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new MySQLStartConvertRunnable(plugin, newType, players));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new StartConvertRunnable(plugin, newType, players));
     }
 
     public void cleanup() {

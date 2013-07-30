@@ -37,7 +37,7 @@ public class SendMessageCallable implements Callable {
     }
 
     public Object call() throws Exception {
-        Bukkit.getPlayer(player).sendMessage(_(message));
+        Bukkit.getPlayer(player).sendMessage(_("[&ePlaytime&f] &6" + message));
         return null;
     }
 

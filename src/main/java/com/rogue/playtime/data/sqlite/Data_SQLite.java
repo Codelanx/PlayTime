@@ -18,9 +18,9 @@ package com.rogue.playtime.data.sqlite;
 
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.DataHandler;
-import com.rogue.playtime.runnable.sqlite.SQLiteStartConvertRunnable;
-import com.rogue.playtime.runnable.sqlite.SQLiteAddRunnable;
-import com.rogue.playtime.runnable.sqlite.SQLiteResetRunnable;
+import com.rogue.playtime.runnable.StartConvertRunnable;
+import com.rogue.playtime.runnable.AddRunnable;
+import com.rogue.playtime.runnable.ResetRunnable;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -98,11 +98,11 @@ public class Data_SQLite implements DataHandler {
     }
 
     public void onDeath(String username) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new SQLiteResetRunnable(username, "deathtime"));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new ResetRunnable(plugin, username, "deathtime"));
     }
     
     public void onLogout(String username) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new SQLiteResetRunnable(username, "onlinetime"));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new ResetRunnable(plugin, username, "onlinetime"));
     }
 
     public void verifyFormat() {
@@ -128,12 +128,12 @@ public class Data_SQLite implements DataHandler {
     }
 
     public void initiateRunnable() {
-        updater = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new SQLiteAddRunnable(plugin), 1200L, 1200L);
+        updater = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new AddRunnable(plugin), 1200L, 1200L);
     }
     
     public void startConversion(String newType, String... players) {
         plugin.onDisable();
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new SQLiteStartConvertRunnable(plugin, newType, players));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new StartConvertRunnable(plugin, newType, players));
     }
 
     public void cleanup() {
