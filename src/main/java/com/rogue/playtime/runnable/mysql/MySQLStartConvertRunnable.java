@@ -17,9 +17,12 @@
 package com.rogue.playtime.runnable.mysql;
 
 import com.rogue.playtime.Playtime;
+import com.rogue.playtime.callable.SendMessageCallable;
 import com.rogue.playtime.data.mysql.MySQL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -43,9 +46,16 @@ public class MySQLStartConvertRunnable extends BukkitRunnable {
     public void run() {
         MySQL db = new MySQL();
         StringBuilder sb = new StringBuilder();
-        /*for (String p : player) {
-            plugin.sendThreadedMessage(p, "[&ePlaytime&f] &6Downloading MySQL database...");
-        }*/
+        
+        plugin.getLogger().log(Level.INFO, "player length: {0}", player.length);
+        plugin.getLogger().log(Level.INFO, "Players in array:");
+        for (String p : player) {
+            plugin.getLogger().log(Level.INFO, p);
+        }
+        for (String p : player) {
+            Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, "[&ePlaytime&f] &6Downloading MySQL database..."));
+        }
+        plugin.getLogger().info("Downloading MySQL database...");
         try {
             db.open();
 

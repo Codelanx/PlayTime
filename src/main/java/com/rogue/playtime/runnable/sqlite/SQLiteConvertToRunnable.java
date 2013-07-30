@@ -17,9 +17,11 @@
 package com.rogue.playtime.runnable.sqlite;
 
 import com.rogue.playtime.Playtime;
+import com.rogue.playtime.callable.SendMessageCallable;
 import com.rogue.playtime.data.DataManager;
 import com.rogue.playtime.data.sqlite.SQLite;
 import java.sql.SQLException;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -52,9 +54,9 @@ public class SQLiteConvertToRunnable extends BukkitRunnable {
             db.open();
             db.update("DELETE FROM `playTime`");
             String[] queries = query.split("\n");
-            /*for (String p : player) {
-             plugin.sendThreadedMessage(p, "[&ePlaytime&f] &6Adding " + queries.length + " rows to SQLite database. Estimated time: " + getTime(queries.length));
-             }*/
+            for (String p : player) {
+             Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, "[&ePlaytime&f] &6Adding " + queries.length + " rows to SQLite database. Estimated time: " + getTime(queries.length)));
+            }
             for (String s : queries) {
                 db.update(s);
             }
@@ -67,14 +69,15 @@ public class SQLiteConvertToRunnable extends BukkitRunnable {
         dm.getDataHandler().cleanup();
         plugin.reload();
         plugin.setBusy(false);
-        /*for (String p : player) {
-            plugin.sendThreadedMessage(p, "[&ePlaytime&f] &6Conversion complete!");
-        }*/
+        for (String p : player) {
+            Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, "[&ePlaytime&f] &6Conversion complete!"));
+        }
     }
 
     private String getTime(int rows) {
-        long seconds = Math.round(rows / (369 + ((2 / 3) - 0.2)));
-        long minutes = seconds / 60;
-        return ((minutes >= 1) ? ((minutes != 1) ? minutes + " minutes" : minutes + " minute") : "") + " " + (seconds % 60);
+        long time = Math.round(rows / (369 + ((2 / 3) - 0.2)));
+        long seconds = time % 60;
+        long minutes = time / 60;
+        return ((minutes >= 1) ? ((minutes != 1) ? minutes + " minutes" : minutes + " minute") : "") + " " + ((seconds != 1) ? seconds + " seconds." : seconds + " second.");
     }
 }

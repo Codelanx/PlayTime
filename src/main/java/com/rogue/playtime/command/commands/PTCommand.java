@@ -47,7 +47,11 @@ public class PTCommand implements CommandBase {
 
                 } else if (args[0].equalsIgnoreCase("confirm")) {
                     if (converters.get(sender) != null) {
-                        plugin.getDataManager().convertData(converters.get(sender));
+                        if (sender instanceof Player) {
+                            plugin.getDataManager().convertData(converters.get(sender), sender.getName());
+                        } else {
+                            plugin.getDataManager().convertData(converters.get(sender));
+                        }
                         converters.remove(sender);
                         sender.sendMessage(_("[&ePlaytime&f] &6Please note that this may take up to 1 minute to complete, depending on the size of your database."));
                         plugin.setBusy(true);
@@ -62,9 +66,13 @@ public class PTCommand implements CommandBase {
                 if (args[0].equalsIgnoreCase("convert") && sender.hasPermission("playtime.convert")) {
                     args[1] = args[1].toLowerCase();
                     if (args[1].equals("mysql") || args[1].equals("sqlite")) {
+                        if (args[1].equals(plugin.getDataManager().getDataHandler().getName())) {
+                            sender.sendMessage(_("[&ePlaytime&f] &6Data Manager already in use!"));
+                            return true;
+                        }
                         converters.put(sender, args[1]);
                         sender.sendMessage(_("[&ePlaytime&f] &6Converting from data type '" + plugin.getDataManager().getDataHandler().getName() + "' to " + args[1] + "!"));
-                        sender.sendMessage(_("[&ePlaytime&f] &6You will need to either confirm this action or cancel it using &e/pt confirm &6or &e/pt cancel"));
+                        sender.sendMessage(_("[&ePlaytime&f] &6You will need to either confirm this action with &e/pt &6confirm or cancel it using &e/pt cancel"));
                     } else if (args[1].equals("flatfile")) {
                         sender.sendMessage(_("[&ePlaytime&f] &6Converting data to flat files is not allowed!"));
                     } else {

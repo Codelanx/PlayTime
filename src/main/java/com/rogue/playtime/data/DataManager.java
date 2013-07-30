@@ -92,8 +92,9 @@ public class DataManager {
             data.startConversion(newType, players);
         } else {
             for (String s : players) {
-                Bukkit.getServer().getPlayer(s).sendMessage(_("[&ePlaytime&f] &6Data manager already being used!"));
+                Bukkit.getPlayer(s).sendMessage(_("[&ePlaytime&f] &6Data manager already being used!"));
             }
+            plugin.setBusy(false);
         }
     }
     
