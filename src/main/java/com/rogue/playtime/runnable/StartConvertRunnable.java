@@ -51,14 +51,8 @@ public class StartConvertRunnable extends BukkitRunnable {
         if (current.equals("mysql")) {
             MySQL db = new MySQL();
             StringBuilder sb = new StringBuilder();
-
-            plugin.getLogger().log(Level.INFO, "player length: {0}", player.length);
-            plugin.getLogger().log(Level.INFO, "Players in array:");
             for (String p : player) {
-                plugin.getLogger().log(Level.INFO, p);
-            }
-            for (String p : player) {
-                Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, "[&ePlaytime&f] &6Downloading MySQL database..."));
+                Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, "Downloading MySQL database..."));
             }
             plugin.getLogger().info("Downloading MySQL database...");
             try {

@@ -46,11 +46,11 @@ public class ConvertToRunnable extends BukkitRunnable {
     }
 
     public void run() {
+        DataManager dm = new DataManager(plugin);
         if (convert.equals("mysql")) {
-            plugin.getConfigurationLoader().getConfig().set("data.manager", "mysql");
+            plugin.getConfigurationLoader().getConfig().set("data.manager", convert);
             plugin.getConfigurationLoader().saveConfig();
-            DataManager dm = new DataManager(plugin);
-            dm.select("mysql");
+            dm.select(convert);
             dm.setup();
 
             MySQL db = new MySQL();
@@ -64,14 +64,11 @@ public class ConvertToRunnable extends BukkitRunnable {
                     e.printStackTrace();
                 }
             }
-            dm.getDataHandler().cleanup();
             plugin.reload();
-            plugin.setBusy(false);
         } else if (convert.equals("sqlite")) {
-            plugin.getConfigurationLoader().getConfig().set("data.manager", "sqlite");
+            plugin.getConfigurationLoader().getConfig().set("data.manager", convert);
             plugin.getConfigurationLoader().saveConfig();
-            DataManager dm = new DataManager(plugin);
-            dm.select("sqlite");
+            dm.select(convert);
             dm.setup();
 
             SQLite db = new SQLite();
@@ -80,7 +77,7 @@ public class ConvertToRunnable extends BukkitRunnable {
                 db.update("DELETE FROM `playTime`");
                 String[] queries = query.split("\n");
                 for (String p : player) {
-                    Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, "[&ePlaytime&f] &6Adding " + queries.length + " rows to SQLite database. Estimated time: " + getTime(queries.length)));
+                    Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, "Adding " + queries.length + " rows to SQLite database. Estimated time: " + getTime(queries.length)));
                 }
                 for (String s : queries) {
                     db.update(s);
@@ -91,17 +88,16 @@ public class ConvertToRunnable extends BukkitRunnable {
                     e.printStackTrace();
                 }
             }
-            dm.getDataHandler().cleanup();
             plugin.reload();
-            plugin.setBusy(false);
             for (String p : player) {
-                Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, "[&ePlaytime&f] &6Conversion complete!"));
+                Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, "Conversion complete!"));
             }
         } else if (convert.equals("flatfile")) {
             for (String s : player) {
                 plugin.getServer().getScheduler().callSyncMethod(plugin, new SendMessageCallable(s, "You cannot convert to flat file storage!"));
             }
         }
+        plugin.setBusy(false);
     }
     
     private String getTime(int rows) {
