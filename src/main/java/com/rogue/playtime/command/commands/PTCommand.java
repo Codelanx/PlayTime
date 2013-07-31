@@ -17,7 +17,7 @@
 package com.rogue.playtime.command.commands;
 
 import com.rogue.playtime.command.CommandBase;
-import static com.rogue.playtime.Playtime._;
+import static com.rogue.playtime.Playtime.__;
 import static com.rogue.playtime.command.CommandBase.plugin;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +53,7 @@ public class PTCommand implements CommandBase {
                             plugin.getDataManager().convertData(converters.get(sender));
                         }
                         converters.remove(sender);
-                        sender.sendMessage(_("[&ePlaytime&f] &6Please note that this may take up to 1 minute to complete, depending on the size of your database."));
+                        sender.sendMessage(__("Please note that this may take up to 1 minute to complete, depending on the size of your database."));
                         plugin.setBusy(true);
                     }
                 } else if (args[0].equalsIgnoreCase("cancel")) {
@@ -67,21 +67,21 @@ public class PTCommand implements CommandBase {
                     args[1] = args[1].toLowerCase();
                     if (args[1].equals("mysql") || args[1].equals("sqlite")) {
                         if (args[1].equals(plugin.getDataManager().getDataHandler().getName())) {
-                            sender.sendMessage(_("[&ePlaytime&f] &6Data Manager already in use!"));
+                            sender.sendMessage(__("Data Manager already in use!"));
                             return true;
                         }
                         converters.put(sender, args[1]);
-                        sender.sendMessage(_("[&ePlaytime&f] &6Converting from data type '" + plugin.getDataManager().getDataHandler().getName() + "' to " + args[1] + "!"));
-                        sender.sendMessage(_("[&ePlaytime&f] &6You will need to either confirm this action with &e/pt &6confirm or cancel it using &e/pt cancel"));
+                        sender.sendMessage(__("Converting from data type '" + plugin.getDataManager().getDataHandler().getName() + "' to " + args[1] + "!"));
+                        sender.sendMessage(__("You will need to either confirm this action with &e/pt &6confirm or cancel it using &e/pt cancel"));
                     } else if (args[1].equals("flatfile")) {
-                        sender.sendMessage(_("[&ePlaytime&f] &6Converting data to flat files is not allowed!"));
+                        sender.sendMessage(__("Converting data to flat files is not allowed!"));
                     } else {
-                        sender.sendMessage(_("[&ePlaytime&f] &6Unknown data type '" + args[1] + "'"));
+                        sender.sendMessage(__("Unknown data type '" + args[1] + "'"));
                     }
                 }
                 break;
             default:
-                sender.sendMessage(_("&ePlaytime v" + plugin.getDescription().getVersion() + "&f - &6Developed by 1Rogue"));
+                sender.sendMessage(__("Version " + plugin.getDescription().getVersion() + "&f - &6Developed by 1Rogue"));
                 break;
         }
         return false;

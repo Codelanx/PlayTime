@@ -17,7 +17,7 @@
 package com.rogue.playtime.command.commands;
 
 import com.rogue.playtime.command.CommandBase;
-import static com.rogue.playtime.Playtime._;
+import static com.rogue.playtime.Playtime.__;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -40,7 +40,7 @@ public class DeathCommand implements CommandBase {
             check = plugin.getBestPlayer(args[0]);
             perm += ".others";
         } else {
-            sender.sendMessage("You cannot check the survival time of a non-player!");
+            sender.sendMessage(__("You cannot check the survival time of a non-player!"));
             return true;
         }
         if (sender.hasPermission(perm)) {
@@ -49,16 +49,16 @@ public class DeathCommand implements CommandBase {
                 int minutes = time % 60;
                 if (time >= 60) {
                     int hours = time / 60;
-                    sender.sendMessage(_("[&ePlayTime&f] &6" + check + " has been alive for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
+                    sender.sendMessage(__(check + " has been alive for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
                 } else {
-                    sender.sendMessage(_("[&ePlayTime&f] &6" + check + " has been alive for " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
+                    sender.sendMessage(__(check + " has been alive for " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
                 }
             } else {
-                sender.sendMessage(_("[&ePlayTime&f] &6Tracking player deaths is disabled!"));
+                sender.sendMessage(__("Tracking player deaths is disabled!"));
             }
 
         } else {
-            sender.sendMessage(_("[&ePlayTime&f] &6You do not have permission to do that!"));
+            sender.sendMessage(__("You do not have permission to do that!"));
         }
         return false;
     }

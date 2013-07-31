@@ -31,7 +31,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @version 1.2.0
  */
 public class AFKRunnable extends BukkitRunnable {
-    
+
     Playtime plugin;
 
     public AFKRunnable(Playtime p) {
@@ -40,22 +40,23 @@ public class AFKRunnable extends BukkitRunnable {
 
     public void run() {
         Map<String, PlaytimePlayer> players = plugin.getPlayerHandler().getPlayers();
-        if (plugin.getDebug() >= 1) {
-            plugin.getLogger().info("AFK check initiated");
-        }
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (!players.get(p.getName().toLowerCase()).isAFK() && p.getLocation().equals(players.get(p.getName().toLowerCase()).getSavedLocation())) {
-                plugin.getPlayerHandler().incrementTime(p.getName());
-                if (plugin.getDebug() >= 3) {
-                    plugin.getLogger().log(Level.INFO, "Time incremented for {0}!", p.getName());
+        if (Bukkit.getOnlinePlayers().length > 0) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (plugin.getDebug() >= 1) {
+                    plugin.getLogger().info("AFK check initiated");
                 }
-            } else if (!players.get(p.getName().toLowerCase()).isAFK()) {
-                plugin.getPlayerHandler().updatePlayer(p.getName(), p.getLocation());
-                if (plugin.getDebug() >= 2) {
-                    plugin.getLogger().log(Level.INFO, "Updating location for {0}!", p.getName());
+                if (!players.get(p.getName().toLowerCase()).isAFK() && p.getLocation().equals(players.get(p.getName().toLowerCase()).getSavedLocation())) {
+                    plugin.getPlayerHandler().incrementTime(p.getName());
+                    if (plugin.getDebug() >= 3) {
+                        plugin.getLogger().log(Level.INFO, "Time incremented for {0}!", p.getName());
+                    }
+                } else if (!players.get(p.getName().toLowerCase()).isAFK()) {
+                    plugin.getPlayerHandler().updatePlayer(p.getName(), p.getLocation());
+                    if (plugin.getDebug() >= 2) {
+                        plugin.getLogger().log(Level.INFO, "Updating location for {0}!", p.getName());
+                    }
                 }
             }
         }
     }
-    
 }

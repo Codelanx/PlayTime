@@ -16,7 +16,7 @@
  */
 package com.rogue.playtime.listener;
 
-import static com.rogue.playtime.Playtime._;
+import static com.rogue.playtime.Playtime.__;
 import com.rogue.playtime.Playtime;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -74,7 +74,7 @@ public class PlaytimeListener implements Listener {
         if (e.getPlayer().isOp() || e.getPlayer().hasPermission("playtime.updatenotice"));
         if (plugin.getConfigurationLoader().getBoolean("update-check")) {
             if (plugin.isUpdateAvailable()) {
-                e.getPlayer().sendMessage(_("[&ePlayTime&f] &6An update is available for Playtime!"));
+                e.getPlayer().sendMessage(__("An update is available for Playtime!"));
             }
         }
         if (plugin.getEventHandler() != null) {

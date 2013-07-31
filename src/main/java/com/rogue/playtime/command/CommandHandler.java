@@ -16,7 +16,7 @@
  */
 package com.rogue.playtime.command;
 
-import static com.rogue.playtime.Playtime._;
+import static com.rogue.playtime.Playtime.__;
 import com.rogue.playtime.command.commands.*;
 import com.rogue.playtime.Playtime;
 import java.util.HashMap;
@@ -92,7 +92,7 @@ public class CommandHandler implements CommandExecutor {
                 return commands.get(commandLabel).execute(sender, cmd, commandLabel, args);
             }
         } else {
-            sender.sendMessage(_("[&ePlaytime&f] &6Playtime is currently busy with an operation, try again in a minute!"));
+            sender.sendMessage(__("Playtime is currently busy with an operation, try again in a minute!"));
         }
         return false;
     }

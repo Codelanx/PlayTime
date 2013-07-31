@@ -17,7 +17,7 @@
 package com.rogue.playtime.command.commands;
 
 import com.rogue.playtime.command.CommandBase;
-import static com.rogue.playtime.Playtime._;
+import static com.rogue.playtime.Playtime.__;
 import static com.rogue.playtime.command.CommandBase.plugin;
 import java.util.Map;
 import org.bukkit.Bukkit;
@@ -62,7 +62,7 @@ public class OnlineTopCommand implements CommandBase {
         }
         Map<String, Integer> players = plugin.getDataManager().getDataHandler().getTopPlayers("onlinetime", i);
         if (players == null) {
-            sender.sendMessage(_("[&ePlayTime&f] &6Onlinetimetop is disabled with flatfile data!"));
+            sender.sendMessage(__("Onlinetimetop is disabled with flatfile data!"));
         }
         if (scoreboard) {
             Player p = (Player)sender;
@@ -77,7 +77,7 @@ public class OnlineTopCommand implements CommandBase {
                 score.setScore(players.get(s)/60);
             }
             p.setScoreboard(scoreBoard);
-            p.sendMessage(_("[&ePlayTime&f] &6Use &e/onlinetimetop clear &6to remove the leaderboard."));
+            p.sendMessage(__("Use &e/onlinetimetop clear &6to remove the leaderboard."));
             
         } else {
             StringBuilder sb = new StringBuilder("Top ").append(i).append(" players for Onlinetime (in hours):");

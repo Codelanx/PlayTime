@@ -16,7 +16,6 @@
  */
 package com.rogue.playtime.data;
 
-import static com.rogue.playtime.Playtime._;
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.mysql.Data_MySQL;
 import com.rogue.playtime.data.sqlite.Data_SQLite;
@@ -86,14 +85,7 @@ public class DataManager {
     }
     
     public void convertData(String newType, String... players) {
-        if (!data.getName().equals(newType)) {
-            data.startConversion(newType, players);
-        } else {
-            for (String s : players) {
-                Bukkit.getPlayer(s).sendMessage(_("[&ePlaytime&f] &6Data manager already being used!"));
-            }
-            plugin.setBusy(false);
-        }
+        data.startConversion(newType, players);
     }
     
     public void convertTo(String newType, String query, String... players) {

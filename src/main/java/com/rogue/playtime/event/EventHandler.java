@@ -16,7 +16,7 @@
  */
 package com.rogue.playtime.event;
 
-import static com.rogue.playtime.Playtime._;
+import static com.rogue.playtime.Playtime.__;
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.runnable.EventRunnable;
 import java.io.File;
@@ -120,7 +120,7 @@ public class EventHandler {
         for (String s : fire) {
             for (String c : yamlEvents.get(s).getCommands()) {
                 if (this.isMessage(c)) {
-                    Bukkit.getPlayer(username).sendMessage(_("[&ePlaytime&f] &6" + this.replaceMessage(c).replace("%u", username)));
+                    Bukkit.getPlayer(username).sendMessage(__(this.replaceMessage(c).replace("%u", username)));
                 } else {
                     Bukkit.dispatchCommand(ccs, c.replace("%u", username));
                 }
@@ -133,7 +133,7 @@ public class EventHandler {
         for (Event e : loginEvents) {
             for (String c : e.getCommands()) {
                 if (this.isMessage(c)) {
-                    Bukkit.getPlayer(username).sendMessage(_("[&ePlaytime&f] &6" + this.replaceMessage(c).replace("%u", username)));
+                    Bukkit.getPlayer(username).sendMessage(__(this.replaceMessage(c).replace("%u", username)));
                 } else {
                     Bukkit.dispatchCommand(ccs, c.replace("%u", username));
                 }
