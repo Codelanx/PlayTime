@@ -55,8 +55,8 @@ public class Data_YAML implements DataHandler {
         return new HashMap<String, Integer>();
     }
     
-    public ArrayList<String> getPlayersInRange(String timer, int maximum, int minimum) {
-        return new ArrayList<String>();
+    public Map<String, Integer> getPlayersInRange(String timer, int maximum, int minimum) {
+        return new HashMap<String, Integer>();
     }
     
     public void onDeath(String username) {

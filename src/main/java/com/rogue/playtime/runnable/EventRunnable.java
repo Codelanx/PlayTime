@@ -18,12 +18,15 @@ package com.rogue.playtime.runnable;
 
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.callable.ConsoleCommandCallable;
+import com.rogue.playtime.callable.SendMessageCallable;
 import com.rogue.playtime.data.mysql.MySQL;
 import com.rogue.playtime.data.sqlite.SQLite;
+import com.rogue.playtime.event.EventHandler;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -54,10 +57,11 @@ public class EventRunnable extends BukkitRunnable {
     }
 
     public void run() {
-        ArrayList<String> users;
+        Map<String, Integer> users;
+        EventHandler event = plugin.getEventHandler();
         if (doRepeat) {
             String data = plugin.getDataManager().getDataHandler().getName();
-            users = new ArrayList();
+            users = new HashMap();
             if (data.equals("sqlite")) {
                 SQLite db = new SQLite();
                 try {
@@ -65,7 +69,7 @@ public class EventRunnable extends BukkitRunnable {
                     ResultSet ret = db.query("SELECT * FROM `playTime`");
                     while (ret.next()) {
                         if (ret.getInt(type) % min <= max - min) {
-                            users.add(ret.getString("username"));
+                            users.put(ret.getString("username"), ret.getInt(type));
                         }
                     }
                     ret.close();
@@ -82,7 +86,7 @@ public class EventRunnable extends BukkitRunnable {
                     ResultSet ret = db.query("SELECT * FROM `playTime`");
                     while (ret.next()) {
                         if (ret.getInt(type) % min <= max - min) {
-                            users.add(ret.getString("username"));
+                            users.put(ret.getString("username"), ret.getInt(type));
                         }
                     }
                     ret.close();
@@ -94,18 +98,26 @@ public class EventRunnable extends BukkitRunnable {
                 }
             }
             if (!users.isEmpty()) {
-                for (String user : users) {
+                for (String user : users.keySet()) {
                     for (String cmd : run) {
-                        Bukkit.getScheduler().callSyncMethod(plugin, new ConsoleCommandCallable(cmd.replace("%u", user)));
+                        if (event.isMessage(cmd.split(" ")[0])) {
+                            Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(user, event.replaceMessage(cmd).replace("%u", user).replace("%t", users.get(user).toString())));
+                        } else {
+                            Bukkit.getScheduler().callSyncMethod(plugin, new ConsoleCommandCallable(cmd.replace("%u", user).replace("%t", users.get(user).toString())));
+                        }
                     }
                 }
             }
         } else {
             users = plugin.getDataManager().getDataHandler().getPlayersInRange(type, min, max);
             if (!users.isEmpty()) {
-                for (String user : users) {
+                for (String user : users.keySet()) {
                     for (String cmd : run) {
-                        Bukkit.getScheduler().callSyncMethod(plugin, new ConsoleCommandCallable(cmd.replace("%u", user)));
+                        if (event.isMessage(cmd.split(" ")[0])) {
+                            Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(user, event.replaceMessage(cmd).replace("%u", user).replace("%t", users.get(user).toString())));
+                        } else {
+                            Bukkit.getScheduler().callSyncMethod(plugin, new ConsoleCommandCallable(cmd.replace("%u", user).replace("%t", users.get(user).toString())));
+                        }
                     }
                 }
             }

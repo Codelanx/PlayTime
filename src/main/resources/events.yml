@@ -1,14 +1,23 @@
 events:
   example:
-    timer: playtime
+    type: playtime
     time: 1200
+    at-login: true
     repeat: false
     commands:
-    - 'msg %u &6Congratulations on hitting 20 hours of play time!'
+    - 'msg %u Congratulations on hitting 20 hours of play time!'
   exampletwo:
-    timer: onlinetime
+    type: onlinetime
     time: 120
+    at-login: true
     repeat: true
     commands:
-    - 'msg %u &6Here''s some food for being online so much!'
+    - 'msg %u Here''s some food for being online so much!'
     - 'give %u 260 1'
+  examplethree:
+    type: onlinetime
+    time: 0
+    at-login: true
+    repeat: false
+    commands:
+    - 'msg %u You have played for %t'

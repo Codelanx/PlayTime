@@ -120,6 +120,7 @@ public class Playtime extends JavaPlugin {
         chandler.registerExecs();
 
         boolean afkEnabled = this.cloader.getBoolean("afk.enabled");
+        boolean events = this.cloader.getBoolean("events.enabled");
         deathEnabled = this.cloader.getBoolean("check.death-time");
         onlineEnabled = this.cloader.getBoolean("check.online-time");
 
@@ -133,7 +134,7 @@ public class Playtime extends JavaPlugin {
             phandler = null;
         }
 
-        if (!(!afkEnabled && !deathEnabled && !onlineEnabled && !cloader.getBoolean("update-check"))) {
+        if (!(!afkEnabled && !deathEnabled && !onlineEnabled && !cloader.getBoolean("update-check") && !events)) {
             this.getLogger().log(Level.INFO, "Enabling Listener...");
             listener = new PlaytimeListener(this);
             Bukkit.getPluginManager().registerEvents(listener, this);
@@ -142,7 +143,7 @@ public class Playtime extends JavaPlugin {
             listener = null;
         }
         
-        if (cloader.getBoolean("events.enabled")) {
+        if (events) {
             this.getLogger().log(Level.INFO, "Enabling event system...");
             ehandler = new EventHandler(this);
         } else {
@@ -295,6 +296,8 @@ public class Playtime extends JavaPlugin {
      *
      * @since 1.2.0
      * @version 1.2.0
+     * 
+     * @deprecated
      *
      * @return Status of AFK runnable
      */

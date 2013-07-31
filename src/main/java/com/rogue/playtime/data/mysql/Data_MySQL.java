@@ -97,14 +97,14 @@ public class Data_MySQL implements DataHandler {
         return players;
     }
     
-    public ArrayList<String> getPlayersInRange(String timer, int maximum, int minimum) {
+    public Map<String, Integer> getPlayersInRange(String timer, int maximum, int minimum) {
         db = new MySQL();
-        ArrayList<String> back = new ArrayList();
+        Map<String, Integer> back = new HashMap();
         try {
             db.open();
-            ResultSet ret = db.query("SELECT `username` FROM `playTime` WHERE `" + timer + "` BETWEEN " + minimum + " AND " + maximum);
+            ResultSet ret = db.query("SELECT * FROM `playTime` WHERE `" + timer + "` BETWEEN " + minimum + " AND " + maximum);
             while (ret.next()) {
-                back.add(ret.getString(1));
+                back.put(ret.getString("username"), ret.getInt(timer));
             }
         } catch (SQLException e) {
             if (plugin.getDebug() == 3) {

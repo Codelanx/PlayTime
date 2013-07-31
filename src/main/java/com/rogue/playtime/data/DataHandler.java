@@ -72,7 +72,7 @@ public interface DataHandler {
      * @param minimum The minimum time
      * @return ArrayList containing players within the range, empty if there are no players in range
      */
-    public abstract ArrayList<String> getPlayersInRange(String timer, int maximum, int minimum);
+    public abstract Map<String, Integer> getPlayersInRange(String timer, int maximum, int minimum);
     
     /**
      * Calls an Asynchronous task that resets the player's death timer

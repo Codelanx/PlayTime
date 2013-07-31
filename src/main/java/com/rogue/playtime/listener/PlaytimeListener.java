@@ -40,13 +40,13 @@ public class PlaytimeListener implements Listener {
     public PlaytimeListener(Playtime p) {
         plugin = p;
     }
-    
+
     /**
      * Resets a player's death timer on death.
-     * 
+     *
      * @since 1.2.0
      * @version 1.2.0
-     * 
+     *
      * @param e The death event
      */
     @EventHandler(priority = EventPriority.NORMAL)
@@ -55,14 +55,15 @@ public class PlaytimeListener implements Listener {
             plugin.getDataManager().getDataHandler().onDeath(e.getEntity().getName());
         }
     }
-    
+
     /**
-     * Sends a notification to ops/players with all of the plugin's permissions.
-     * Also registers the player with the AFK checker if it is enabled.
-     * 
+     * Sends a notification to ops/players with all of the plugin's permissions,
+     * registers the player with the AFK checker if it is enabled, and fires any
+     * login events registered by the player.
+     *
      * @since 1.2.0
-     * @versino 1.3.0
-     * 
+     * @versino 1.4.0
+     *
      * @param e The join event
      */
     @EventHandler(priority = EventPriority.NORMAL)
@@ -76,15 +77,18 @@ public class PlaytimeListener implements Listener {
                 e.getPlayer().sendMessage(_("[&ePlayTime&f] &6An update is available for Playtime!"));
             }
         }
+        if (plugin.getEventHandler() != null) {
+            plugin.getEventHandler().fireLoginEvents(e.getPlayer().getName());
+        }
     }
-    
+
     /**
      * Resets a player's online timer and removes them from the afk check, if
      * the relevant service is enabled.
-     * 
+     *
      * @since 1.2.0
      * @version 1.3.0
-     * 
+     *
      * @param e The quit event
      */
     @EventHandler(priority = EventPriority.NORMAL)
@@ -96,13 +100,13 @@ public class PlaytimeListener implements Listener {
             plugin.getDataManager().getDataHandler().onLogout(e.getPlayer().getName());
         }
     }
-    
+
     /**
      * Sets a player as "not AFK" when they move.
-     * 
+     *
      * @since 1.2.0
      * @version 1.2.0
-     * 
+     *
      * @param e The move event
      */
     @EventHandler(priority = EventPriority.NORMAL)
@@ -111,13 +115,13 @@ public class PlaytimeListener implements Listener {
             plugin.getPlayerHandler().updatePlayer(e.getPlayer().getName(), false);
         }
     }
-    
+
     /**
      * Sets a player as "not AFK" when they interact with something.
-     * 
+     *
      * @since 1.2.0
      * @version 1.2.0
-     * 
+     *
      * @param e The interact event
      */
     @EventHandler(priority = EventPriority.NORMAL)
