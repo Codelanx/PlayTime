@@ -1,0 +1,14 @@
+events:
+  example:
+    timer: playtime
+    time: 1200
+    repeat: false
+    commands:
+    - 'msg %u &6Congratulations on hitting 20 hours of play time!'
+  exampletwo:
+    timer: onlinetime
+    time: 120
+    repeat: true
+    commands:
+    - 'msg %u &6Here''s some food for being online so much!'
+    - 'give %u 260 1'

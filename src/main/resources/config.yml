@@ -7,6 +7,9 @@ afk:
   enabled: true
   interval: 60
   timeout: 900
+events:
+  enabled: true
+  interval: 600
 data:
   manager: 'flatfile'
 managers:

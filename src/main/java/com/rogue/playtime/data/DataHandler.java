@@ -16,6 +16,7 @@
  */
 package com.rogue.playtime.data;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -60,6 +61,18 @@ public interface DataHandler {
      * @return A map object containing the strings for the top players, and an integer value of their time
      */
     public abstract Map<String, Integer> getTopPlayers(String data, int amount);
+    
+    /**
+     * Gets the players within a range of a timer.
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @param maximum The maximum time
+     * @param minimum The minimum time
+     * @return ArrayList containing players within the range, empty if there are no players in range
+     */
+    public abstract ArrayList<String> getPlayersInRange(String timer, int maximum, int minimum);
     
     /**
      * Calls an Asynchronous task that resets the player's death timer

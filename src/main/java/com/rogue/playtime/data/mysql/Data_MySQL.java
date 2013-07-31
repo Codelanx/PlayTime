@@ -23,6 +23,7 @@ import com.rogue.playtime.runnable.ResetRunnable;
 import com.rogue.playtime.runnable.StartConvertRunnable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -94,6 +95,23 @@ public class Data_MySQL implements DataHandler {
             }
         }
         return players;
+    }
+    
+    public ArrayList<String> getPlayersInRange(String timer, int maximum, int minimum) {
+        db = new MySQL();
+        ArrayList<String> back = new ArrayList();
+        try {
+            db.open();
+            ResultSet ret = db.query("SELECT `username` FROM `playTime` WHERE `" + timer + "` BETWEEN " + minimum + " AND " + maximum);
+            while (ret.next()) {
+                back.add(ret.getString(1));
+            }
+        } catch (SQLException e) {
+            if (plugin.getDebug() == 3) {
+                e.printStackTrace();
+            }
+        }
+        return back;
     }
 
     public void onDeath(String username) {

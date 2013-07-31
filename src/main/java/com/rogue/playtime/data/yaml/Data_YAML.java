@@ -21,6 +21,8 @@ import com.rogue.playtime.data.DataHandler;
 import com.rogue.playtime.runnable.StartConvertRunnable;
 import com.rogue.playtime.runnable.AddRunnable;
 import com.rogue.playtime.runnable.ResetRunnable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
@@ -50,7 +52,11 @@ public class Data_YAML implements DataHandler {
     }
     
     public Map<String, Integer> getTopPlayers(String data, int amount) {
-        return null;
+        return new HashMap<String, Integer>();
+    }
+    
+    public ArrayList<String> getPlayersInRange(String timer, int maximum, int minimum) {
+        return new ArrayList<String>();
     }
     
     public void onDeath(String username) {

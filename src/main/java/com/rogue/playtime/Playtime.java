@@ -19,6 +19,7 @@ package com.rogue.playtime;
 import com.rogue.playtime.command.CommandHandler;
 import com.rogue.playtime.config.ConfigurationLoader;
 import com.rogue.playtime.data.DataManager;
+import com.rogue.playtime.event.EventHandler;
 import com.rogue.playtime.listener.PlaytimeListener;
 import com.rogue.playtime.metrics.Metrics;
 import com.rogue.playtime.player.PlayerHandler;
@@ -52,7 +53,7 @@ public class Playtime extends JavaPlugin {
     protected CommandHandler chandler;
     protected DataManager dmanager;
     protected ConfigurationLoader cloader;
-    private boolean afkEnabled = true;
+    protected EventHandler ehandler;
     private boolean deathEnabled = true;
     private boolean onlineEnabled = true;
     private boolean isUpdate = false;
@@ -118,7 +119,7 @@ public class Playtime extends JavaPlugin {
         chandler = new CommandHandler(this);
         chandler.registerExecs();
 
-        afkEnabled = this.cloader.getBoolean("afk.enabled");
+        boolean afkEnabled = this.cloader.getBoolean("afk.enabled");
         deathEnabled = this.cloader.getBoolean("check.death-time");
         onlineEnabled = this.cloader.getBoolean("check.online-time");
 
@@ -140,6 +141,13 @@ public class Playtime extends JavaPlugin {
             this.getLogger().log(Level.INFO, "Listener Disabled!");
             listener = null;
         }
+        
+        if (cloader.getBoolean("events.enabled")) {
+            this.getLogger().log(Level.INFO, "Enabling event system...");
+            ehandler = new EventHandler(this);
+        } else {
+            this.getLogger().log(Level.INFO, "Disabling event system!");
+        }
 
         final long endTime = System.nanoTime();
         if (debug >= 1) {
@@ -157,6 +165,7 @@ public class Playtime extends JavaPlugin {
     @Override
     public void onDisable() {
         dmanager.getDataHandler().cleanup();
+        ehandler.cancelChecks();
         if (afkChecker != null) {
             afkChecker.cancel();
         }
@@ -181,7 +190,6 @@ public class Playtime extends JavaPlugin {
         chandler = null;
         dmanager = null;
         cloader = null;
-        afkEnabled = true;
         deathEnabled = true;
         onlineEnabled = true;
         isUpdate = false;
@@ -291,7 +299,7 @@ public class Playtime extends JavaPlugin {
      * @return Status of AFK runnable
      */
     public boolean isAFKEnabled() {
-        return afkEnabled;
+        return phandler != null;
     }
 
     /**
@@ -379,9 +387,9 @@ public class Playtime extends JavaPlugin {
         return cloader;
     }
     
-    /*public void sendThreadedMessage(String playername, String message) {
-        Bukkit.getPlayer(playername).sendMessage(_(message));
-    }*/
+    public EventHandler getEventHandler() {
+        return ehandler;
+    }
     
     public boolean isBusy() {
         return isBusy;

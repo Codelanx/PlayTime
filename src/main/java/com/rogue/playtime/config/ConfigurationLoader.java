@@ -33,7 +33,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class ConfigurationLoader {
 
     private Playtime plugin;
-    YamlConfiguration yaml = null;
+    private YamlConfiguration yaml = null;
     private File file;
 
     public ConfigurationLoader(Playtime p) {
@@ -63,6 +63,8 @@ public class ConfigurationLoader {
         if (!yaml.isSet("afk.enabled")) { yaml.set("afk.enabled", true); }
         if (!yaml.isSet("afk.interval")) { yaml.set("afk.interval", 60); }
         if (!yaml.isSet("afk.timeout")) { yaml.set("afk.timeout", 900); }
+        if (!yaml.isSet("events.enabled")) { yaml.set("events.enabled", true); }
+        if (!yaml.isSet("events.interval")) { yaml.set("events.interval", 600); }
         if (!yaml.isSet("data.manager")) { yaml.set("data.manager", "flatfile"); }
         if (!yaml.isSet("managers.mysql.host")) { yaml.set("managers.mysql.host", "localhost"); }
         if (!yaml.isSet("managers.mysql.port")) { yaml.set("managers.mysql.port", "3306"); }

@@ -19,6 +19,9 @@ package com.rogue.playtime.data.yaml;
 import com.rogue.playtime.Playtime;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -46,16 +49,32 @@ public class YAML {
     }
     
     /**
-     * Increases an int value within the data file by 1
+     * Increases an int value within the data file by 1, and fires events if triggered
+     * 
+     * For the users yml file, the key should be in the format:
+     * "users.[username].[value]"
      * 
      * @since 1.3.0
-     * @version 1.3.0
+     * @version 1.4.0
      * 
      * @param key The path to the data to edit
      */
     public void incrementValue(String key) {
         int i = yaml.getInt(key);
-        yaml.set(key, ++i);
+        i++;
+        boolean eventFired = false;
+        Map<String, Integer> events = plugin.getEventHandler().getTimes();
+        List<String> fire = new ArrayList();
+        for (String s : events.keySet()) {
+            if (i == events.get(s)) {
+                eventFired = true;
+                fire.add(s);
+            }
+        }
+        if (eventFired) {
+            plugin.getEventHandler().fireYAMLEvents(fire, key.split(".")[1]);
+        }
+        yaml.set(key, i);
     }
     
     /**
