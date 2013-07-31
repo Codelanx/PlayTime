@@ -1,5 +1,7 @@
-debug-level: 0
-update-check: true
+general:
+  debug-level: 0
+  update-check: true
+  language: en_US
 check:
   death-time: true
   online-time: true

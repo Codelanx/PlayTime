@@ -20,6 +20,7 @@ import com.rogue.playtime.command.CommandHandler;
 import com.rogue.playtime.config.ConfigurationLoader;
 import com.rogue.playtime.data.DataManager;
 import com.rogue.playtime.event.EventHandler;
+import com.rogue.playtime.lang.Cipher;
 import com.rogue.playtime.listener.PlaytimeListener;
 import com.rogue.playtime.metrics.Metrics;
 import com.rogue.playtime.player.PlayerHandler;
@@ -54,13 +55,14 @@ public class Playtime extends JavaPlugin {
     protected DataManager dmanager;
     protected ConfigurationLoader cloader;
     protected EventHandler ehandler;
+    protected Cipher lang;
     private boolean deathEnabled = true;
     private boolean onlineEnabled = true;
     private boolean isUpdate = false;
     private boolean isBusy = false;
 
     /**
-     * Registers the plugin configuration file.
+     * Registers the plugin configuration file and language system.
      *
      * @since 1.0
      * @version 1.3.0
@@ -72,6 +74,9 @@ public class Playtime extends JavaPlugin {
         this.getLogger().info("Loading Configuration mananger...");
         cloader = new ConfigurationLoader(this);
         cloader.verifyConfig();
+        
+        lang = new Cipher(this);
+        
     }
 
     /**
