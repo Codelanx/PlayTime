@@ -183,7 +183,7 @@ public class Cipher {
     private FileConfiguration getFromGithub(Plugin plugin, String lang) throws MalformedURLException, IOException {
         YamlConfiguration pluginyml = YamlConfiguration.loadConfiguration(plugin.getResource("plugin.yml"));
 
-        URL upstr = new URL(langFileLocGithub.replace("<version>", pluginyml.getString("language-version")).replace("<lang>", lang));
+        URL upstr = new URL(langFileLocGithub.replace("<version>", pluginyml.getString("version")).replace("<lang>", lang));
         InputStream langs = upstr.openStream();
         if (langs != null) {
             return YamlConfiguration.loadConfiguration(langs);

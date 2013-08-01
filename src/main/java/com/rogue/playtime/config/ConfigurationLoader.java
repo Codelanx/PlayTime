@@ -38,7 +38,8 @@ public class ConfigurationLoader {
 
     public ConfigurationLoader(Playtime p) {
         plugin = p;
-        file = new File(plugin.getDataFolder() + File.separator + "config.yml");
+        file = new File(plugin.getDataFolder(), "config.yml");
+        verifyConfig();
     }
 
     /**
@@ -52,12 +53,13 @@ public class ConfigurationLoader {
             plugin.getDataFolder().mkdir();
         }
         if (!file.exists()) {
-            plugin.saveResource("config.yml", true);
+            plugin.saveDefaultConfig();
             return;
         }
         yaml = YamlConfiguration.loadConfiguration(file);
-        if (!yaml.isSet("debug-level")) { yaml.set("debug-level", 0); }
-        if (!yaml.isSet("update-check")) { yaml.set("update-check", true); }
+        if (!yaml.isSet("general.debug-level")) { yaml.set("general.debug-level", 0); }
+        if (!yaml.isSet("general.update-check")) { yaml.set("general.update-check", true); }
+        if (!yaml.isSet("general.language")) { yaml.set("general.language", "en_US"); }
         if (!yaml.isSet("check.death-time")) { yaml.set("check.death-time", true); }
         if (!yaml.isSet("check.online-time")) { yaml.set("check.online-time", true); }
         if (!yaml.isSet("afk.enabled")) { yaml.set("afk.enabled", true); }

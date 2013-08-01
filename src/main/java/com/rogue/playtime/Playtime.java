@@ -73,7 +73,12 @@ public class Playtime extends JavaPlugin {
 
         this.getLogger().info("Loading Configuration mananger...");
         cloader = new ConfigurationLoader(this);
-        cloader.verifyConfig();
+        
+        try {
+            Thread.sleep(500L);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         this.getLogger().info("Loading language manager...");
         lang = new Cipher(this);
