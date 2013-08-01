@@ -28,7 +28,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
  *
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.3.0
+ * @version 1.4.0
  */
 public class ConfigurationLoader {
 
@@ -45,7 +45,7 @@ public class ConfigurationLoader {
      * Verifies the values within the configuration, and the file itself
      * 
      * @since 1.3.0
-     * @version 1.3.0
+     * @version 1.4.0
      */
     public void verifyConfig() {
         if (plugin.getDataFolder().exists()) {

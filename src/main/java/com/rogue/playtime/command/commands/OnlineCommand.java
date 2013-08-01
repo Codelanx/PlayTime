@@ -27,7 +27,7 @@ import org.bukkit.entity.Player;
  *
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.3.0
+ * @version 1.4.0
  */
 public class OnlineCommand implements CommandBase {
 
@@ -41,20 +41,25 @@ public class OnlineCommand implements CommandBase {
             check = plugin.getBestPlayer(args[0]);
             perm += ".others";
         } else {
-            sender.sendMessage(__("You cannot check the online time of a non-player!"));
+            sender.sendMessage(__(plugin.getCipher().getString("command.commands.online.console")));
             return true;
         }
         if (sender.hasPermission(perm)) {
-            int time = plugin.getDataManager().getDataHandler().getValue("onlinetime", check);
-            int minutes = time % 60;
-            if (time >= 60) {
-                int hours = time / 60;
-                sender.sendMessage(__(check + " has been online for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
+            if (plugin.isOnlineEnabled()) {
+                int time = plugin.getDataManager().getDataHandler().getValue("onlinetime", check);
+                int minutes = time % 60;
+                if (time >= 60) {
+                    int hours = time / 60;
+                    sender.sendMessage(__(plugin.getCipher().getString("command.commands.online.playtime-hours", check, hours, (hours == 1 ? "" : "s"), minutes, (minutes == 1 ? "" : "s"))));
+                } else {
+                    sender.sendMessage(__(plugin.getCipher().getString("command.commands.online.playtime-minutes", check, minutes, (minutes == 1 ? "" : "s"))));
+                }
             } else {
-                sender.sendMessage(__(check + " has been online for " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
+                sender.sendMessage(__(plugin.getCipher().getString("command.commands.online.disabled")));
             }
+
         } else {
-            sender.sendMessage(__("You do not have permission to do that!"));
+            sender.sendMessage(__(plugin.getCipher().getString("command.commands.online.noperm")));
         }
         return false;
     }
@@ -62,5 +67,4 @@ public class OnlineCommand implements CommandBase {
     public String getName() {
         return "onlinetime";
     }
-
 }

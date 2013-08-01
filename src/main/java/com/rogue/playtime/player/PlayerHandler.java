@@ -25,7 +25,7 @@ import org.bukkit.Location;
  *
  * @since 1.2.0
  * @author 1Rogue
- * @version 1.2.0
+ * @version 1.4.0
  */
 public class PlayerHandler {
 
@@ -193,7 +193,7 @@ public class PlayerHandler {
      * Increments the value for a player's AFK time.
      * 
      * @since 1.2.0
-     * @version 1.2.0
+     * @version 1.4.0
      * 
      * @param name The username to increment time for
      */
@@ -201,7 +201,7 @@ public class PlayerHandler {
         this.getPlayer(name.toLowerCase()).setTime(this.getPlayer(name.toLowerCase()).getTime() + timer);
         if (checkTime(name) >= timeEnd) {
             if (plugin.getDebug() >= 2) {
-                plugin.getLogger().log(Level.INFO, "Setting {0} as AFK!", name);
+                plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("player.set-afk", name));
             }
             plugin.getPlayerHandler().updatePlayer(name, true);
         }

@@ -20,7 +20,6 @@ import static com.rogue.playtime.Playtime.__;
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.runnable.EventRunnable;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,17 +40,21 @@ public class EventHandler {
     private Playtime plugin;
     private YamlConfiguration yaml = null;
     private File file;
-    private Map<String, BukkitTask> events = new HashMap();
-    private Map<String, Event> yamlEvents = new HashMap();
-    private Map<String, Integer> eventTimes = new HashMap();
-    private List<Event> loginEvents = new ArrayList();
+    private Map<String, BukkitTask> eventTasks = new HashMap();
+    private Map<String, Event> events = new HashMap();
 
     public EventHandler(Playtime p) {
         plugin = p;
         file = new File(plugin.getDataFolder(), "events.yml");
         loadEvents();
     }
-
+    
+    /**
+     * Loads the file configuration for events and adds the events
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     */
     private void loadEvents() {
         if (plugin.getDataFolder().exists()) {
             plugin.getDataFolder().mkdir();
@@ -75,6 +78,16 @@ public class EventHandler {
 
     }
 
+    /**
+     * Gets an event for an sql manager and adds it accordingly
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @param name The event name
+     * @param interval The interval at which runnable checks will repeat at in seconds
+     * @param login If the event is a login event
+     */
     private void evalEvent(String name, int interval, boolean login) {
         String timer = yaml.getString("events." + name + ".type");
         if (!timer.equalsIgnoreCase("deathtime") && !timer.equalsIgnoreCase("onlinetime") && !timer.equalsIgnoreCase("playtime")) {
@@ -86,12 +99,21 @@ public class EventHandler {
         }
         Integer seconds = yaml.getInt("events." + name + ".time");
         if (login) {
-            loginEvents.add(new Event(name, timer, seconds / 60, commands, yaml.getBoolean("events." + name + ".repeat")));
+            events.put(name, new Event(name, timer, seconds / 60, commands, yaml.getBoolean("events." + name + ".repeat"), login));
         } else {
-            events.put(name, Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new EventRunnable(plugin, name, timer, seconds / 60, (seconds + interval) / 60, commands, yaml.getBoolean("events." + name + ".repeat")), interval * 20L, interval * 20L));
+            eventTasks.put(name, Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new EventRunnable(plugin, name, timer, seconds / 60, (seconds + interval) / 60, commands, yaml.getBoolean("events." + name + ".repeat")), interval * 20L, interval * 20L));
         }
     }
-
+    
+    /**
+     * Gets an event for a flatfile manager and adds it accordingly
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @param name The event name
+     * @param login If the event is a login event
+     */
     private void evalYAMLEvent(String name, boolean login) {
         String timer = yaml.getString("events." + name + ".type");
         if (!timer.equalsIgnoreCase("deathtime") && !timer.equalsIgnoreCase("onlinetime") && !timer.equalsIgnoreCase("playtime")) {
@@ -103,22 +125,35 @@ public class EventHandler {
         }
         Integer seconds = yaml.getInt("events." + name + ".time");
         boolean repeat = yaml.getBoolean("events." + name + ".repeat");
-        eventTimes.put(name, seconds / 60);
-        if (login) {
-            loginEvents.add(new Event(name, timer, seconds / 60, commands, yaml.getBoolean("events." + name + ".repeat")));
-        } else {
-            yamlEvents.put(name, new Event(name, timer, seconds / 60, commands, yaml.getBoolean("events." + name + ".repeat")));
-        }
+        events.put(name, new Event(name, timer, seconds / 60, commands, yaml.getBoolean("events." + name + ".repeat"), login));
     }
 
-    public Map<String, Integer> getTimes() {
-        return eventTimes;
+    /**
+     * Gets a list of static (non-runnable) events in use. This will only return
+     * login events if you are using an sql manager.
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @return Map of events in use
+     */
+    public Map<String, Event> getEvents() {
+        return events;
     }
 
-    public void fireYAMLEvents(List<String> fire, String username) {
+    /**
+     * Fires static events manually for a provided user
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @param fire A list of names for events to fire
+     * @param username The user to fire events for
+     */
+    public void fireEvents(List<String> fire, String username) {
         ConsoleCommandSender ccs = Bukkit.getConsoleSender();
         for (String s : fire) {
-            for (String c : yamlEvents.get(s).getCommands()) {
+            for (String c : events.get(s).getCommands()) {
                 if (this.isMessage(c)) {
                     Bukkit.getPlayer(username).sendMessage(__(this.replaceMessage(c).replace("%u", username)));
                 } else {
@@ -128,29 +163,64 @@ public class EventHandler {
         }
     }
     
+    /**
+     * Fires login events for a particular user
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @param username The user to fire events for
+     */
     public void fireLoginEvents(String username) {
         ConsoleCommandSender ccs = Bukkit.getConsoleSender();
-        for (Event e : loginEvents) {
-            for (String c : e.getCommands()) {
-                if (this.isMessage(c)) {
-                    Bukkit.getPlayer(username).sendMessage(__(this.replaceMessage(c).replace("%u", username)));
-                } else {
-                    Bukkit.dispatchCommand(ccs, c.replace("%u", username));
+        for (Event e : events.values()) {
+            if (e.isLoginEvent()) {
+                for (String c : e.getCommands()) {
+                    if (this.isMessage(c)) {
+                        Bukkit.getPlayer(username).sendMessage(__(this.replaceMessage(c).replace("%u", username)));
+                    } else {
+                        Bukkit.dispatchCommand(ccs, c.replace("%u", username));
+                    }
                 }
             }
         }
     }
-
+    
+    /**
+     * Cancels any runnables that are runnnig as events
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     */
     public void cancelChecks() {
-        for (String s : events.keySet()) {
-            events.get(s).cancel();
+        for (String s : eventTasks.keySet()) {
+            eventTasks.get(s).cancel();
         }
     }
 
+    /**
+     * Determines if a command for an event is a messaging command
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @param test The commandLabel to test
+     * @return true if messaging command, false if not
+     */
     public boolean isMessage(String test) {
         return test.equalsIgnoreCase("msg") || test.equalsIgnoreCase("message") || test.equalsIgnoreCase("whipser") || test.equalsIgnoreCase("w") || test.equalsIgnoreCase("m") || test.equalsIgnoreCase("t") || test.equalsIgnoreCase("tell");
     }
 
+    /**
+     * Replaces the first two arguments of a command, intended for messaging
+     * commands.
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @param test The raw command to edit
+     * @return The message to send to a player
+     */
     public String replaceMessage(String test) {
         String[] back = test.split(" ");
         if (back.length >= 3) {

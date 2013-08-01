@@ -75,6 +75,7 @@ public class Playtime extends JavaPlugin {
         cloader = new ConfigurationLoader(this);
         cloader.verifyConfig();
         
+        this.getLogger().info("Loading language manager...");
         lang = new Cipher(this);
         
     }
@@ -102,7 +103,7 @@ public class Playtime extends JavaPlugin {
 
         try {
             Metrics metrics = new Metrics(this);
-            getLogger().info("Enabling Metrics...");
+            getLogger().info(lang.getString("main.metrics"));
             metrics.start();
         } catch (IOException ex) {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
@@ -111,16 +112,16 @@ public class Playtime extends JavaPlugin {
         if (cloader.getBoolean("update-check")) {
             Bukkit.getScheduler().runTaskLater(this, new UpdateRunnable(this), 1);
         } else {
-            this.getLogger().info("Update checks disabled!");
+            this.getLogger().info(lang.getString("main.update"));
         }
 
-        this.getLogger().log(Level.INFO, "Enabling Data Manager...");
+        this.getLogger().info(lang.getString("main.data"));
         dmanager = new DataManager(this);
         dmanager.select(cloader.getString("data.manager"));
         dmanager.setup();
         dmanager.start();
         
-        this.getLogger().info("Enabling Command Handler...");
+        this.getLogger().info(lang.getString("main.command"));
         chandler = new CommandHandler(this);
         chandler.registerExecs();
 
@@ -131,34 +132,34 @@ public class Playtime extends JavaPlugin {
 
 
         if (afkEnabled) {
-            this.getLogger().log(Level.INFO, "Enabling Player Handler...");
+            this.getLogger().info(lang.getString("main.player"));
             phandler = new PlayerHandler(this, cloader.getInt("afk.interval"), cloader.getInt("afk.timeout"));
             afkChecker = Bukkit.getScheduler().runTaskTimer(this, new AFKRunnable(this), phandler.getAFKCheckInterval() * 20L, phandler.getAFKCheckInterval() * 20L);
         } else {
-            this.getLogger().log(Level.INFO, "AFK checking disabled!");
+            this.getLogger().info(lang.getString("main.afk"));
             phandler = null;
         }
 
         if (!(!afkEnabled && !deathEnabled && !onlineEnabled && !cloader.getBoolean("update-check") && !events)) {
-            this.getLogger().log(Level.INFO, "Enabling Listener...");
+            this.getLogger().info(lang.getString("main.listener"));
             listener = new PlaytimeListener(this);
             Bukkit.getPluginManager().registerEvents(listener, this);
         } else {
-            this.getLogger().log(Level.INFO, "Listener Disabled!");
+            this.getLogger().info(lang.getString("main.listener-disabled"));
             listener = null;
         }
         
         if (events) {
-            this.getLogger().log(Level.INFO, "Enabling event system...");
+            this.getLogger().info(lang.getString("main.event"));
             ehandler = new EventHandler(this);
         } else {
-            this.getLogger().log(Level.INFO, "Disabling event system!");
+            this.getLogger().info(lang.getString("main.event-disabled"));
         }
 
         final long endTime = System.nanoTime();
         if (debug >= 1) {
             final long duration = endTime - startTime;
-            this.getLogger().log(Level.INFO, "Enabled ({0})", this.readableProfile(duration));
+            this.getLogger().info(lang.getString("main.enabled", this.readableProfile(duration)));
         }
     }
 
@@ -202,9 +203,9 @@ public class Playtime extends JavaPlugin {
         this.onLoad();
         this.onEnable();
         
-        this.getLogger().info("Playtime reloaded!");
+        this.getLogger().info(lang.getString("main.reloaded"));
         for (String s : names) {
-            this.getServer().getPlayer(s).sendMessage(__("Playtime Reloaded!"));
+            this.getServer().getPlayer(s).sendMessage(__(lang.getString("main.reloaded")));
         }
     }
 
@@ -396,14 +397,52 @@ public class Playtime extends JavaPlugin {
         return cloader;
     }
     
+    /**
+     * Returns the language loader for Playtime
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @return The language file loader
+     */
+    public Cipher getCipher() {
+        return lang;
+    }
+    
+    /**
+     * Returns the event system for Playtime
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @return Playtime's event handler
+     */
     public EventHandler getEventHandler() {
         return ehandler;
     }
     
+    /**
+     * Returns whether or not the plugin is busy. Used mostly for when the
+     * database is being converted.
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @return true if busy, false if not
+     */
     public boolean isBusy() {
         return isBusy;
     }
     
+    /**
+     * Sets the plugin's "busy" mode".
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @param busy What value to set
+     * @return The updated busy status
+     */
     public boolean setBusy(boolean busy) {
         isBusy = busy;
         return isBusy;

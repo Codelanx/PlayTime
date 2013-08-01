@@ -53,7 +53,7 @@ public class PTCommand implements CommandBase {
                             plugin.getDataManager().convertData(converters.get(sender));
                         }
                         converters.remove(sender);
-                        sender.sendMessage(__("Please note that this may take up to 1 minute to complete, depending on the size of your database."));
+                        sender.sendMessage(__(plugin.getCipher().getString("command.commands.pt.longtime")));
                         plugin.setBusy(true);
                     }
                 } else if (args[0].equalsIgnoreCase("cancel")) {
@@ -67,21 +67,21 @@ public class PTCommand implements CommandBase {
                     args[1] = args[1].toLowerCase();
                     if (args[1].equals("mysql") || args[1].equals("sqlite")) {
                         if (args[1].equals(plugin.getDataManager().getDataHandler().getName())) {
-                            sender.sendMessage(__("Data Manager already in use!"));
+                            sender.sendMessage(__(plugin.getCipher().getString("command.commands.pt.datainuse")));
                             return true;
                         }
                         converters.put(sender, args[1]);
-                        sender.sendMessage(__("Converting from data type '" + plugin.getDataManager().getDataHandler().getName() + "' to " + args[1] + "!"));
-                        sender.sendMessage(__("You will need to either confirm this action with &e/pt &6confirm or cancel it using &e/pt cancel"));
+                        sender.sendMessage(__(plugin.getCipher().getString("command.commands.pt.convert", plugin.getDataManager().getDataHandler().getName(), args[1])));
+                        sender.sendMessage(__(plugin.getCipher().getString("command.commands.pt.confirm")));
                     } else if (args[1].equals("flatfile")) {
-                        sender.sendMessage(__("Converting data to flat files is not allowed!"));
+                        sender.sendMessage(__(plugin.getCipher().getString("command.commands.pt.flatfile")));
                     } else {
-                        sender.sendMessage(__("Unknown data type '" + args[1] + "'"));
+                        sender.sendMessage(__(plugin.getCipher().getString("command.commands.pt.baddata", args[0])));
                     }
                 }
                 break;
             default:
-                sender.sendMessage(__("Version " + plugin.getDescription().getVersion() + "&f - &6Developed by 1Rogue"));
+                sender.sendMessage(__(plugin.getCipher().getString("command.commands.pt.version", plugin.getDescription().getVersion())));
                 break;
         }
         return false;

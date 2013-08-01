@@ -51,9 +51,9 @@ public class StartConvertRunnable extends BukkitRunnable {
             MySQL db = new MySQL();
             StringBuilder sb = new StringBuilder();
             for (String p : player) {
-                Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, "Downloading MySQL database..."));
+                Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, plugin.getCipher().getString("runnable.startconvert.mysql.download")));
             }
-            plugin.getLogger().info("Downloading MySQL database...");
+            plugin.getLogger().info(plugin.getCipher().getString("runnable.startconvert.mysql.download"));
             try {
                 db.open();
 

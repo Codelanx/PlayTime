@@ -24,7 +24,6 @@ import com.rogue.playtime.runnable.ResetRunnable;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -37,7 +36,7 @@ import org.bukkit.scheduler.BukkitTask;
  *
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.3.0
+ * @version 1.4.0
  */
 public class Data_SQLite implements DataHandler {
 
@@ -125,27 +124,27 @@ public class Data_SQLite implements DataHandler {
 
     public void verifyFormat() {
         db = new SQLite();
-        plugin.getLogger().info("Connecting to SQLite database...");
+        plugin.getLogger().info(plugin.getCipher().getString("data.sqlite.main.connecting"));
         try {
             db.open();
-            plugin.getLogger().info("Successfully connected to database!");
+            plugin.getLogger().info(plugin.getCipher().getString("data.sqlite.main.connect-success"));
             if (!db.checkTable("playTime")) {
-                plugin.getLogger().log(Level.INFO, "Creating table 'playTime' in database");
+                plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.sqlite.main.create-table"));
                 db.update("CREATE TABLE playTime ( id INTEGER NOT NULL PRIMARY KEY, username VARCHAR(32) NOT NULL UNIQUE, playtime INTEGER NOT NULL DEFAULT 0, deathtime INTEGER NOT NULL DEFAULT 0, onlinetime INTEGER NOT NULL DEFAULT 0)");
             }
             db.close();
         } catch (SQLException ex) {
-            Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, "Error in SQLite database, shutting down!", ex);
+            Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, plugin.getCipher().getString("data.sqlite.main.error"), ex);
             File file = new File(plugin.getDataFolder() + File.separator + "users.db");
             file.delete();
             Bukkit.getServer().getPluginManager().disablePlugin(plugin);
         }
     }
 
-    public void setup() {
+    public void init() {
     }
 
-    public void initiateRunnable() {
+    public void startRunnables() {
         updater = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new AddRunnable(plugin), 1200L, 1200L);
     }
     

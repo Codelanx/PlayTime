@@ -31,7 +31,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
  *
  * @since 1.2.0
  * @author 1Rogue
- * @version 1.3.0
+ * @version 1.4.0
  */
 public class PlaytimeListener implements Listener {
 
@@ -74,7 +74,7 @@ public class PlaytimeListener implements Listener {
         if (e.getPlayer().isOp() || e.getPlayer().hasPermission("playtime.updatenotice"));
         if (plugin.getConfigurationLoader().getBoolean("update-check")) {
             if (plugin.isUpdateAvailable()) {
-                e.getPlayer().sendMessage(__("An update is available for Playtime!"));
+                e.getPlayer().sendMessage(__(plugin.getCipher().getString("listener.update")));
             }
         }
         if (plugin.getEventHandler() != null) {

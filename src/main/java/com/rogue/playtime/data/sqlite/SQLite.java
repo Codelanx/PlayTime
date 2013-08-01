@@ -32,12 +32,13 @@ import org.bukkit.Bukkit;
  * 
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.3.0
+ * @version 1.4.0
  */
 public class SQLite {
     
     private static int connections = 0;
     private Connection con = null;
+    private Playtime plugin = Playtime.getPlugin();
     
     /**
      * Opens a connection to the SQLite database. Make sure to call
@@ -45,7 +46,7 @@ public class SQLite {
      * segment of your code.
      * 
      * @since 1.3.0
-     * @version 1.3.0
+     * @version 1.4.0
      * 
      * @return The Connection object
      * @throws SQLException 
@@ -54,12 +55,12 @@ public class SQLite {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(SQLite.class.getName()).log(Level.SEVERE, "Error loading sqlite connection, disabling!", ex);
-            Bukkit.getServer().getPluginManager().disablePlugin(Playtime.getPlugin());
+            Logger.getLogger(SQLite.class.getName()).log(Level.SEVERE, plugin.getCipher().getString("data.sqlite.instance.open"), ex);
+            Bukkit.getServer().getPluginManager().disablePlugin(plugin);
         }
-        con = DriverManager.getConnection("jdbc:sqlite:" + Playtime.getPlugin().getDataFolder() + File.separator + "users.db");
-        if (Playtime.getPlugin().getDebug() >= 2) {
-            Playtime.getPlugin().getLogger().log(Level.INFO, "Open connections: {0}", ++connections);
+        con = DriverManager.getConnection("jdbc:sqlite:" + plugin.getDataFolder() + File.separator + "users.db");
+        if (plugin.getDebug() >= 2) {
+            plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.sqlite.instance.open", ++connections));
         }
         return con;
     }
@@ -68,7 +69,7 @@ public class SQLite {
      * Checks if a table exists within the set database
      * 
      * @since 1.3.0
-     * @version 1.3.0
+     * @version 1.4.0
      * 
      * @param tablename Name of the table to check for
      * @return true if exists, false otherwise
@@ -76,11 +77,12 @@ public class SQLite {
      */
    public boolean checkTable(String tablename) throws SQLException {
         ResultSet count = query("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='" + tablename + "'");
-        int i = count.getInt(1);
-        if (i > 0) {
-            return true;
+        int i = 0;
+        if (count.next()) {
+            i = count.getInt(1);
         }
-        return false;
+        count.close();
+        return (i == 1) ? true : false;
     }
 
     /**
@@ -119,14 +121,14 @@ public class SQLite {
      * Closes the SQLite connection. Must be open first.
      * 
      * @since 1.3.0
-     * @version 1.3.0
+     * @version 1.4.0
      * 
      * @throws SQLException 
      */
     public void close() throws SQLException {
         con.close();
-        if (Playtime.getPlugin().getDebug() >= 2) {
-            Playtime.getPlugin().getLogger().log(Level.INFO, "Open connections: {0}", --connections);
+        if (plugin.getDebug() >= 2) {
+            plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.sqlite.instance.open", --connections));
         }
     }
 }

@@ -62,25 +62,25 @@ public class OnlineTopCommand implements CommandBase {
         }
         Map<String, Integer> players = plugin.getDataManager().getDataHandler().getTopPlayers("onlinetime", i);
         if (players == null) {
-            sender.sendMessage(__("Onlinetimetop is disabled with flatfile data!"));
+            sender.sendMessage(__(plugin.getCipher().getString("command.commands.onlinetop.disabled-flatfile")));
         }
         if (scoreboard) {
             Player p = (Player)sender;
             ScoreboardManager sbm = Bukkit.getScoreboardManager();
             Scoreboard scoreBoard = sbm.getNewScoreboard();
-            Objective objv = scoreBoard.registerNewObjective("Top Onlinetimes", "dummy");
+            Objective objv = scoreBoard.registerNewObjective(plugin.getCipher().getString("command.commands.onlinetop.title"), "dummy");
             objv.setDisplaySlot(DisplaySlot.SIDEBAR);
-            objv.setDisplayName("Top Onlinetimes (in hours):");
+            objv.setDisplayName(plugin.getCipher().getString("command.commands.onlinetop.title-shown"));
             Score score;
             for (String s : players.keySet()) {
                 score = objv.getScore(Bukkit.getOfflinePlayer(s));
                 score.setScore(players.get(s)/60);
             }
             p.setScoreboard(scoreBoard);
-            p.sendMessage(__("Use &e/onlinetimetop clear &6to remove the leaderboard."));
+            p.sendMessage(__(plugin.getCipher().getString("command.commands.onlinetop.clear")));
             
         } else {
-            StringBuilder sb = new StringBuilder("Top ").append(i).append(" players for Onlinetime (in hours):");
+            StringBuilder sb = new StringBuilder(plugin.getCipher().getString("command.commands.onlinetop.console-title", i));
             for (String s : players.keySet()) {
                 sb.append('\n').append(s).append(" - ").append(players.get(s)/60);
             }

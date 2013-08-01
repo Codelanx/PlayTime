@@ -28,7 +28,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  *
  * @since 1.2.0
  * @author 1Rogue
- * @version 1.2.0
+ * @version 1.4.0
  */
 public class AFKRunnable extends BukkitRunnable {
 
@@ -43,17 +43,17 @@ public class AFKRunnable extends BukkitRunnable {
         if (Bukkit.getOnlinePlayers().length > 0) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (plugin.getDebug() >= 1) {
-                    plugin.getLogger().info("AFK check initiated");
+                    plugin.getLogger().info(plugin.getCipher().getString("runnable.afk.check"));
                 }
                 if (!players.get(p.getName().toLowerCase()).isAFK() && p.getLocation().equals(players.get(p.getName().toLowerCase()).getSavedLocation())) {
                     plugin.getPlayerHandler().incrementTime(p.getName());
                     if (plugin.getDebug() >= 3) {
-                        plugin.getLogger().log(Level.INFO, "Time incremented for {0}!", p.getName());
+                        plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.afk.time", p.getName()));
                     }
                 } else if (!players.get(p.getName().toLowerCase()).isAFK()) {
                     plugin.getPlayerHandler().updatePlayer(p.getName(), p.getLocation());
                     if (plugin.getDebug() >= 2) {
-                        plugin.getLogger().log(Level.INFO, "Updating location for {0}!", p.getName());
+                        plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.afk.location", p.getName()));
                     }
                 }
             }

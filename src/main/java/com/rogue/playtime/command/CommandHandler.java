@@ -30,7 +30,7 @@ import org.bukkit.command.CommandSender;
  *
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.3.0
+ * @version 1.4.0
  */
 public class CommandHandler implements CommandExecutor {
 
@@ -92,7 +92,7 @@ public class CommandHandler implements CommandExecutor {
                 return commands.get(commandLabel).execute(sender, cmd, commandLabel, args);
             }
         } else {
-            sender.sendMessage(__("Playtime is currently busy with an operation, try again in a minute!"));
+            sender.sendMessage(__(plugin.getCipher().getString("command.handler.busy")));
         }
         return false;
     }

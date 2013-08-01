@@ -16,14 +16,13 @@
  */
 package com.rogue.playtime.data;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
  *
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.3.0
+ * @version 1.4.0
  */
 public interface DataHandler {
     
@@ -107,18 +106,18 @@ public interface DataHandler {
      * Sets any necessary variables before dealing with data management.
      * 
      * @since 1.3.0
-     * @version 1.3.0
+     * @version 1.4.0
      */
-    public abstract void setup();
+    public abstract void init();
     
     /**
      * Starts the runnable that will add data to the relevant storage location
      * at 1-minute intervals
      * 
      * @since 1.3.0
-     * @version 1.3.0
+     * @version 1.4.0
      */
-    public abstract void initiateRunnable();
+    public abstract void startRunnables();
     
     /**
      * Runs an asynchronous class that will get the entirety of the currently

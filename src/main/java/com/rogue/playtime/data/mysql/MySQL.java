@@ -30,12 +30,13 @@ import java.util.logging.Level;
  *
  * @since 1.1
  * @author 1Rogue
- * @version 1.1
+ * @version 1.4.0
  */
 public class MySQL {
 
     private static int connections = 0;
     private Connection con = null;
+    private Playtime plugin = Playtime.getPlugin();
 
     /**
      * Opens a connection to the MySQL database. Make sure to call MySQL.close()
@@ -43,7 +44,7 @@ public class MySQL {
      * code.
      * 
      * @since 1.1
-     * @version 1.1
+     * @version 1.4.0
      * 
      * @return The Connection object
      * @throws SQLException 
@@ -54,8 +55,8 @@ public class MySQL {
         connectionProps.put("password", MySQL_Vars.PASS);
 
         con = DriverManager.getConnection("jdbc:mysql://" + MySQL_Vars.HOST + ":" + MySQL_Vars.PORT + "/" + MySQL_Vars.DATABASE, connectionProps);
-        if (Playtime.getPlugin().getDebug() >= 2) {
-            Playtime.getPlugin().getLogger().log(Level.INFO, "Open connections: {0}", ++connections);
+        if (plugin.getDebug() >= 2) {
+            plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.mysql.instance.open", ++connections));
         }
         return con;
     }
@@ -64,7 +65,7 @@ public class MySQL {
      * Checks if a table exists within the set database
      * 
      * @since 1.1
-     * @version 1.1
+     * @version 1.4.0
      * 
      * @param tablename Name of the table to check for
      * @return true if exists, false otherwise
@@ -114,14 +115,14 @@ public class MySQL {
      * Closes the MySQL connection. Must be open first.
      * 
      * @since 1.1
-     * @version 1.1
+     * @version 1.4.0
      * 
      * @throws SQLException 
      */
     public void close() throws SQLException {
         con.close();
-        if (Playtime.getPlugin().getDebug() >= 2) {
-            Playtime.getPlugin().getLogger().log(Level.INFO, "Open connections: {0}", --connections);
+        if (plugin.getDebug() >= 2) {
+            plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.mysql.instance.open", --connections));
         }
     }
     

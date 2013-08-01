@@ -58,14 +58,14 @@ public class AddRunnable extends BukkitRunnable {
                 }
                 if (sb.toString().endsWith(" VALUES ")) {
                     if (plugin.getDebug() >= 1) {
-                        plugin.getLogger().info("No players to update.");
+                        plugin.getLogger().info(plugin.getCipher().getString("runnable.add.none"));
                     }
                     return;
                 }
                 if (plugin.getDebug() >= 1) {
-                    plugin.getLogger().info("Players updated!");
+                    plugin.getLogger().info(plugin.getCipher().getString("runnable.add.update"));
                     if (plugin.getDebug() >= 2) {
-                        plugin.getLogger().log(Level.INFO, "SQL Query for update: \n {0} ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1" + (plugin.isDeathEnabled() ? ", `deathtime`=`deathtime`+1" : "") + ", `onlinetime`=`onlinetime`+1", sb.substring(0, sb.length() - 2));
+                        plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.query", sb.substring(0, sb.length() - 2) + " ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1" + (plugin.isDeathEnabled() ? ", `deathtime`=`deathtime`+1" : "") + ", `onlinetime`=`onlinetime`+1"));
                     }
                 }
                 complete = true;
@@ -77,7 +77,7 @@ public class AddRunnable extends BukkitRunnable {
                 }
                 db.close();
             } catch (Exception ex) {
-                plugin.getLogger().log(Level.SEVERE, null, ex);
+                plugin.getLogger().log(Level.SEVERE, null);
                 if (plugin.getDebug() == 3) {
                     ex.printStackTrace();
                 }
@@ -110,13 +110,13 @@ public class AddRunnable extends BukkitRunnable {
                 }
                 if (sb.toString().endsWith(" `playTime` ")) {
                     if (plugin.getDebug() >= 1) {
-                        plugin.getLogger().info("No players to update.");
+                        plugin.getLogger().info(plugin.getCipher().getString("runnable.add.none"));
                     }
                     return;
                 }
                 if (plugin.getDebug() >= 2) {
-                    plugin.getLogger().log(Level.INFO, "SQL Query 1 for update: \n {0}", sb.substring(0, sb.length() - 1));
-                    plugin.getLogger().log(Level.INFO, "SQL Query 2 for update: \n {0}", sb2.substring(0, sb2.length() - 2) + ")");
+                    plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.query", sb.substring(0, sb.length() - 1)));
+                    plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.query", sb2.substring(0, sb2.length() - 2) + ")"));
                 }
                 SQLite db = new SQLite();
                 try {
@@ -126,11 +126,11 @@ public class AddRunnable extends BukkitRunnable {
                     db.update(sb2.substring(0, sb2.length() - 2) + ")");
 
                     if (plugin.getDebug() >= 1) {
-                        plugin.getLogger().info("Players updated!");
+                        plugin.getLogger().info(plugin.getCipher().getString("runnable.add.update"));
                     }
                     db.close();
                 } catch (SQLException ex) {
-                    plugin.getLogger().log(Level.SEVERE, null, ex);
+                    plugin.getLogger().log(Level.SEVERE, null);
                     if (plugin.getDebug() == 3) {
                         ex.printStackTrace();
                     }
@@ -147,13 +147,13 @@ public class AddRunnable extends BukkitRunnable {
                             yaml.incrementValue("users." + p.getName() + ".deathtime");
                             yaml.incrementValue("users." + p.getName() + ".onlinetime");
                             if (plugin.getDebug() == 3) {
-                                plugin.getLogger().log(Level.INFO, "Updating values for {0}!", p.getName());
+                                plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.update", p.getName()));
                             }
                         } else {
                             yaml.incrementValue("users." + p.getName() + ".playtime");
                             yaml.incrementValue("users." + p.getName() + ".onlinetime");
                             if (plugin.getDebug() == 3) {
-                                plugin.getLogger().log(Level.INFO, "Updating values for {0}!");
+                                plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.update", p.getName()));
                             }
                         }
                     }
@@ -163,19 +163,19 @@ public class AddRunnable extends BukkitRunnable {
                         yaml.incrementValue("users." + p.getName() + ".deathtime");
                         yaml.incrementValue("users." + p.getName() + ".onlinetime");
                         if (plugin.getDebug() == 3) {
-                            plugin.getLogger().log(Level.INFO, "Updating onlinetime for {0}!", p.getName());
+                            plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.update", p.getName()));
                         }
                     } else {
                         yaml.incrementValue("users." + p.getName() + ".playtime");
                         yaml.incrementValue("users." + p.getName() + ".onlinetime");
                         if (plugin.getDebug() == 3) {
-                            plugin.getLogger().log(Level.INFO, "Updating onlinetime for {0}!");
+                            plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.update", p.getName()));
                         }
                     }
                 }
             }
             if (plugin.getDebug() >= 1) {
-                plugin.getLogger().info("Players updated!");
+                plugin.getLogger().info(plugin.getCipher().getString("runnable.add.update"));
             }
             yaml.forceSave();
         }

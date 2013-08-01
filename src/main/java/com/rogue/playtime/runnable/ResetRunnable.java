@@ -51,7 +51,7 @@ public class ResetRunnable extends BukkitRunnable {
                 db.update("UPDATE `playTime` SET `" + value + "`=0 WHERE `username`='" + user + "'");
                 db.close();
             } catch (SQLException ex) {
-                Playtime.getPlugin().getLogger().log(Level.SEVERE, "Error updating player {0} time", value.substring(0, value.length() - 5));
+                Playtime.getPlugin().getLogger().log(Level.SEVERE, plugin.getCipher().getString("runnable.reset.error", value.substring(0, value.length() - 5)));
                 if (Playtime.getPlugin().getDebug() == 3) {
                     ex.printStackTrace();
                 }
@@ -63,7 +63,7 @@ public class ResetRunnable extends BukkitRunnable {
                 db.update("UPDATE `playTime` SET `" + value + "`=0 WHERE `username`='" + user + "'");
                 db.close();
             } catch (SQLException ex) {
-                Playtime.getPlugin().getLogger().log(Level.SEVERE, "Error updating player {0} time", value.substring(0, value.length() - 5));
+                Playtime.getPlugin().getLogger().log(Level.SEVERE, plugin.getCipher().getString("runnable.reset.error", value.substring(0, value.length() - 5)));
                 if (Playtime.getPlugin().getDebug() == 3) {
                     ex.printStackTrace();
                 }

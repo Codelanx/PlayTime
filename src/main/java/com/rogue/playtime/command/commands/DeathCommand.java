@@ -18,6 +18,7 @@ package com.rogue.playtime.command.commands;
 
 import com.rogue.playtime.command.CommandBase;
 import static com.rogue.playtime.Playtime.__;
+import static com.rogue.playtime.command.CommandBase.plugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ import org.bukkit.entity.Player;
  *
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.3.0
+ * @version 1.4.0
  */
 public class DeathCommand implements CommandBase {
 
@@ -40,7 +41,7 @@ public class DeathCommand implements CommandBase {
             check = plugin.getBestPlayer(args[0]);
             perm += ".others";
         } else {
-            sender.sendMessage(__("You cannot check the survival time of a non-player!"));
+            sender.sendMessage(__(plugin.getCipher().getString("command.commands.death.console")));
             return true;
         }
         if (sender.hasPermission(perm)) {
@@ -49,16 +50,16 @@ public class DeathCommand implements CommandBase {
                 int minutes = time % 60;
                 if (time >= 60) {
                     int hours = time / 60;
-                    sender.sendMessage(__(check + " has been alive for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
+                    sender.sendMessage(__(plugin.getCipher().getString("command.commands.death.playtime-hours", check, hours, (hours == 1 ? "" : "s"), minutes, (minutes == 1 ? "" : "s"))));
                 } else {
-                    sender.sendMessage(__(check + " has been alive for " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
+                    sender.sendMessage(__(plugin.getCipher().getString("command.commands.death.playtime-minutes", check, minutes, (minutes == 1 ? "" : "s"))));
                 }
             } else {
-                sender.sendMessage(__("Tracking player deaths is disabled!"));
+                sender.sendMessage(__(plugin.getCipher().getString("command.commands.death.disabled")));
             }
 
         } else {
-            sender.sendMessage(__("You do not have permission to do that!"));
+            sender.sendMessage(__(plugin.getCipher().getString("command.commands.death.noperm")));
         }
         return false;
     }

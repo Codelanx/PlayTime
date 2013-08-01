@@ -77,7 +77,7 @@ public class ConvertToRunnable extends BukkitRunnable {
                 db.update("DELETE FROM `playTime`");
                 String[] queries = query.split("\n");
                 for (String p : player) {
-                    Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, "Adding " + queries.length + " rows to SQLite database. Estimated time: " + getTime(queries.length)));
+                    Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, plugin.getCipher().getString("runnable.convertto.rows", queries.length, getTime(queries.length))));
                 }
                 for (String s : queries) {
                     db.update(s);
@@ -90,20 +90,32 @@ public class ConvertToRunnable extends BukkitRunnable {
             }
             plugin.reload();
             for (String p : player) {
-                Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, "Conversion complete!"));
+                Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, plugin.getCipher().getString("runnable.convertto.complete")));
             }
         } else if (convert.equals("flatfile")) {
             for (String s : player) {
-                plugin.getServer().getScheduler().callSyncMethod(plugin, new SendMessageCallable(s, "You cannot convert to flat file storage!"));
+                plugin.getServer().getScheduler().callSyncMethod(plugin, new SendMessageCallable(s, plugin.getCipher().getString("runnable.convertto.noflat")));
             }
         }
         plugin.setBusy(false);
     }
     
+    /**
+     * Returns an estimation of how long SQLite conversion will take based on
+     * the number of rows required to add. The converter uses individual INSERT
+     * statements for each row, which is unfortunate due to SQLite's limitations
+     * on multiple values within inserts or union selects.
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @param rows The number of rows to evaluate
+     * @return The estimated time as a readable string
+     */
     private String getTime(int rows) {
         long time = Math.round(rows / (369 + ((2 / 3) - 0.2)));
         long seconds = time % 60;
         long minutes = time / 60;
-        return ((minutes >= 1) ? ((minutes != 1) ? minutes + " minutes" : minutes + " minute") : "") + " " + ((seconds != 1) ? seconds + " seconds." : seconds + " second.");
+        return ((minutes >= 1) ? ((minutes != 1) ? minutes + " " + plugin.getCipher().getString("runnable.convertto.minutes") : minutes + " " + plugin.getCipher().getString("runnable.convertto.minute")) : "") + " " + ((seconds != 1) ? seconds + " " + plugin.getCipher().getString("runnable.convertto.seconds") + "." : seconds + " " + plugin.getCipher().getString("runnable.convertto.second") + ".");
     }
 }

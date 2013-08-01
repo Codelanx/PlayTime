@@ -27,7 +27,7 @@ import org.bukkit.Bukkit;
  *
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.3.0
+ * @version 1.4.0
  */
 public class DataManager {
     
@@ -66,7 +66,7 @@ public class DataManager {
      * @version 1.3.0
      */
     public void setup() {
-        data.setup();
+        data.init();
         data.verifyFormat();
     }
     
@@ -77,17 +77,44 @@ public class DataManager {
      * @version 1.4.0
      */
     public void start() {
-        data.initiateRunnable();
+        data.startRunnables();
     }
     
+    /**
+     * Gets the interface in use for handling data. (MySQL, SQLite, or YAML)
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @return Data Handler
+     */
     public DataHandler getDataHandler() {
         return data;
     }
     
+    /**
+     * Starts the conversion process from one data type to another
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @param newType The new data type (mysql, sqlite, or flatfile)
+     * @param players Any players to notify after the completion
+     */
     public void convertData(String newType, String... players) {
         data.startConversion(newType, players);
     }
     
+    /**
+     * Executes the asynchronous converter for Playtime
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @param newType The new data type (mysql, sqlite, or flatfile)
+     * @param query The query to be used in the conversion process
+     * @param players Any players to notify after the completion
+     */
     public void convertTo(String newType, String query, String... players) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, new ConvertToRunnable(newType, plugin, query, players));
     }

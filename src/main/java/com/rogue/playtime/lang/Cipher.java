@@ -135,6 +135,9 @@ public class Cipher {
     /**
      * Gets the lang file from the plugin data folder
      * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
      * @param pl The plugin
      * @param lang The lang file to use
      * @return The lang file as a FileConfiguration
@@ -151,6 +154,9 @@ public class Cipher {
     /**
      * Gets the lang file from the plugin jarfile
      * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
      * @param pl The plugin
      * @param lang The lang file to use
      * @return The lang file as a FileConfiguration
@@ -166,6 +172,9 @@ public class Cipher {
     
     /**
      * Gets the lang file from github
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
      * 
      * @param pl The plugin
      * @param lang The lang file to use

@@ -31,7 +31,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  * 
  * @since 1.1
  * @author Lord_Ralex
- * @version 1.3.0
+ * @version 1.4.0
  */
 public class UpdateRunnable extends BukkitRunnable {
 
@@ -49,7 +49,7 @@ public class UpdateRunnable extends BukkitRunnable {
 
     public void run() {
         if (version.endsWith("SNAPSHOT") || version.endsWith("DEV")) {
-            plugin.getLogger().warning("You are using a dev build, update checks are disabled");
+            plugin.getLogger().warning(plugin.getCipher().getString("runnable.update.dev"));
             isLatest = true;
             return;
         }
@@ -66,15 +66,30 @@ public class UpdateRunnable extends BukkitRunnable {
             }
             plugin.setUpdateStatus(!isLatest);
         } catch (MalformedURLException ex) {
-            plugin.getLogger().log(Level.SEVERE, "Error occured while checking for an update", ex);
+            plugin.getLogger().log(Level.SEVERE, plugin.getCipher().getString("runnable.update.error"));
+            if (plugin.getDebug() == 3) {
+                ex.printStackTrace();
+            }
         } catch (IOException ex) {
-            plugin.getLogger().log(Level.SEVERE, "Error occured while checking for an update", ex);
+            plugin.getLogger().log(Level.SEVERE, plugin.getCipher().getString("runnable.update.error"));
+            if (plugin.getDebug() == 3) {
+                ex.printStackTrace();
+            }
         }
     }
 
+    /**
+     * Returns whether or not there is an update
+     * 
+     * @since 1.1
+     * @version 1.4.0
+     * 
+     * @return True if there is an update, false otherwise
+     * @throws IllegalStateException 
+     */
     public boolean isUpdate() throws IllegalStateException {
         if (isLatest == null) {
-            throw new IllegalStateException("Version check was not completed");
+            throw new IllegalStateException(plugin.getCipher().getString("runnable.update.version-error"));
         }
         return !isLatest;
     }

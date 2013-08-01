@@ -21,7 +21,6 @@ import com.rogue.playtime.data.DataHandler;
 import com.rogue.playtime.runnable.StartConvertRunnable;
 import com.rogue.playtime.runnable.AddRunnable;
 import com.rogue.playtime.runnable.ResetRunnable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.Bukkit;
@@ -32,7 +31,7 @@ import org.bukkit.scheduler.BukkitTask;
  *
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.3.0
+ * @version 1.4.0
  */
 public class Data_YAML implements DataHandler {
     
@@ -70,12 +69,12 @@ public class Data_YAML implements DataHandler {
     public void verifyFormat() {
     }
 
-    public void setup() {
+    public void init() {
         yaml = new YAML();
         plugin = Playtime.getPlugin();
     }
 
-    public void initiateRunnable() {
+    public void startRunnables() {
         updater = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new AddRunnable(plugin), 1200L, 1200L);
     }
     

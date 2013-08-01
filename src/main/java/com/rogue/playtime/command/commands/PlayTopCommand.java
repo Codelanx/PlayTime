@@ -18,6 +18,7 @@ package com.rogue.playtime.command.commands;
 
 import com.rogue.playtime.command.CommandBase;
 import static com.rogue.playtime.Playtime.__;
+import static com.rogue.playtime.command.CommandBase.plugin;
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -61,31 +62,30 @@ public class PlayTopCommand implements CommandBase {
         }
         Map<String, Integer> players = plugin.getDataManager().getDataHandler().getTopPlayers("playtime", i);
         if (players == null) {
-            sender.sendMessage(__("Playtimetop is disabled with flatfile data!"));
+            sender.sendMessage(__(plugin.getCipher().getString("command.commands.playtop.disabled-flatfile")));
         }
         if (scoreboard) {
-            Player p = (Player) sender;
+            Player p = (Player)sender;
             ScoreboardManager sbm = Bukkit.getScoreboardManager();
             Scoreboard scoreBoard = sbm.getNewScoreboard();
-            Objective objv = scoreBoard.registerNewObjective("Top Playtimes", "dummy");
+            Objective objv = scoreBoard.registerNewObjective(plugin.getCipher().getString("command.commands.playtop.title"), "dummy");
             objv.setDisplaySlot(DisplaySlot.SIDEBAR);
-            objv.setDisplayName("Top Playtimes (in hours):");
+            objv.setDisplayName(plugin.getCipher().getString("command.commands.playtop.title-shown"));
             Score score;
             for (String s : players.keySet()) {
                 score = objv.getScore(Bukkit.getOfflinePlayer(s));
-                score.setScore(players.get(s) / 60);
+                score.setScore(players.get(s)/60);
             }
             p.setScoreboard(scoreBoard);
-            p.sendMessage(__("Use &e/playtimetop clear &6to remove the leaderboard."));
-
+            p.sendMessage(__(plugin.getCipher().getString("command.commands.playtop.clear")));
+            
         } else {
-            StringBuilder sb = new StringBuilder("Top ").append(i).append(" players for Playtime (in hours):");
+            StringBuilder sb = new StringBuilder(plugin.getCipher().getString("command.commands.playtop.console-title", i));
             for (String s : players.keySet()) {
-                sb.append('\n').append(s).append(" - ").append(players.get(s) / 60);
+                sb.append('\n').append(s).append(" - ").append(players.get(s)/60);
             }
             sender.sendMessage(sb.toString());
         }
-
         return true;
     }
 

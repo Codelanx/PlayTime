@@ -17,11 +17,11 @@
 package com.rogue.playtime.data.yaml;
 
 import com.rogue.playtime.Playtime;
+import com.rogue.playtime.event.Event;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -30,7 +30,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
  *
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.3.0
+ * @version 1.4.0
  */
 public class YAML {
     
@@ -44,7 +44,7 @@ public class YAML {
         try {
             yaml = this.makeYAML(users);
         } catch (IOException ex) {
-            Logger.getLogger(YAML.class.getName()).log(Level.SEVERE, "Error creating user YAML file!", ex);
+            Logger.getLogger(YAML.class.getName()).log(Level.SEVERE, plugin.getCipher().getString("data.yaml.instance.error-create"), ex);
         }
     }
     
@@ -63,16 +63,15 @@ public class YAML {
         int i = yaml.getInt(key);
         i++;
         boolean eventFired = false;
-        Map<String, Integer> events = plugin.getEventHandler().getTimes();
         List<String> fire = new ArrayList();
-        for (String s : events.keySet()) {
-            if (i == events.get(s)) {
+        for (Event e : plugin.getEventHandler().getEvents().values()) {
+            if (!e.isLoginEvent() && i == e.getTrigger()) {
                 eventFired = true;
-                fire.add(s);
+                fire.add(e.getName());
             }
         }
         if (eventFired) {
-            plugin.getEventHandler().fireYAMLEvents(fire, key.split(".")[1]);
+            plugin.getEventHandler().fireEvents(fire, key.split(".")[1]);
         }
         yaml.set(key, i);
     }
@@ -99,7 +98,7 @@ public class YAML {
         try {
             yaml.save(path);
         } catch (IOException ex) {
-            Logger.getLogger(YAML.class.getName()).log(Level.SEVERE, "Error saving user yaml configuration!", ex);
+            Logger.getLogger(YAML.class.getName()).log(Level.SEVERE, plugin.getCipher().getString("data.yaml.instance.error-save"), ex);
         }
     }
     

@@ -16,17 +16,18 @@
  */
 package com.rogue.playtime.command.commands;
 
-import com.rogue.playtime.command.CommandBase;
 import static com.rogue.playtime.Playtime.__;
+import com.rogue.playtime.command.CommandBase;
+import static com.rogue.playtime.command.CommandBase.plugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * 
+ *
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.3.0
+ * @version 1.4.0
  */
 public class PlayCommand implements CommandBase {
 
@@ -40,7 +41,7 @@ public class PlayCommand implements CommandBase {
             check = plugin.getBestPlayer(args[0]);
             perm += ".others";
         } else {
-            sender.sendMessage("You cannot check the playtime of a non-player!");
+            sender.sendMessage(__(plugin.getCipher().getString("command.commands.play.console")));
             return true;
         }
         if (sender.hasPermission(perm)) {
@@ -48,14 +49,15 @@ public class PlayCommand implements CommandBase {
             int minutes = time % 60;
             if (time >= 60) {
                 int hours = time / 60;
-                sender.sendMessage(__(check + " has played for " + hours + " hour" + (hours == 1 ? "" : "s") + " and " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
+                sender.sendMessage(__(plugin.getCipher().getString("command.commands.play.playtime-hours", check, hours, (hours == 1 ? "" : "s"), minutes, (minutes == 1 ? "" : "s"))));
             } else {
-                sender.sendMessage(__(check + " has played for " + minutes + " minute" + (minutes == 1 ? "" : "s") + "."));
+                sender.sendMessage(__(plugin.getCipher().getString("command.commands.play.playtime-minutes", check, minutes, (minutes == 1 ? "" : "s"))));
             }
+
         } else {
-            sender.sendMessage(__("You do not have permission to do that!"));
+            sender.sendMessage(__(plugin.getCipher().getString("command.commands.play.noperm")));
         }
-        return false;
+        return true;
     }
 
     @Override
