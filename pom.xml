@@ -27,8 +27,10 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
                 <includes>
+                    <include>events.yml</include>
                     <include>plugin.yml</include>
                     <include>config.yml</include>
+                    <include>en_US.yml</include>
                 </includes>
             </resource>
         </resources>

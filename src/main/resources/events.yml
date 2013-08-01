@@ -2,14 +2,14 @@ events:
   example:
     type: playtime
     time: 1200
-    at-login: true
+    at-login: false
     repeat: false
     commands:
     - 'msg %u Congratulations on hitting 20 hours of play time!'
   exampletwo:
     type: onlinetime
     time: 120
-    at-login: true
+    at-login: false
     repeat: true
     commands:
     - 'msg %u Here''s some food for being online so much!'

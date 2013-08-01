@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -162,6 +163,11 @@ public class Playtime extends JavaPlugin {
         }
 
         final long endTime = System.nanoTime();
+        if (Bukkit.getOnlinePlayers().length > 0) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                listener.onPlayerJoin(new PlayerJoinEvent(p, ""));
+            }
+        }
         this.setBusy(false);
         if (debug >= 1) {
             final long duration = endTime - startTime;

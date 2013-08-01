@@ -36,7 +36,7 @@ public class SendMessageCallable implements Callable {
         message = messagetext;
     }
 
-    public Object call() throws Exception {
+    public Object call() {
         Bukkit.getPlayer(player).sendMessage(__(message));
         return null;
     }

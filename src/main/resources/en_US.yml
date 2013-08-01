@@ -14,9 +14,9 @@ command:
       clear: 'Use &e/deathtimetop clear&6 to remove the leaderboard.'
       console-title: 'Top {0} players for Deathtime (in hours):'
     online:
-      console: 'You cannot check the survival time of a non-player!'
-      playtime-hours: '{0} has been alive for {1} hour{2} and {3} minute{4}.'
-      playtime-minutes: '{0} has been alive for {1} minute{2}.'
+      console: 'You cannot check the online time of a non-player!'
+      playtime-hours: '{0} has been online for {1} hour{2} and {3} minute{4}.'
+      playtime-minutes: '{0} has been online for {1} minute{2}.'
       disabled: 'Tracking online time is disabled!'
       noperm: 'You do not have permission to do that!'
     onlinetop:
@@ -75,6 +75,11 @@ data:
     instance:
       error-create: 'Error creating user YAML file!'
       error-save: 'Error saving user YAML configuration!'
+event:
+  hours: 'hours'
+  minutes: 'minutes'
+  hour: 'hour'
+  minute: 'minute'
 listener:
   update: 'An update is available for Playtime!'
 player:
