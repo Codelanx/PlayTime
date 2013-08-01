@@ -201,6 +201,7 @@ public class Playtime extends JavaPlugin {
      * @param names Players to notify when the reload is complete
      */
     public void reload(String... names) {
+        String reloaded = lang.getString("main.reloaded");
         this.onDisable();
         afkChecker = null;
         debug = 0;
@@ -209,15 +210,17 @@ public class Playtime extends JavaPlugin {
         chandler = null;
         dmanager = null;
         cloader = null;
+        ehandler = null;
+        lang = null;
         deathEnabled = true;
         onlineEnabled = true;
         isUpdate = false;
         this.onLoad();
         this.onEnable();
         
-        this.getLogger().info(lang.getString("main.reloaded"));
+        this.getLogger().info(reloaded);
         for (String s : names) {
-            this.getServer().getPlayer(s).sendMessage(__(lang.getString("main.reloaded")));
+            this.getServer().getPlayer(s).sendMessage(__(reloaded));
         }
     }
 
