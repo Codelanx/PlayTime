@@ -40,6 +40,7 @@ command:
       longtime: 'Please note that this may take up to 1 minute to complete, depending on the size of your database.'
       datainuse: 'Data Manager already in use!'
       convert: 'Converting from data type ''{0}'' to ''{1}''!'
+      swap: 'Swapping from data type ''{0}'' to ''{1}''!'
       confirm: 'You will need to either confirm this action with &e/pt &6confirm or cancel it using &e/pt cancel'
       flatfile: 'Converting data to flatfiles is not allowed!'
       baddata: 'Unknown data type ''{0}'''

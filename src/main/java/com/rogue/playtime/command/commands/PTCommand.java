@@ -34,6 +34,7 @@ import org.bukkit.entity.Player;
 public class PTCommand implements CommandBase {
 
     private static Map<CommandSender, String> converters = new HashMap();
+    private static Map<CommandSender, String> swappers = new HashMap();
 
     public boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         switch (args.length) {
@@ -55,10 +56,23 @@ public class PTCommand implements CommandBase {
                         converters.remove(sender);
                         sender.sendMessage(__(plugin.getCipher().getString("command.commands.pt.longtime")));
                         plugin.setBusy(true);
+                    } else if (swappers.get(sender) != null) {
+                        plugin.getConfigurationLoader().getConfig().set("data.manager", swappers.get(sender));
+                        plugin.getConfigurationLoader().saveConfig();
+                        plugin.setBusy(true);
+                        if (sender instanceof Player) {
+                            plugin.reload(sender.getName());
+                        } else {
+                            plugin.reload();
+                        }
+                        swappers.remove(sender);
                     }
                 } else if (args[0].equalsIgnoreCase("cancel")) {
                     if (converters.get(sender) != null) {
                         converters.remove(sender);
+                    }
+                    if (swappers.get(sender) != null) {
+                        swappers.remove(sender);
                     }
                 }
                 break;
@@ -75,6 +89,19 @@ public class PTCommand implements CommandBase {
                         sender.sendMessage(__(plugin.getCipher().getString("command.commands.pt.confirm")));
                     } else if (args[1].equals("flatfile")) {
                         sender.sendMessage(__(plugin.getCipher().getString("command.commands.pt.flatfile")));
+                    } else {
+                        sender.sendMessage(__(plugin.getCipher().getString("command.commands.pt.baddata", args[0])));
+                    }
+                } else if (args[0].equalsIgnoreCase("swap") && sender.hasPermission("playtime.swap")) {
+                    args[1] = args[1].toLowerCase();
+                    if (args[1].equals("mysql") || args[1].equals("sqlite") || args[1].equals("flatfile")) {
+                        if (args[1].equals(plugin.getDataManager().getDataHandler().getName())) {
+                            sender.sendMessage(__(plugin.getCipher().getString("command.commands.pt.datainuse")));
+                            return true;
+                        }
+                        swappers.put(sender, args[1]);
+                        sender.sendMessage(__(plugin.getCipher().getString("command.commands.pt.swap", plugin.getDataManager().getDataHandler().getName(), args[1])));
+                        sender.sendMessage(__(plugin.getCipher().getString("command.commands.pt.confirm")));
                     } else {
                         sender.sendMessage(__(plugin.getCipher().getString("command.commands.pt.baddata", args[0])));
                     }

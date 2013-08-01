@@ -59,7 +59,7 @@ public class Playtime extends JavaPlugin {
     private boolean deathEnabled = true;
     private boolean onlineEnabled = true;
     private boolean isUpdate = false;
-    private boolean isBusy = false;
+    private boolean isBusy = true;
 
     /**
      * Registers the plugin configuration file and language system.
@@ -157,6 +157,7 @@ public class Playtime extends JavaPlugin {
         }
 
         final long endTime = System.nanoTime();
+        this.setBusy(false);
         if (debug >= 1) {
             final long duration = endTime - startTime;
             this.getLogger().info(lang.getString("main.enabled", this.readableProfile(duration)));

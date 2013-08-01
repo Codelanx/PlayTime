@@ -35,8 +35,16 @@ permissions:
       playtime.online.others: true
       playtime.online.top: true
       playtime.updatenotice: true
-      playtime.reload: true
-      playtime.convert: true
+      playtime.admin.reload: true
+      playtime.admin.convert: true
+      playtime.admin.swap: true
+  playtime.admin.*:
+    default: op
+    description: Gives access to playtime's administrative functions
+    children:
+      playtime.admin.reload: true
+      playtime.admin.convert: true
+      playtime.admin.swap: true
     playtime.use.*:
       default: op
       children:
