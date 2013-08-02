@@ -43,7 +43,7 @@ public class Data_SQLite implements DataHandler {
     private BukkitTask updater;
     private Playtime plugin = Playtime.getPlugin();
     private SQLite db;
-    
+
     public String getName() {
         return "sqlite";
     }
@@ -73,7 +73,7 @@ public class Data_SQLite implements DataHandler {
         }
         return ret;
     }
-    
+
     public Map<String, Integer> getTopPlayers(String data, int amount) {
         db = new SQLite();
         Map<String, Integer> players = new HashMap();
@@ -96,7 +96,7 @@ public class Data_SQLite implements DataHandler {
         }
         return players;
     }
-    
+
     public Map<String, Integer> getPlayersInRange(String timer, int minimum, int maximum) {
         db = new SQLite();
         Map<String, Integer> back = new HashMap();
@@ -117,7 +117,7 @@ public class Data_SQLite implements DataHandler {
     public void onDeath(String username) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, new ResetRunnable(plugin, username, "deathtime"));
     }
-    
+
     public void onLogout(String username) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, new ResetRunnable(plugin, username, "onlinetime"));
     }
@@ -131,6 +131,14 @@ public class Data_SQLite implements DataHandler {
             if (!db.checkTable("playTime")) {
                 plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.sqlite.main.create-table"));
                 db.update("CREATE TABLE playTime ( id INTEGER NOT NULL PRIMARY KEY, username VARCHAR(32) NOT NULL UNIQUE, playtime INTEGER NOT NULL DEFAULT 0, deathtime INTEGER NOT NULL DEFAULT 0, onlinetime INTEGER NOT NULL DEFAULT 0)");
+            } else {
+                try {
+                    db.update("UPDATE `playTime` SET `onlinetime`=0");
+                    if (plugin.getDebug() >= 1) {
+                        plugin.getLogger().info(plugin.getCipher().getString("data.sqlite.reset-column", "`onlinetime`"));
+                    }
+                } catch (SQLException e) {
+                }
             }
             db.close();
         } catch (SQLException ex) {
@@ -147,7 +155,7 @@ public class Data_SQLite implements DataHandler {
     public void startRunnables() {
         updater = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new AddRunnable(plugin), 1200L, 1200L);
     }
-    
+
     public void startConversion(String newType, String... players) {
         plugin.onDisable();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, new StartConvertRunnable(plugin, newType, players));

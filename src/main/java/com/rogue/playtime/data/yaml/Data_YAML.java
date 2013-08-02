@@ -24,6 +24,7 @@ import com.rogue.playtime.runnable.ResetRunnable;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
@@ -67,6 +68,11 @@ public class Data_YAML implements DataHandler {
     }
 
     public void verifyFormat() {
+        ConfigurationSection section = yaml.getFile().getConfigurationSection("users");
+        for (String s : section.getKeys(false)) {
+            yaml.getFile().set("users." + s + ".onlinetime", 0);
+        }
+        yaml.forceSave();
     }
 
     public void init() {

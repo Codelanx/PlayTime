@@ -42,7 +42,7 @@ public class Data_MySQL implements DataHandler {
     private BukkitTask updater;
     private Playtime plugin = Playtime.getPlugin();
     private MySQL db;
-    
+
     public String getName() {
         return "mysql";
     }
@@ -95,7 +95,7 @@ public class Data_MySQL implements DataHandler {
         }
         return players;
     }
-    
+
     public Map<String, Integer> getPlayersInRange(String timer, int maximum, int minimum) {
         db = new MySQL();
         Map<String, Integer> back = new HashMap();
@@ -142,7 +142,7 @@ public class Data_MySQL implements DataHandler {
                     try {
                         db.update("ALTER TABLE `playTime` ADD `playtime` int NOT NULL DEFAULT 0 AFTER `username`");
                         plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.missing-playtime"));
-                        plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.playtime-reset"));
+                        plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.reset-column", "`playtime`"));
                     } catch (SQLException e) {
                     }
                     try {
@@ -181,6 +181,13 @@ public class Data_MySQL implements DataHandler {
                         }
                     } catch (SQLException e) {
                     }
+                    try {
+                        db.update("UPDATE `playTime` SET `onlinetime`=0");
+                        if (plugin.getDebug() >= 1) {
+                            plugin.getLogger().info(plugin.getCipher().getString("data.mysql.reset-column", "`onlinetime`"));
+                        }
+                    } catch (SQLException e) {
+                    }
                     plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.uptodate"));
                 }
             }
@@ -214,7 +221,7 @@ public class Data_MySQL implements DataHandler {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void startConversion(String newType, String... players) {
         plugin.onDisable();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, new StartConvertRunnable(plugin, newType, players));

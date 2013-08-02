@@ -55,7 +55,7 @@ data:
       create-table: 'Creating table ''playTime'' in database ''{0}'''
       missing-user: 'Missing username column! Recreating table...'
       missing-playtime: 'Missing playtime column! Repairing...'
-      playtime-reset: 'Playtime values reset to 0.'
+      reset-column: 'Resetting column {0}'
       updating-table: 'Updating SQL table for {0}'
       setting-defaults: 'Setting defaults for column {0}'
       uptodate: 'SQL table is up to date!'
@@ -67,6 +67,7 @@ data:
       connecting: '"Connecting to SQLite database..."'
       connect-success: 'Successfully connected to database!'
       create-table: 'Creating table ''playTime'' in database'
+      reset-column: 'Resetting column {0}'
       error: 'Error in SQLite database, shutting down!'
     instance:
       open: 'Open SQLite connections: {0}'
