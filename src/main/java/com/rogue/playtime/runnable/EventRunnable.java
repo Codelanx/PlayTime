@@ -101,9 +101,9 @@ public class EventRunnable extends BukkitRunnable {
                 for (String user : users.keySet()) {
                     for (String cmd : run) {
                         if (event.isMessage(cmd.split(" ")[0])) {
-                            Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(user, event.replaceMessage(cmd).replace("%u", user).replace("%t", users.get(user).toString())));
+                            Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(user, event.replaceMessage(cmd).replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))));
                         } else {
-                            Bukkit.getScheduler().callSyncMethod(plugin, new ConsoleCommandCallable(cmd.replace("%u", user).replace("%t", users.get(user).toString())));
+                            Bukkit.getScheduler().callSyncMethod(plugin, new ConsoleCommandCallable(cmd.replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))));
                         }
                     }
                 }
@@ -114,9 +114,9 @@ public class EventRunnable extends BukkitRunnable {
                 for (String user : users.keySet()) {
                     for (String cmd : run) {
                         if (event.isMessage(cmd.split(" ")[0])) {
-                            Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(user, event.replaceMessage(cmd).replace("%u", user).replace("%t", users.get(user).toString())));
+                            Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(user, event.replaceMessage(cmd).replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))));
                         } else {
-                            Bukkit.getScheduler().callSyncMethod(plugin, new ConsoleCommandCallable(cmd.replace("%u", user).replace("%t", users.get(user).toString())));
+                            Bukkit.getScheduler().callSyncMethod(plugin, new ConsoleCommandCallable(cmd.replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))));
                         }
                     }
                 }
