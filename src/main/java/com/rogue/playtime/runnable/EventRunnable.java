@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  *
@@ -36,7 +35,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @author 1Rogue
  * @version 1.4.0
  */
-public class EventRunnable extends BukkitRunnable {
+public class EventRunnable implements Runnable {
 
     private Playtime plugin;
     private final String name;
@@ -101,9 +100,9 @@ public class EventRunnable extends BukkitRunnable {
                 for (String user : users.keySet()) {
                     for (String cmd : run) {
                         if (event.isMessage(cmd.split(" ")[0])) {
-                            Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(user, event.replaceMessage(cmd).replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))));
+                            plugin.getExecutiveManager().runCallable(new SendMessageCallable(user, event.replaceMessage(cmd).replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))), 0L);
                         } else {
-                            Bukkit.getScheduler().callSyncMethod(plugin, new ConsoleCommandCallable(cmd.replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))));
+                            plugin.getExecutiveManager().runCallable(new ConsoleCommandCallable(cmd.replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))), 0L);
                         }
                     }
                 }
@@ -117,10 +116,10 @@ public class EventRunnable extends BukkitRunnable {
                         
                         if (event.isMessage(cmd.split(" ")[0])) {
                             System.out.println("is message!");
-                            Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(user, event.replaceMessage(cmd).replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))));
+                            plugin.getExecutiveManager().runCallable(new SendMessageCallable(user, event.replaceMessage(cmd).replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))), 0L);
                         } else {
                             System.out.println("is not message!");
-                            Bukkit.getScheduler().callSyncMethod(plugin, new ConsoleCommandCallable(cmd.replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))));
+                            plugin.getExecutiveManager().runCallable(new ConsoleCommandCallable(cmd.replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))), 0L);
                         }
                     }
                 }

@@ -20,6 +20,7 @@ import com.rogue.playtime.command.CommandHandler;
 import com.rogue.playtime.config.ConfigurationLoader;
 import com.rogue.playtime.data.DataManager;
 import com.rogue.playtime.event.EventHandler;
+import com.rogue.playtime.executables.ExecutiveManager;
 import com.rogue.playtime.lang.Cipher;
 import com.rogue.playtime.listener.PlaytimeListener;
 import com.rogue.playtime.metrics.Metrics;
@@ -37,7 +38,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
 /**
  * The main class
@@ -48,8 +48,8 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public class Playtime extends JavaPlugin {
     
-    protected BukkitTask afkChecker;
     protected int debug = 0;
+    protected ExecutiveManager execmanager;
     protected PlaytimeListener listener;
     protected PlayerHandler phandler;
     protected CommandHandler chandler;
@@ -114,9 +114,12 @@ public class Playtime extends JavaPlugin {
         } catch (IOException ex) {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        this.getLogger().info(lang.getString("main.execs"));
+        execmanager = new ExecutiveManager(this);
 
         if (cloader.getBoolean("update-check")) {
-            Bukkit.getScheduler().runTaskLater(this, new UpdateRunnable(this), 1);
+            execmanager.runAsyncTask(new UpdateRunnable(this), 10L);
         } else {
             this.getLogger().info(lang.getString("main.update"));
         }
@@ -140,7 +143,7 @@ public class Playtime extends JavaPlugin {
         if (afkEnabled) {
             this.getLogger().info(lang.getString("main.player"));
             phandler = new PlayerHandler(this, cloader.getInt("afk.interval"), cloader.getInt("afk.timeout"));
-            afkChecker = Bukkit.getScheduler().runTaskTimer(this, new AFKRunnable(this), phandler.getAFKCheckInterval() * 20L, phandler.getAFKCheckInterval() * 20L);
+            execmanager.runAsyncTaskRepeat(new AFKRunnable(this), phandler.getAFKCheckInterval(), phandler.getAFKCheckInterval());
         } else {
             this.getLogger().info(lang.getString("main.afk"));
             phandler = null;
@@ -183,13 +186,8 @@ public class Playtime extends JavaPlugin {
      */
     @Override
     public void onDisable() {
+        execmanager.cancelAllTasks();
         dmanager.getDataHandler().cleanup();
-        ehandler.cancelChecks();
-        if (afkChecker != null) {
-            afkChecker.cancel();
-        }
-        afkChecker = null;
-        this.getServer().getScheduler().cancelTasks(this);
     }
     
     /**
@@ -203,8 +201,8 @@ public class Playtime extends JavaPlugin {
     public void reload(String... names) {
         String reloaded = lang.getString("main.reloaded");
         this.onDisable();
-        afkChecker = null;
         debug = 0;
+        execmanager = null;
         listener = null;
         phandler = null;
         chandler = null;
@@ -434,6 +432,18 @@ public class Playtime extends JavaPlugin {
      */
     public EventHandler getEventHandler() {
         return ehandler;
+    }
+    
+    /**
+     * Returns the manager for runnables that Playtime uses
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @return Playtime's executive manager
+     */
+    public ExecutiveManager getExecutiveManager() {
+        return execmanager;
     }
     
     /**

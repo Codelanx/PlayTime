@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitTask;
 
 /**
  * MySQL Data manager. See DataHandler for information about each method.
@@ -39,7 +38,6 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public class Data_MySQL implements DataHandler {
 
-    private BukkitTask updater;
     private Playtime plugin = Playtime.getPlugin();
     private MySQL db;
 
@@ -114,11 +112,11 @@ public class Data_MySQL implements DataHandler {
     }
 
     public void onDeath(String username) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new ResetRunnable(plugin, username, "deathtime"));
+        plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(plugin, username, "deathtime"), 0L);
     }
 
     public void onLogout(String username) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new ResetRunnable(plugin, username, "onlinetime"));
+        plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(plugin, username, "onlinetime"), 0L);
     }
 
     public void verifyFormat() {
@@ -210,7 +208,7 @@ public class Data_MySQL implements DataHandler {
         try {
             db.open();
             if (db.checkConnection()) {
-                updater = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new AddRunnable(plugin), 1200L, 1200L);
+                plugin.getExecutiveManager().runAsyncTaskRepeat(new AddRunnable(plugin), 60L, 60L);
                 db.close();
             } else {
                 plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.error"));
@@ -224,14 +222,10 @@ public class Data_MySQL implements DataHandler {
 
     public void startConversion(String newType, String... players) {
         plugin.onDisable();
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new StartConvertRunnable(plugin, newType, players));
+        plugin.getExecutiveManager().runAsyncTask(new StartConvertRunnable(plugin, newType, players), 0L);
     }
 
     public void cleanup() {
-        if (updater != null) {
-            updater.cancel();
-        }
-        updater = null;
         db = null;
     }
 }

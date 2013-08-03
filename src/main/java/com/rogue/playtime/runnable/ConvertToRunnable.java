@@ -22,8 +22,6 @@ import com.rogue.playtime.data.DataManager;
 import com.rogue.playtime.data.mysql.MySQL;
 import com.rogue.playtime.data.sqlite.SQLite;
 import java.sql.SQLException;
-import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  *
@@ -31,7 +29,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @author 1Rogue
  * @version 1.4.0
  */
-public class ConvertToRunnable extends BukkitRunnable {
+public class ConvertToRunnable implements Runnable {
 
     private Playtime plugin;
     private final String[] player;
@@ -77,7 +75,7 @@ public class ConvertToRunnable extends BukkitRunnable {
                 db.update("DELETE FROM `playTime`");
                 String[] queries = query.split("\n");
                 for (String p : player) {
-                    Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, plugin.getCipher().getString("runnable.convertto.rows", queries.length, getTime(queries.length))));
+                    plugin.getExecutiveManager().runCallable(new SendMessageCallable(p, plugin.getCipher().getString("runnable.convertto.rows", queries.length, getTime(queries.length))), 0L);
                 }
                 for (String s : queries) {
                     db.update(s);
@@ -90,11 +88,11 @@ public class ConvertToRunnable extends BukkitRunnable {
             }
             plugin.reload();
             for (String p : player) {
-                Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, plugin.getCipher().getString("runnable.convertto.complete")));
+                plugin.getExecutiveManager().runCallable(new SendMessageCallable(p, plugin.getCipher().getString("runnable.convertto.complete")), 0L);
             }
         } else if (convert.equals("flatfile")) {
             for (String s : player) {
-                plugin.getServer().getScheduler().callSyncMethod(plugin, new SendMessageCallable(s, plugin.getCipher().getString("runnable.convertto.noflat")));
+                plugin.getExecutiveManager().runCallable(new SendMessageCallable(s, plugin.getCipher().getString("runnable.convertto.noflat")), 0L);
             }
         }
         plugin.setBusy(false);

@@ -115,6 +115,7 @@ runnable:
 main:
   metrics: 'Enabling Metrics...'
   update: 'Update checks disabled!'
+  execs: 'Enabling executable manager...'
   data: 'Enabling Data Manager...'
   command: 'Enabling Command Handler...'
   player: 'Enabling Player Handler...'

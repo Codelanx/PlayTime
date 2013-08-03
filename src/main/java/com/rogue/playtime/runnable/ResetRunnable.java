@@ -22,7 +22,6 @@ import com.rogue.playtime.data.sqlite.SQLite;
 import com.rogue.playtime.data.yaml.YAML;
 import java.sql.SQLException;
 import java.util.logging.Level;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  *
@@ -30,7 +29,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @author 1Rogue
  * @version 1.4.0
  */
-public class ResetRunnable extends BukkitRunnable {
+public class ResetRunnable implements Runnable {
 
     private Playtime plugin;
     private final String user;

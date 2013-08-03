@@ -24,7 +24,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import com.rogue.playtime.Playtime;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Adopted from TotalPermissions
@@ -33,7 +32,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @author Lord_Ralex
  * @version 1.4.0
  */
-public class UpdateRunnable extends BukkitRunnable {
+public class UpdateRunnable implements Runnable {
 
     private static final String VERSION_URL = "https://raw.github.com/1Rogue/Playtime/master/VERSION";
     private Boolean isLatest = null;

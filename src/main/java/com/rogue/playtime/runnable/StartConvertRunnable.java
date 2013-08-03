@@ -25,7 +25,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  *
@@ -33,7 +32,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @author 1Rogue
  * @version 1.4.0
  */
-public class StartConvertRunnable extends BukkitRunnable {
+public class StartConvertRunnable implements Runnable {
 
     private Playtime plugin;
     private final String convertTo;
@@ -51,7 +50,7 @@ public class StartConvertRunnable extends BukkitRunnable {
             MySQL db = new MySQL();
             StringBuilder sb = new StringBuilder();
             for (String p : player) {
-                Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(p, plugin.getCipher().getString("runnable.startconvert.mysql.download")));
+                plugin.getExecutiveManager().runCallable(new SendMessageCallable(p, plugin.getCipher().getString("runnable.startconvert.mysql.download")), 0L);
             }
             plugin.getLogger().info(plugin.getCipher().getString("runnable.startconvert.mysql.download"));
             try {

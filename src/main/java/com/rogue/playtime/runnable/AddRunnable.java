@@ -23,7 +23,6 @@ import com.rogue.playtime.data.yaml.YAML;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  *
@@ -31,7 +30,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @author 1Rogue
  * @version 1.4.0
  */
-public class AddRunnable extends BukkitRunnable {
+public class AddRunnable implements Runnable {
 
     Playtime plugin;
 

@@ -21,7 +21,6 @@ import com.rogue.playtime.data.mysql.Data_MySQL;
 import com.rogue.playtime.data.sqlite.Data_SQLite;
 import com.rogue.playtime.data.yaml.Data_YAML;
 import com.rogue.playtime.runnable.ConvertToRunnable;
-import org.bukkit.Bukkit;
 
 /**
  *
@@ -116,7 +115,7 @@ public class DataManager {
      * @param players Any players to notify after the completion
      */
     public void convertTo(String newType, String query, String... players) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new ConvertToRunnable(newType, plugin, query, players));
+        plugin.getExecutiveManager().runAsyncTask(new ConvertToRunnable(newType, plugin, query, players), 0L);
     }
 
 }

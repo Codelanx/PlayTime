@@ -27,7 +27,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.scheduler.BukkitTask;
 
 /**
  *
@@ -40,7 +39,6 @@ public class EventHandler {
     private Playtime plugin;
     private YamlConfiguration yaml = null;
     private File file;
-    private Map<String, BukkitTask> eventTasks = new HashMap();
     private Map<String, Event> events = new HashMap();
 
     public EventHandler(Playtime p) {
@@ -101,7 +99,7 @@ public class EventHandler {
         if (login) {
             events.put(name, new Event(name, timer, seconds / 60, commands, yaml.getBoolean("events." + name + ".repeat"), login));
         } else {
-            eventTasks.put(name, Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new EventRunnable(plugin, name, timer, seconds / 60, (seconds + interval) / 60, commands, yaml.getBoolean("events." + name + ".repeat")), interval * 1200L, interval * 1200L));
+            plugin.getExecutiveManager().runAsyncTaskRepeat(new EventRunnable(plugin, name, timer, seconds / 60, (seconds + interval) / 60, commands, yaml.getBoolean("events." + name + ".repeat")), interval * 60L, interval * 60L);
         }
     }
     
@@ -183,18 +181,6 @@ public class EventHandler {
                     }
                 }
             }
-        }
-    }
-    
-    /**
-     * Cancels any runnables that are runnnig as events
-     * 
-     * @since 1.4.0
-     * @version 1.4.0
-     */
-    public void cancelChecks() {
-        for (String s : eventTasks.keySet()) {
-            eventTasks.get(s).cancel();
         }
     }
 
