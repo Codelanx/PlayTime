@@ -61,6 +61,7 @@ public class Playtime extends JavaPlugin {
     private boolean onlineEnabled = true;
     private boolean isUpdate = false;
     private boolean isBusy = true;
+    private boolean reloaded = false;
 
     /**
      * Registers the plugin configuration file and language system.
@@ -95,6 +96,10 @@ public class Playtime extends JavaPlugin {
     @Override
     public void onEnable() {
         final long startTime = System.nanoTime();
+        
+        if (Bukkit.getOnlinePlayers().length > 0) {
+            reloaded = true;
+        }
         
         debug = cloader.getInt("debug-level");
         if (debug > 3) {
@@ -166,7 +171,7 @@ public class Playtime extends JavaPlugin {
         }
 
         final long endTime = System.nanoTime();
-        if (Bukkit.getOnlinePlayers().length > 0) {
+        if (reloaded) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 listener.onPlayerJoin(new PlayerJoinEvent(p, ""));
             }
@@ -471,5 +476,9 @@ public class Playtime extends JavaPlugin {
     public boolean setBusy(boolean busy) {
         isBusy = busy;
         return isBusy;
+    }
+    
+    public boolean firstRun() {
+        return reloaded;
     }
 }

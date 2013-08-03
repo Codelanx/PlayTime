@@ -34,10 +34,10 @@ import org.bukkit.configuration.ConfigurationSection;
  * @version 1.4.0
  */
 public class Data_YAML implements DataHandler {
-    
+
     private YAML yaml;
     private Playtime plugin;
-    
+
     public String getName() {
         return "flatfile";
     }
@@ -48,29 +48,31 @@ public class Data_YAML implements DataHandler {
         }
         return yaml.getFile().getInt("users." + plugin.getBestPlayer(username) + "." + data);
     }
-    
+
     public Map<String, Integer> getTopPlayers(String data, int amount) {
         return new HashMap<String, Integer>();
     }
-    
+
     public Map<String, Integer> getPlayersInRange(String timer, int maximum, int minimum) {
         return new HashMap<String, Integer>();
     }
-    
+
     public void onDeath(String username) {
         plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(plugin, username, "deathtime"), 0L);
     }
-    
+
     public void onLogout(String username) {
         plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(plugin, username, "onlinetime"), 0L);
     }
 
     public void verifyFormat() {
-        ConfigurationSection section = yaml.getFile().getConfigurationSection("users");
-        for (String s : section.getKeys(false)) {
-            yaml.getFile().set("users." + s + ".onlinetime", 0);
+        if (plugin.firstRun()) {
+            ConfigurationSection section = yaml.getFile().getConfigurationSection("users");
+            for (String s : section.getKeys(false)) {
+                yaml.getFile().set("users." + s + ".onlinetime", 0);
+            }
+            yaml.forceSave();
         }
-        yaml.forceSave();
     }
 
     public void init() {
@@ -81,7 +83,7 @@ public class Data_YAML implements DataHandler {
     public void startRunnables() {
         plugin.getExecutiveManager().runAsyncTaskRepeat(new AddRunnable(plugin), 60L, 60L);
     }
-    
+
     public void startConversion(String newType, String... players) {
         plugin.onDisable();
         plugin.getExecutiveManager().runAsyncTask(new StartConvertRunnable(plugin, newType, players), 0L);

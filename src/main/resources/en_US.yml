@@ -9,7 +9,7 @@ command:
       noperm: 'You do not have permission to do that!'
     deathtop:
       disabled-flatfile: '&e/deathtimetop&6 is disabled with &eflatfile&6 data!'
-      title: 'Top survival times'
+      title: 'Top deathtimes'
       title-shown: 'Top survival times (in hours):'
       clear: 'Use &e/deathtimetop clear&6 to remove the leaderboard.'
       console-title: 'Top {0} players for Deathtime (in hours):'
@@ -21,7 +21,7 @@ command:
       noperm: 'You do not have permission to do that!'
     onlinetop:
       disabled-flatfile: '&e/onlinetimetop&6 is disabled with &eflatfile&6 data!'
-      title: 'Top online times'
+      title: 'Top onlinetimes'
       title-shown: 'Top online times (in hours):'
       clear: 'Use &e/onlinetimetop clear&6 to remove the leaderboard.'
       console-title: 'Top {0} players for Onlinetime (in hours):'

@@ -179,12 +179,14 @@ public class Data_MySQL implements DataHandler {
                         }
                     } catch (SQLException e) {
                     }
-                    try {
-                        db.update("UPDATE `playTime` SET `onlinetime`=0");
-                        if (plugin.getDebug() >= 1) {
-                            plugin.getLogger().info(plugin.getCipher().getString("data.mysql.reset-column", "`onlinetime`"));
+                    if (plugin.firstRun()) {
+                        try {
+                            db.update("UPDATE `playTime` SET `onlinetime`=0");
+                            if (plugin.getDebug() >= 1) {
+                                plugin.getLogger().info(plugin.getCipher().getString("data.mysql.reset-column", "`onlinetime`"));
+                            }
+                        } catch (SQLException e) {
                         }
-                    } catch (SQLException e) {
                     }
                     plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.uptodate"));
                 }

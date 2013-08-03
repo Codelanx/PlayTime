@@ -130,12 +130,14 @@ public class Data_SQLite implements DataHandler {
                 plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.sqlite.main.create-table"));
                 db.update("CREATE TABLE playTime ( id INTEGER NOT NULL PRIMARY KEY, username VARCHAR(32) NOT NULL UNIQUE, playtime INTEGER NOT NULL DEFAULT 0, deathtime INTEGER NOT NULL DEFAULT 0, onlinetime INTEGER NOT NULL DEFAULT 0)");
             } else {
-                try {
-                    db.update("UPDATE `playTime` SET `onlinetime`=0");
-                    if (plugin.getDebug() >= 1) {
-                        plugin.getLogger().info(plugin.getCipher().getString("data.sqlite.reset-column", "`onlinetime`"));
+                if (plugin.firstRun()) {
+                    try {
+                        db.update("UPDATE `playTime` SET `onlinetime`=0");
+                        if (plugin.getDebug() >= 1) {
+                            plugin.getLogger().info(plugin.getCipher().getString("data.sqlite.reset-column", "`onlinetime`"));
+                        }
+                    } catch (SQLException e) {
                     }
-                } catch (SQLException e) {
                 }
             }
             db.close();
