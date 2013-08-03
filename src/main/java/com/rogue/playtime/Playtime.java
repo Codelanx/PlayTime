@@ -200,6 +200,7 @@ public class Playtime extends JavaPlugin {
      */
     public void reload(String... names) {
         String reloaded = lang.getString("main.reloaded");
+        this.setBusy(true);
         this.onDisable();
         debug = 0;
         execmanager = null;
@@ -215,7 +216,6 @@ public class Playtime extends JavaPlugin {
         isUpdate = false;
         this.onLoad();
         this.onEnable();
-        
         this.getLogger().info(reloaded);
         for (String s : names) {
             this.getServer().getPlayer(s).sendMessage(__(reloaded));
