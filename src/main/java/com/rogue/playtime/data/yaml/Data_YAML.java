@@ -57,14 +57,6 @@ public class Data_YAML implements DataHandler {
         return new HashMap<String, Integer>();
     }
 
-    public void onDeath(String username) {
-        plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(plugin, username, "deathtime"), 0L);
-    }
-
-    public void onLogout(String username) {
-        plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(plugin, username, "onlinetime"), 0L);
-    }
-
     public void verifyFormat() {
         if (plugin.firstRun()) {
             ConfigurationSection section = yaml.getFile().getConfigurationSection("users");

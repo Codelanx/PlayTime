@@ -112,14 +112,6 @@ public class Data_SQLite implements DataHandler {
         return back;
     }
 
-    public void onDeath(String username) {
-        plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(plugin, username, "deathtime"), 0L);
-    }
-
-    public void onLogout(String username) {
-        plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(plugin, username, "onlinetime"), 0L);
-    }
-
     public void verifyFormat() {
         db = new SQLite();
         plugin.getLogger().info(plugin.getCipher().getString("data.sqlite.main.connecting"));

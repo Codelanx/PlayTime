@@ -74,26 +74,6 @@ public interface DataHandler {
     public abstract Map<String, Integer> getPlayersInRange(String timer, int maximum, int minimum);
     
     /**
-     * Calls an Asynchronous task that resets the player's death timer
-     * 
-     * @since 1.3.0
-     * @version 1.3.0
-     * 
-     * @param username The username to reset
-     */
-    public abstract void onDeath(String username);
-    
-    /**
-     * Calls an Asynchronous task that resets the player's online timer
-     * 
-     * @since 1.3.0
-     * @version 1.3.0
-     * 
-     * @param username The username to reset
-     */
-    public abstract void onLogout(String username);
-    
-    /**
      * A void method used to double-check that the files/sql databases are
      * correctly formatted, and will not cause errors in the future.
      * 

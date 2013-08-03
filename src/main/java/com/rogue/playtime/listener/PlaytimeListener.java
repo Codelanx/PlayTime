@@ -18,6 +18,7 @@ package com.rogue.playtime.listener;
 
 import static com.rogue.playtime.Playtime.__;
 import com.rogue.playtime.Playtime;
+import com.rogue.playtime.runnable.ResetRunnable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -52,7 +53,7 @@ public class PlaytimeListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerDeath(PlayerDeathEvent e) {
         if (plugin.isDeathEnabled()) {
-            plugin.getDataManager().getDataHandler().onDeath(e.getEntity().getName());
+            plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(plugin, e.getEntity().getName(), "deathtime"), 0L);
         }
     }
 
@@ -87,7 +88,7 @@ public class PlaytimeListener implements Listener {
      * the relevant service is enabled.
      *
      * @since 1.2.0
-     * @version 1.3.0
+     * @version 1.4.0
      *
      * @param e The quit event
      */
@@ -97,7 +98,7 @@ public class PlaytimeListener implements Listener {
             plugin.getPlayerHandler().remPlayer(e.getPlayer().getName());
         }
         if (plugin.isOnlineEnabled()) {
-            plugin.getDataManager().getDataHandler().onLogout(e.getPlayer().getName());
+            plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(plugin, e.getPlayer().getName(), "onlinetime"), 0L);
         }
     }
 
