@@ -46,7 +46,7 @@ public class PlaytimeListener implements Listener {
      * Resets a player's death timer on death.
      *
      * @since 1.2.0
-     * @version 1.2.0
+     * @version 1.4.0
      *
      * @param e The death event
      */
