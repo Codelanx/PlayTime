@@ -43,18 +43,52 @@ public class ExecutiveManager {
         es = Executors.newScheduledThreadPool(10);
     }
     
+    /**
+     * Runs a repeating asynchronous task under Playtime
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @param r The runnable to execute
+     * @param startAfter Time (in seconds) to wait before execution
+     * @param delay Time (in seconds) between execution to wait
+     */
     public void runAsyncTaskRepeat(Runnable r, long startAfter, long delay) {
         executives.add(es.scheduleWithFixedDelay(r, startAfter, delay, TimeUnit.SECONDS));
     }
     
+    /**
+     * Runs a single asynchronous task under Playtime
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @param r The runnable to execute
+     * @param delay Time (in seconds) to wait before execution
+     */
     public void runAsyncTask(Runnable r, long delay) {
         executives.add(es.schedule(r, delay, TimeUnit.SECONDS));
     }
     
+    /**
+     * Runs a Callable
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     * 
+     * @param c The callable to execute
+     * @param delay Time (in seconds) to wait before execution
+     */
     public void runCallable(Callable<?> c, long delay) {
         es.schedule(c, delay, TimeUnit.SECONDS);
     }
     
+    /**
+     * Cancels all running tasks/threads under Playtime.
+     * 
+     * @since 1.4.0
+     * @version 1.4.0
+     */
     public void cancelAllTasks() {
         for (ScheduledFuture<?> s : executives) {
             s.cancel(false);
