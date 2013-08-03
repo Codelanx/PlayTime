@@ -15,7 +15,7 @@ events:
     - 'msg %u Here''s some food for being online so much!'
     - 'give %u 260 1'
   examplethree:
-    type: onlinetime
+    type: playtime
     time: 0
     at-login: true
     repeat: false

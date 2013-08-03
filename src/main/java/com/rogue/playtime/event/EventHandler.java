@@ -101,7 +101,7 @@ public class EventHandler {
         if (login) {
             events.put(name, new Event(name, timer, seconds / 60, commands, yaml.getBoolean("events." + name + ".repeat"), login));
         } else {
-            eventTasks.put(name, Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new EventRunnable(plugin, name, timer, seconds / 60, (seconds + interval) / 60, commands, yaml.getBoolean("events." + name + ".repeat")), interval * 20L, interval * 20L));
+            eventTasks.put(name, Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new EventRunnable(plugin, name, timer, seconds / 60, (seconds + interval) / 60, commands, yaml.getBoolean("events." + name + ".repeat")), interval * 1200L, interval * 1200L));
         }
     }
     
@@ -176,7 +176,7 @@ public class EventHandler {
         for (Event e : events.values()) {
             if (e.isLoginEvent()) {
                 for (String c : e.getCommands()) {
-                    if (this.isMessage(c)) {
+                    if (this.isMessage(c.split(" ")[0])) {
                         Bukkit.getPlayer(username).sendMessage(__(this.replaceMessage(c).replace("%u", username).replace("%t", this.toReadable(plugin.getDataManager().getDataHandler().getValue(e.getType(), username)))));
                     } else {
                         Bukkit.dispatchCommand(ccs, c.replace("%u", username).replace("%t", plugin.getDataManager().getDataHandler().getValue(e.getType(), username) + ""));
@@ -248,6 +248,6 @@ public class EventHandler {
     public String toReadable(int time) {
         long minutes = time % 60;
         long hours = time / 60;
-        return ((hours >= 1) ? ((hours != 1) ? hours + " " + plugin.getCipher().getString("event.hours") : hours + " " + plugin.getCipher().getString("event.hour")) : "") + " " + ((minutes != 1) ? minutes + " " + plugin.getCipher().getString("event.minutes") + "." : minutes + " " + plugin.getCipher().getString("event.minute") + ".");
+        return ((hours >= 1) ? ((hours != 1) ? hours + " " + plugin.getCipher().getString("event.hours") + " " : hours + " " + plugin.getCipher().getString("event.hour")) + " " : "") + ((minutes != 1) ? minutes + " " + plugin.getCipher().getString("event.minutes") + "." : minutes + " " + plugin.getCipher().getString("event.minute") + ".");
     }
 }

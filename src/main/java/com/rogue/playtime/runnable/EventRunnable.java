@@ -113,9 +113,13 @@ public class EventRunnable extends BukkitRunnable {
             if (!users.isEmpty()) {
                 for (String user : users.keySet()) {
                     for (String cmd : run) {
+                        System.out.println("cmd = " + cmd.split(" ")[0]);
+                        
                         if (event.isMessage(cmd.split(" ")[0])) {
+                            System.out.println("is message!");
                             Bukkit.getScheduler().callSyncMethod(plugin, new SendMessageCallable(user, event.replaceMessage(cmd).replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))));
                         } else {
+                            System.out.println("is not message!");
                             Bukkit.getScheduler().callSyncMethod(plugin, new ConsoleCommandCallable(cmd.replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))));
                         }
                     }
