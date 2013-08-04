@@ -42,8 +42,12 @@ public class DataManager {
      * by the user. By default, it will use flatfile if the user enters
      * something that isn't compatible.
      * 
+     * Flatfile storage is currently broken, thus it will only load mysql or
+     * sqlite. If the type set is flatfile, it will let the user know what it is
+     * doing.
+     * 
      * @since 1.3.0
-     * @version 1.3.0
+     * @version 1.4.0
      * 
      * @param type The type of data manager to use
      */
@@ -51,11 +55,19 @@ public class DataManager {
         type = type.toLowerCase();
         if (type.equals("mysql")) {
             data = new Data_MySQL();
+        } else {
+            data = new Data_SQLite();
+        }
+        if (type.equals("flatfile")) {
+            plugin.getLogger().severe(plugin.getCipher().getString("data.manager.no-flat"));
+        }
+        /*if (type.equals("mysql")) {
+            data = new Data_MySQL();
         } else if (type.equals("sqlite")) {
             data = new Data_SQLite();
         } else {
             data = new Data_YAML();
-        }
+        }*/
     }
     
     /**

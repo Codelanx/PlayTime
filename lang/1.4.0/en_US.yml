@@ -76,6 +76,8 @@ data:
     instance:
       error-create: 'Error creating user YAML file!'
       error-save: 'Error saving user YAML configuration!'
+  manager:
+    no-flat: 'Flatfile storage is currently broken! Using SQLite...'
 event:
   hours: 'hours'
   minutes: 'minutes'
