@@ -20,7 +20,6 @@ import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.DataHandler;
 import com.rogue.playtime.runnable.StartConvertRunnable;
 import com.rogue.playtime.runnable.AddRunnable;
-import com.rogue.playtime.runnable.ResetRunnable;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;

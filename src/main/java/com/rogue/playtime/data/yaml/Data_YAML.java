@@ -20,7 +20,6 @@ import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.DataHandler;
 import com.rogue.playtime.runnable.StartConvertRunnable;
 import com.rogue.playtime.runnable.AddRunnable;
-import com.rogue.playtime.runnable.ResetRunnable;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.Bukkit;
@@ -53,7 +52,7 @@ public class Data_YAML implements DataHandler {
         return new HashMap<String, Integer>();
     }
 
-    public Map<String, Integer> getPlayersInRange(String timer, int maximum, int minimum) {
+    public Map<String, Integer> getPlayersInRange(String timer, int minimum, int maximum) {
         return new HashMap<String, Integer>();
     }
 

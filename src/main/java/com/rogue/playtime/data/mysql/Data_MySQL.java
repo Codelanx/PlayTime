@@ -19,7 +19,6 @@ package com.rogue.playtime.data.mysql;
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.DataHandler;
 import com.rogue.playtime.runnable.AddRunnable;
-import com.rogue.playtime.runnable.ResetRunnable;
 import com.rogue.playtime.runnable.StartConvertRunnable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -94,10 +93,10 @@ public class Data_MySQL implements DataHandler {
         return players;
     }
 
-    public Map<String, Integer> getPlayersInRange(String timer, int maximum, int minimum) {
+    public Map<String, Integer> getPlayersInRange(String timer, int minimum, int maximum) {
         db = new MySQL();
         Map<String, Integer> back = new HashMap();
-        try {
+            try {
             db.open();
             ResultSet ret = db.query("SELECT * FROM `playTime` WHERE `" + timer + "` BETWEEN " + minimum + " AND " + maximum);
             while (ret.next()) {

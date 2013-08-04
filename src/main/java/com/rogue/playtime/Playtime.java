@@ -204,9 +204,14 @@ public class Playtime extends JavaPlugin {
      * @param names Players to notify when the reload is complete
      */
     public void reload(String... names) {
-        String reloaded = lang.getString("main.reloaded");
+        String reloadDone = lang.getString("main.reloaded");
         this.setBusy(true);
         this.onDisable();
+        try {
+            Thread.sleep(250L);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
+        }
         debug = 0;
         execmanager = null;
         listener = null;
@@ -221,9 +226,9 @@ public class Playtime extends JavaPlugin {
         isUpdate = false;
         this.onLoad();
         this.onEnable();
-        this.getLogger().info(reloaded);
+        this.getLogger().info(reloadDone);
         for (String s : names) {
-            this.getServer().getPlayer(s).sendMessage(__(reloaded));
+            this.getServer().getPlayer(s).sendMessage(__(reloadDone));
         }
     }
 
@@ -479,6 +484,6 @@ public class Playtime extends JavaPlugin {
     }
     
     public boolean firstRun() {
-        return reloaded;
+        return !reloaded;
     }
 }

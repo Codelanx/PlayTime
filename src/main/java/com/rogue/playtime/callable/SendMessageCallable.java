@@ -27,10 +27,10 @@ import org.bukkit.Bukkit;
  * @version 1.4.0
  */
 public class SendMessageCallable implements Callable {
-    
+
     private final String player;
     private final String message;
-    
+
     public SendMessageCallable(String playername, String messagetext) {
         player = playername;
         message = messagetext;
@@ -40,5 +40,4 @@ public class SendMessageCallable implements Callable {
         Bukkit.getPlayer(player).sendMessage(__(message));
         return null;
     }
-
 }

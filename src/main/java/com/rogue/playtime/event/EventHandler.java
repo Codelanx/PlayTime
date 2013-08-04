@@ -95,11 +95,11 @@ public class EventHandler {
         if (commands.isEmpty()) {
             return;
         }
-        Integer seconds = yaml.getInt("events." + name + ".time");
+        Integer minutes = yaml.getInt("events." + name + ".time");
         if (login) {
-            events.put(name, new Event(name, timer, seconds / 60, commands, yaml.getBoolean("events." + name + ".repeat"), login));
+            events.put(name, new Event(name, timer, minutes, commands, yaml.getBoolean("events." + name + ".repeat"), login));
         } else {
-            plugin.getExecutiveManager().runAsyncTaskRepeat(new EventRunnable(plugin, name, timer, seconds / 60, (seconds + interval) / 60, commands, yaml.getBoolean("events." + name + ".repeat")), interval * 60L, interval * 60L);
+            plugin.getExecutiveManager().runAsyncTaskRepeat(new EventRunnable(plugin, name, timer, minutes, (minutes + interval), commands, yaml.getBoolean("events." + name + ".repeat")), interval * 60L, interval * 60L);
         }
     }
     
@@ -121,9 +121,9 @@ public class EventHandler {
         if (commands.isEmpty()) {
             return;
         }
-        Integer seconds = yaml.getInt("events." + name + ".time");
+        Integer minutes = yaml.getInt("events." + name + ".time");
         boolean repeat = yaml.getBoolean("events." + name + ".repeat");
-        events.put(name, new Event(name, timer, seconds / 60, commands, yaml.getBoolean("events." + name + ".repeat"), login));
+        events.put(name, new Event(name, timer, minutes, commands, yaml.getBoolean("events." + name + ".repeat"), login));
     }
 
     /**
