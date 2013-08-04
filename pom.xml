@@ -9,7 +9,7 @@
   <repositories>
         <repository>
             <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/content/repositories/snapshots/</url>
+            <url>http://repo.bukkit.org/content/repositories/releases/</url>
         </repository>
     </repositories>
     <licenses>
@@ -41,7 +41,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.6.2-R0.1-SNAPSHOT</version>
+            <version>1.6.2-R0.1</version>
             <type>jar</type>
         </dependency>
     </dependencies>
