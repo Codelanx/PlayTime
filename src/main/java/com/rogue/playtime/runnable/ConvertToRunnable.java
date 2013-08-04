@@ -44,7 +44,7 @@ public class ConvertToRunnable implements Runnable {
     }
 
     public void run() {
-        DataManager dm = new DataManager(plugin);
+        DataManager dm = new DataManager(plugin, false);
         if (convert.equals("mysql")) {
             plugin.getConfigurationLoader().getConfig().set("data.manager", convert);
             plugin.getConfigurationLoader().saveConfig();

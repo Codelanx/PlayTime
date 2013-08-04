@@ -29,26 +29,53 @@ import com.rogue.playtime.runnable.ConvertToRunnable;
  * @version 1.4.0
  */
 public class DataManager {
-    
+
     protected final Playtime plugin;
     protected DataHandler data;
-    
-    public DataManager(Playtime p) {
-        plugin = p;
-    }
-    
+
     /**
-     * Selects the proper data manager to use, based on the configuration set
-     * by the user. By default, it will use flatfile if the user enters
-     * something that isn't compatible.
-     * 
-     * Flatfile storage is currently broken, thus it will only load mysql or
-     * sqlite. If the type set is flatfile, it will let the user know what it is
-     * doing.
-     * 
+     * The constuctor for DataManager.
+     *
      * @since 1.3.0
      * @version 1.4.0
-     * 
+     *
+     * @param p The main plugin instance
+     * @param automatic Whether to automatically select and run necessary
+     * operations
+     */
+    public DataManager(Playtime p, boolean automatic) {
+        plugin = p;
+        if (automatic) {
+            startData();
+        }
+    }
+
+    /**
+     * Begins the process for selecting the data manager and starting necessary
+     * processes.
+     *
+     * Flatfile storage is currently broken, thus it will only load mysql or
+     * sqlite. If the type set is flatfile, it will let the user know what it is
+     * doing, and convert any yaml data to sqlite.
+     *
+     * @since 1.4.0
+     * @version 1.4.0
+     */
+    private void startData() {
+        this.select(plugin.getConfigurationLoader().getString("data.manager"));
+        this.setup();
+        this.start();
+
+    }
+
+    /**
+     * Selects the proper data manager to use, based on the configuration set by
+     * the user. By default, it will use flatfile if the user enters something
+     * that isn't compatible.
+     *
+     * @since 1.3.0
+     * @version 1.4.0
+     *
      * @param type The type of data manager to use
      */
     public void select(String type) {
@@ -61,18 +88,11 @@ public class DataManager {
         if (type.equals("flatfile")) {
             plugin.getLogger().severe(plugin.getCipher().getString("data.manager.no-flat"));
         }
-        /*if (type.equals("mysql")) {
-            data = new Data_MySQL();
-        } else if (type.equals("sqlite")) {
-            data = new Data_SQLite();
-        } else {
-            data = new Data_YAML();
-        }*/
     }
-    
+
     /**
      * Runs the startup process for the data manager at hand.
-     * 
+     *
      * @since 1.3.0
      * @version 1.3.0
      */
@@ -80,48 +100,48 @@ public class DataManager {
         data.init();
         data.verifyFormat();
     }
-    
+
     /**
      * Starts the data updating process
-     * 
+     *
      * @since 1.4.0
      * @version 1.4.0
      */
     public void start() {
         data.startRunnables();
     }
-    
+
     /**
      * Gets the interface in use for handling data. (MySQL, SQLite, or YAML)
-     * 
+     *
      * @since 1.4.0
      * @version 1.4.0
-     * 
+     *
      * @return Data Handler
      */
     public DataHandler getDataHandler() {
         return data;
     }
-    
+
     /**
      * Starts the conversion process from one data type to another
-     * 
+     *
      * @since 1.4.0
      * @version 1.4.0
-     * 
+     *
      * @param newType The new data type (mysql, sqlite, or flatfile)
      * @param players Any players to notify after the completion
      */
     public void convertData(String newType, String... players) {
         data.startConversion(newType, players);
     }
-    
+
     /**
      * Executes the asynchronous converter for Playtime
-     * 
+     *
      * @since 1.4.0
      * @version 1.4.0
-     * 
+     *
      * @param newType The new data type (mysql, sqlite, or flatfile)
      * @param query The query to be used in the conversion process
      * @param players Any players to notify after the completion
@@ -129,5 +149,4 @@ public class DataManager {
     public void convertTo(String newType, String query, String... players) {
         plugin.getExecutiveManager().runAsyncTask(new ConvertToRunnable(newType, plugin, query, players), 0L);
     }
-
 }

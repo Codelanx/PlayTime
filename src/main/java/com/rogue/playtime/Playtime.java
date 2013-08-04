@@ -130,10 +130,7 @@ public class Playtime extends JavaPlugin {
         }
 
         this.getLogger().info(lang.getString("main.data"));
-        dmanager = new DataManager(this);
-        dmanager.select(cloader.getString("data.manager"));
-        dmanager.setup();
-        dmanager.start();
+        dmanager = new DataManager(this, true);
         
         this.getLogger().info(lang.getString("main.command"));
         chandler = new CommandHandler(this);
