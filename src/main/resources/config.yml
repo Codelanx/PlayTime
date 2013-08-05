@@ -1,7 +1,9 @@
 general:
   debug-level: 0
   update-check: true
-  language: en_US
+language:
+  use-github: true
+  locale: en_US
 check:
   death-time: true
   online-time: true

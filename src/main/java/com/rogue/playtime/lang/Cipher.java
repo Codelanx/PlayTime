@@ -32,7 +32,7 @@ import org.bukkit.plugin.Plugin;
 
 /**
  * Adapted from TotalPermissions
- * 
+ *
  * @version 1.4.0
  * @author 1Rogue
  * @since 1.4.0
@@ -46,7 +46,7 @@ public class Cipher {
     private final String language;
 
     public Cipher(Playtime plugin) {
-        language = plugin.getConfigurationLoader().getString("general.language");
+        language = plugin.getConfigurationLoader().getString("language.locale");
         //load file from github in preps for future use
         if (language.equalsIgnoreCase("custom")) {
             FileConfiguration file = this.getFromFolder(plugin, language);
@@ -56,12 +56,14 @@ public class Cipher {
             }
         }
         FileConfiguration github = null;
-        try {
-            github = getFromGithub(plugin, language);
-        } catch (FileNotFoundException e) {
-            plugin.getLogger().log(Level.SEVERE, "Cannot find lang file {0}!", language);
-        } catch (IOException e) {
-            plugin.getLogger().log(Level.SEVERE, "Fatal error occured while retrieving lang files", e);
+        if (plugin.getConfigurationLoader().getBoolean("language.use-github")) {
+            try {
+                github = getFromGithub(plugin, language);
+            } catch (FileNotFoundException e) {
+                plugin.getLogger().log(Level.SEVERE, "Cannot find lang file {0}!", language);
+            } catch (IOException e) {
+                plugin.getLogger().log(Level.SEVERE, "Fatal error occured while retrieving lang files", e);
+            }
         }
         try {
             //first see if there is a lang file
@@ -107,7 +109,7 @@ public class Cipher {
     /**
      * Gets the message for this key in the used language. If the key does not
      * exist, this will default to use the en_US in the jarfile.
-     * 
+     *
      * @since 1.4.0
      * @version 1.4.0
      *
@@ -131,13 +133,13 @@ public class Cipher {
         }
         return ChatColor.translateAlternateColorCodes('&', string);
     }
-    
+
     /**
      * Gets the lang file from the plugin data folder
-     * 
+     *
      * @since 1.4.0
      * @version 1.4.0
-     * 
+     *
      * @param pl The plugin
      * @param lang The lang file to use
      * @return The lang file as a FileConfiguration
@@ -150,13 +152,13 @@ public class Cipher {
             return null;
         }
     }
-    
+
     /**
      * Gets the lang file from the plugin jarfile
-     * 
+     *
      * @since 1.4.0
      * @version 1.4.0
-     * 
+     *
      * @param pl The plugin
      * @param lang The lang file to use
      * @return The lang file as a FileConfiguration
@@ -169,13 +171,13 @@ public class Cipher {
             return null;
         }
     }
-    
+
     /**
      * Gets the lang file from github
-     * 
+     *
      * @since 1.4.0
      * @version 1.4.0
-     * 
+     *
      * @param pl The plugin
      * @param lang The lang file to use
      * @return The lang file as a FileConfiguration

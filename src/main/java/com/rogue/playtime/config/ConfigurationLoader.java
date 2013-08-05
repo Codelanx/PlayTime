@@ -59,7 +59,8 @@ public class ConfigurationLoader {
         yaml = YamlConfiguration.loadConfiguration(file);
         if (!yaml.isSet("general.debug-level")) { yaml.set("general.debug-level", 0); }
         if (!yaml.isSet("general.update-check")) { yaml.set("general.update-check", true); }
-        if (!yaml.isSet("general.language")) { yaml.set("general.language", "en_US"); }
+        if (!yaml.isSet("language.use-github")) { yaml.set("language.use-github", true); }
+        if (!yaml.isSet("language.locale")) { yaml.set("language.locale", "en_US"); }
         if (!yaml.isSet("check.death-time")) { yaml.set("check.death-time", true); }
         if (!yaml.isSet("check.online-time")) { yaml.set("check.online-time", true); }
         if (!yaml.isSet("afk.enabled")) { yaml.set("afk.enabled", true); }
