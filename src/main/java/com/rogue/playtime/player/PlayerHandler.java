@@ -44,45 +44,51 @@ public class PlayerHandler {
      * Updates the AFK-start time for the provided player.
      *
      * @since 1.2.0
-     * @version 1.2.0
+     * @version 1.4.0
      *
      * @param name The relevant player's name
      * @param time The time being AFK started
      */
     public void updatePlayer(String name, int time) {
         PlaytimePlayer temp = this.getPlayer(name);
-        temp.setTime(time);
-        this.putPlayer(name, temp);
+        if (temp != null) {
+            temp.setTime(time);
+            this.putPlayer(name, temp);
+        }
     }
 
     /**
      * Updates the AFK-start location for the provided player.
      *
      * @since 1.2.0
-     * @version 1.2.0
+     * @version 1.4.0
      *
      * @param name The relevant player's name
      * @param place The place the player was at the start of being AFK
      */
     public void updatePlayer(String name, Location place) {
         PlaytimePlayer temp = this.getPlayer(name.toLowerCase());
-        temp.setSavedLocation(place);
-        this.putPlayer(name.toLowerCase(), temp);
+        if (temp != null) {
+            temp.setSavedLocation(place);
+            this.putPlayer(name.toLowerCase(), temp);
+        }
     }
 
     /**
      * Updates the AFK-status for the provided player.
      *
      * @since 1.2.0
-     * @version 1.2.0
+     * @version 1.4.0
      *
      * @param name The relevant player's name
      * @param afk Whether the player is AFK or not
      */
     public void updatePlayer(String name, boolean afk) {
         PlaytimePlayer temp = this.getPlayer(name.toLowerCase());
-        temp.setAFK(afk);
-        this.putPlayer(name.toLowerCase(), temp);
+        if (temp != null) {
+            temp.setAFK(afk);
+            this.putPlayer(name.toLowerCase(), temp);
+        }
     }
 
     /**
@@ -141,12 +147,12 @@ public class PlayerHandler {
      * Returns whether or not the player is AFK.
      *
      * @since 1.2.0
-     * @version 1.2.0
+     * @version 1.4.0
      *
      * @return AFK status
      */
     public boolean isAFK(String name) {
-        return players.get(name.toLowerCase()).isAFK();
+        return this.getPlayer(name.toLowerCase()).isAFK();
     }
 
     /**
@@ -177,24 +183,11 @@ public class PlayerHandler {
     }
 
     /**
-     * Sets whether or not the player is AFK.
-     *
-     * @since 1.2.0
-     * @version 1.2.0
-     *
-     * @param name The player name
-     * @param value Whether or not the player is AFK
-     */
-    public void changeAFK(String name, boolean value) {
-        this.getPlayer(name.toLowerCase()).setAFK(value);
-    }
-
-    /**
      * Increments the value for a player's AFK time.
-     * 
+     *
      * @since 1.2.0
      * @version 1.4.0
-     * 
+     *
      * @param name The username to increment time for
      */
     public void incrementTime(String name) {
@@ -206,13 +199,13 @@ public class PlayerHandler {
             plugin.getPlayerHandler().updatePlayer(name, true);
         }
     }
-    
+
     /**
      * Gets the timeout value for AFK management in seconds
-     * 
+     *
      * @since 1.2.0
      * @version 1.2.0
-     * 
+     *
      * @return The int value of the AFK timeout
      */
     public int getAFKTimeout() {
@@ -221,10 +214,10 @@ public class PlayerHandler {
 
     /**
      * Gets the interval at which the plugin checks for AFK people in seconds
-     * 
+     *
      * @since 1.2.0
      * @version 1.2.0
-     * 
+     *
      * @return The int value of the AFK checking interval
      */
     public int getAFKCheckInterval() {
