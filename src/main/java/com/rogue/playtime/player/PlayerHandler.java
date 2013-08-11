@@ -25,7 +25,7 @@ import org.bukkit.Location;
  *
  * @since 1.2.0
  * @author 1Rogue
- * @version 1.4.0
+ * @version 1.4.1
  */
 public class PlayerHandler {
 
@@ -44,7 +44,7 @@ public class PlayerHandler {
      * Updates the AFK-start time for the provided player.
      *
      * @since 1.2.0
-     * @version 1.4.0
+     * @version 1.4.1
      *
      * @param name The relevant player's name
      * @param time The time being AFK started
@@ -61,7 +61,7 @@ public class PlayerHandler {
      * Updates the AFK-start location for the provided player.
      *
      * @since 1.2.0
-     * @version 1.4.0
+     * @version 1.4.1
      *
      * @param name The relevant player's name
      * @param place The place the player was at the start of being AFK
@@ -78,7 +78,7 @@ public class PlayerHandler {
      * Updates the AFK-status for the provided player.
      *
      * @since 1.2.0
-     * @version 1.4.0
+     * @version 1.4.1
      *
      * @param name The relevant player's name
      * @param afk Whether the player is AFK or not
@@ -147,7 +147,7 @@ public class PlayerHandler {
      * Returns whether or not the player is AFK.
      *
      * @since 1.2.0
-     * @version 1.4.0
+     * @version 1.4.1
      *
      * @return AFK status
      */
@@ -186,17 +186,20 @@ public class PlayerHandler {
      * Increments the value for a player's AFK time.
      *
      * @since 1.2.0
-     * @version 1.4.0
+     * @version 1.4.1
      *
      * @param name The username to increment time for
      */
     public void incrementTime(String name) {
-        this.getPlayer(name.toLowerCase()).setTime(this.getPlayer(name.toLowerCase()).getTime() + timer);
-        if (checkTime(name) >= timeEnd) {
-            if (plugin.getDebug() >= 2) {
-                plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("player.set-afk", name));
+        PlaytimePlayer temp = this.getPlayer(name.toLowerCase());
+        if (temp != null) {
+            temp.setTime(this.getPlayer(name.toLowerCase()).getTime() + timer);
+            if (this.checkTime(name) >= timeEnd) {
+                if (plugin.getDebug() >= 2) {
+                    plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("player.set-afk", name));
+                }
+                plugin.getPlayerHandler().updatePlayer(name, true);
             }
-            plugin.getPlayerHandler().updatePlayer(name, true);
         }
     }
 
