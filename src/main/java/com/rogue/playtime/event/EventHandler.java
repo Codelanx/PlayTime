@@ -63,6 +63,9 @@ public class EventHandler {
         }
         yaml = YamlConfiguration.loadConfiguration(file);
         ConfigurationSection eventSection = yaml.getConfigurationSection("events");
+        if (eventSection == null) {
+            return;
+        }
         int interval = plugin.getConfigurationLoader().getInt("events.interval");
         if (plugin.getDataManager().getDataHandler().getName().equals("flatfile")) {
             for (String s : eventSection.getKeys(false)) {
