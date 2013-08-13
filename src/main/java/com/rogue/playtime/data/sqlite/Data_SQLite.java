@@ -125,7 +125,7 @@ public class Data_SQLite implements DataHandler {
                     try {
                         db.update("UPDATE `playTime` SET `onlinetime`=0");
                         if (plugin.getDebug() >= 1) {
-                            plugin.getLogger().info(plugin.getCipher().getString("data.sqlite.reset-column", "`onlinetime`"));
+                            plugin.getLogger().info(plugin.getCipher().getString("data.sqlite.main.reset-column", "`onlinetime`"));
                         }
                     } catch (SQLException e) {
                     }

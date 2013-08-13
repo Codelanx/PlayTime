@@ -174,7 +174,7 @@ public class Data_MySQL implements DataHandler {
                         try {
                             db.update("UPDATE `playTime` SET `onlinetime`=0");
                             if (plugin.getDebug() >= 1) {
-                                plugin.getLogger().info(plugin.getCipher().getString("data.mysql.reset-column", "`onlinetime`"));
+                                plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.reset-column", "`onlinetime`"));
                             }
                         } catch (SQLException e) {
                         }
