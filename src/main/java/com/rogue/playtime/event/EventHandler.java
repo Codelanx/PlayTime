@@ -223,16 +223,14 @@ public class EventHandler {
     }
     
     /**
-     * Returns an estimation of how long SQLite conversion will take based on
-     * the number of rows required to add. The converter uses individual INSERT
-     * statements for each row, which is unfortunate due to SQLite's limitations
-     * on multiple values within inserts or union selects.
+     * Returns a readable string, converting a value of minutes into hours and
+     * minutes.
      * 
      * @since 1.4.0
      * @version 1.4.0
      * 
-     * @param rows The number of rows to evaluate
-     * @return The estimated time as a readable string
+     * @param time The time in minutes to evaluate
+     * @return The time in hours and minutes in readable form.
      */
     public String toReadable(int time) {
         long minutes = time % 60;
