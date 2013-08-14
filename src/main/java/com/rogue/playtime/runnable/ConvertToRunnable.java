@@ -114,6 +114,6 @@ public class ConvertToRunnable implements Runnable {
         long time = Math.round(rows / (369 + ((2 / 3) - 0.2)));
         long seconds = time % 60;
         long minutes = time / 60;
-        return ((minutes >= 1) ? ((minutes != 1) ? minutes + " " + plugin.getCipher().getString("runnable.convertto.minutes") : minutes + " " + plugin.getCipher().getString("runnable.convertto.minute")) : "") + " " + ((seconds != 1) ? seconds + " " + plugin.getCipher().getString("runnable.convertto.seconds") + "." : seconds + " " + plugin.getCipher().getString("runnable.convertto.second") + ".");
+        return ((minutes >= 1) ? ((minutes != 1) ? minutes + " " + plugin.getCipher().getString("variables.minutes") : minutes + " " + plugin.getCipher().getString("variables.minute")) : "") + " " + ((seconds != 1) ? seconds + " " + plugin.getCipher().getString("variables.seconds") + "." : seconds + " " + plugin.getCipher().getString("variables.second") + ".");
     }
 }

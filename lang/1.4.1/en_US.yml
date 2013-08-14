@@ -128,3 +128,11 @@ main:
   event-disabled: 'Disabling event system!'
   enabled: 'Enabled! ({0})'
   reloaded: 'Playtime reloaded!'
+variables:
+  second: 'second'
+  seconds: 'seconds'
+  minute: 'minute'
+  minutes: 'minutes'
+  hour: 'hour'
+  hours: 'hours'
+  and: 'and'

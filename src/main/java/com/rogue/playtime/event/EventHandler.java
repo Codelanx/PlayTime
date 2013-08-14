@@ -237,6 +237,6 @@ public class EventHandler {
     public String toReadable(int time) {
         long minutes = time % 60;
         long hours = time / 60;
-        return ((hours >= 1) ? ((hours != 1) ? hours + " " + plugin.getCipher().getString("event.hours") + " " : hours + " " + plugin.getCipher().getString("event.hour")) + " " : "") + ((minutes != 1) ? minutes + " " + plugin.getCipher().getString("event.minutes") + "." : minutes + " " + plugin.getCipher().getString("event.minute") + ".");
+        return ((hours >= 1) ? ((hours != 1) ? hours + " " + plugin.getCipher().getString("variables.hours") + " " : hours + " " + plugin.getCipher().getString("variables.hour")) + " " : "") + ((minutes != 1) ? minutes + " " + plugin.getCipher().getString("variables.minutes") + "." : minutes + " " + plugin.getCipher().getString("variables.minute") + ".");
     }
 }

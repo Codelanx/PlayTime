@@ -46,7 +46,7 @@ command:
       baddata: 'Unbekannter Datenwert ''{0}'''
       version: 'Version &e{0}&f - &6Developed by 1Rogue'
   handler:
-    busy: 'playTime ist momentan mit einer Funktion beschäftigt, bitte versuch es in einer Minute nochmal!'
+    busy: 'Playtime ist momentan mit einer Funktion beschäftigt, bitte versuch es in einer Minute nochmal!'
 data:
   mysql:
     main:
@@ -78,11 +78,6 @@ data:
       error-save: 'Fehler beim speichern der Nutzer YAML Konfiguration!'
   manager:
     no-flat: 'Flatfile Speicher ist zur Zeit defekt! Verwende SQLite...'
-event:
-  hours: 'Stunden'
-  minutes: 'Minuten'
-  hour: 'Stunde'
-  minute: 'Minute'
 listener:
   update: 'Ein Update für playTime ist verfügbar!'
 player:
@@ -101,10 +96,6 @@ runnable:
     rows: 'Ergänze {0} Reihen in der SQLite Datenbasis. Geschätzte Zeit: {1}'
     complete: 'Umwandlung abgeschlossen!'
     noflat: 'Umwandlung zu flat file Speicher nicht möglich!'
-    second: 'Sekunde'
-    minute: 'Minute'
-    seconds: 'Sekunden'
-    minutes: 'Minuten'
   reset:
     error: 'Fehler beim aktualisieren der Zeit für {0}'
   startconvert:
@@ -128,3 +119,11 @@ main:
   event-disabled: 'Disabling event system!'
   enabled: 'Enabled! ({0})'
   reloaded: 'Playtime reloaded!'
+variables:
+  second: 'sekunde'
+  seconds: 'sekunden'
+  minute: 'minute'
+  minutes: 'minuten'
+  hour: 'stunde'
+  hours: 'stunden'
+  and: 'und'
