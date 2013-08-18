@@ -118,7 +118,7 @@ public class Data_MySQL implements DataHandler {
             if (db.checkConnection()) {
                 plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.connect-success"));
                 if (!db.checkTable("playTime")) {
-                    plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.mysql.create-table", MySQL_Vars.DATABASE));
+                    plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.mysql.create-table", plugin.getConfig().getString("managers.mysql.database")));
                     int result = db.update("CREATE TABLE `playTime` ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL DEFAULT 0, deathtime int NOT NULL DEFAULT 0, onlinetime int NOT NULL DEFAULT 0, PRIMARY KEY (id), UNIQUE KEY (username)) ENGINE=MyISAM;");
                 } else {
                     try {
@@ -189,11 +189,7 @@ public class Data_MySQL implements DataHandler {
     }
 
     public void init() {
-        MySQL_Vars.HOST = plugin.getConfig().getString("managers.mysql.host");
-        MySQL_Vars.DATABASE = plugin.getConfig().getString("managers.mysql.database");
-        MySQL_Vars.USER = plugin.getConfig().getString("managers.mysql.username");
-        MySQL_Vars.PASS = plugin.getConfig().getString("managers.mysql.password");
-        MySQL_Vars.PORT = plugin.getConfig().getString("managers.mysql.port");
+        db = new MySQL(plugin.getConfig().getString("managers.mysql.host"), plugin.getConfig().getString("managers.mysql.username"), plugin.getConfig().getString("managers.mysql.password"), plugin.getConfig().getString("managers.mysql.database"), plugin.getConfig().getString("managers.mysql.port"));
     }
 
     public void startRunnables() {
@@ -202,7 +198,6 @@ public class Data_MySQL implements DataHandler {
             db.open();
             if (db.checkConnection()) {
                 plugin.getExecutiveManager().runAsyncTaskRepeat(new AddRunnable(plugin), 60L, 60L);
-                db.close();
             } else {
                 plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.error"));
                 plugin.getServer().getPluginManager().disablePlugin(plugin);

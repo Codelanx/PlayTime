@@ -16,7 +16,7 @@
  */
 package com.rogue.playtime.event;
 
-import static com.rogue.playtime.Playtime.__;
+import static com.rogue.playtime.Playtime._;
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.runnable.EventRunnable;
 import java.io.File;
@@ -156,7 +156,7 @@ public class EventHandler {
         for (String s : fire) {
             for (String c : events.get(s).getCommands()) {
                 if (this.isMessage(c)) {
-                    Bukkit.getPlayer(username).sendMessage(__(this.replaceMessage(c).replace("%u", username).replace("%t", plugin.getDataManager().getDataHandler().getValue(events.get(s).getType(), username) + "")));
+                    Bukkit.getPlayer(username).sendMessage(_(this.replaceMessage(c).replace("%u", username).replace("%t", plugin.getDataManager().getDataHandler().getValue(events.get(s).getType(), username) + "")));
                 } else {
                     Bukkit.dispatchCommand(ccs, c.replace("%u", username).replace("%t", plugin.getDataManager().getDataHandler().getValue(events.get(s).getType(), username) + ""));
                 }
@@ -178,7 +178,7 @@ public class EventHandler {
             if (e.isLoginEvent()) {
                 for (String c : e.getCommands()) {
                     if (this.isMessage(c.split(" ")[0])) {
-                        Bukkit.getPlayer(username).sendMessage(__(this.replaceMessage(c).replace("%u", username).replace("%t", this.toReadable(plugin.getDataManager().getDataHandler().getValue(e.getType(), username)))));
+                        Bukkit.getPlayer(username).sendMessage(_(this.replaceMessage(c).replace("%u", username).replace("%t", this.toReadable(plugin.getDataManager().getDataHandler().getValue(e.getType(), username)))));
                     } else {
                         Bukkit.dispatchCommand(ccs, c.replace("%u", username).replace("%t", plugin.getDataManager().getDataHandler().getValue(e.getType(), username) + ""));
                     }
@@ -227,7 +227,7 @@ public class EventHandler {
      * minutes.
      * 
      * @since 1.4.0
-     * @version 1.4.0
+     * @version 1.4.1
      * 
      * @param time The time in minutes to evaluate
      * @return The time in hours and minutes in readable form.
@@ -235,6 +235,6 @@ public class EventHandler {
     public String toReadable(int time) {
         long minutes = time % 60;
         long hours = time / 60;
-        return ((hours >= 1) ? ((hours != 1) ? hours + " " + plugin.getCipher().getString("variables.hours") + " " : hours + " " + plugin.getCipher().getString("variables.hour")) + " " : "") + ((minutes != 1) ? minutes + " " + plugin.getCipher().getString("variables.minutes") + "." : minutes + " " + plugin.getCipher().getString("variables.minute") + ".");
+        return ((hours >= 1) ? hours + " " + ((hours != 1) ? plugin.getCipher().getString("variables.hours") : plugin.getCipher().getString("variables.hours")) + " " : "") + minutes + " " + ((minutes != 1) ? plugin.getCipher().getString("variables.minutes") : plugin.getCipher().getString("variables.minute")) + ".";
     }
 }
