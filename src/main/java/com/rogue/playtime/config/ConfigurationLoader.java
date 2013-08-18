@@ -66,6 +66,7 @@ public class ConfigurationLoader {
         if (!yaml.isSet("afk.enabled")) { yaml.set("afk.enabled", true); }
         if (!yaml.isSet("afk.interval")) { yaml.set("afk.interval", 60); }
         if (!yaml.isSet("afk.timeout")) { yaml.set("afk.timeout", 900); }
+        if (!yaml.isSet("afk.check-chat")) { yaml.set("afk.check-chat", false); }
         if (!yaml.isSet("events.enabled")) { yaml.set("events.enabled", true); }
         if (!yaml.isSet("events.interval")) { yaml.set("events.interval", 600); }
         if (!yaml.isSet("data.manager")) { yaml.set("data.manager", "flatfile"); }

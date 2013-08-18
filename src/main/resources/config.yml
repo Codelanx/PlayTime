@@ -11,6 +11,7 @@ afk:
   enabled: true
   interval: 60
   timeout: 900
+  check-chat: false
 events:
   enabled: true
   interval: 10
