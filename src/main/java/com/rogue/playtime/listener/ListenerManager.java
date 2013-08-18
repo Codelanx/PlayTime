@@ -34,18 +34,18 @@ public class ListenerManager {
     
     private final Map<String, Listener> listeners = new HashMap();
     
-    public ListenerManager (Playtime plugin) {
+    public ListenerManager(Playtime plugin) {
         
         if (plugin.getPlayerHandler() != null) {
             listeners.put("afk", new AFKListener(plugin, plugin.getConfigurationLoader().getBoolean("afk.check-chat")));
         }
-        if (plugin.isDeathEnabled()) {
+        if (plugin.getConfigurationLoader().getBoolean("check.death-time")) {
             listeners.put("death", new DeathListener(plugin));
         }
         if (plugin.getEventHandler() != null) {
             listeners.put("event", new EventListener(plugin));
         }
-        if (plugin.isOnlineEnabled()) {
+        if (plugin.getConfigurationLoader().getBoolean("check.online-time")) {
             listeners.put("online", new OnlineListener(plugin));
         }
         if (plugin.getConfigurationLoader().getBoolean("update-check")) {

@@ -45,7 +45,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  *
  * @since 1.0
  * @author 1Rogue
- * @version 1.3.0
+ * @version 1.4.1
  */
 public class Playtime extends JavaPlugin {
 
@@ -58,8 +58,6 @@ public class Playtime extends JavaPlugin {
     protected ConfigurationLoader cloader;
     protected EventHandler ehandler;
     protected Cipher lang;
-    private boolean deathEnabled = true;
-    private boolean onlineEnabled = true;
     private boolean isUpdate = false;
     private boolean isBusy = true;
     private boolean reloaded = false;
@@ -92,7 +90,7 @@ public class Playtime extends JavaPlugin {
      * Registers debug, metrics, commands, data management, and listeners.
      *
      * @since 1.0
-     * @version 1.3.0
+     * @version 1.4.1
      */
     @Override
     public void onEnable() {
@@ -110,7 +108,7 @@ public class Playtime extends JavaPlugin {
             debug = 0;
         }
         if (debug >= 1) {
-            this.getLogger().log(Level.INFO, "Debug level set to {0}!", debug);
+            this.getLogger().info(lang.getString("main.debug", debug));
         }
 
         try {
@@ -139,8 +137,8 @@ public class Playtime extends JavaPlugin {
 
         boolean afkEnabled = this.cloader.getBoolean("afk.enabled");
         boolean events = this.cloader.getBoolean("events.enabled");
-        deathEnabled = this.cloader.getBoolean("check.death-time");
-        onlineEnabled = this.cloader.getBoolean("check.online-time");
+        boolean deathEnabled = this.cloader.getBoolean("check.death-time");
+        boolean onlineEnabled = this.cloader.getBoolean("check.online-time");
 
 
         if (afkEnabled) {
@@ -216,14 +214,12 @@ public class Playtime extends JavaPlugin {
         cloader = null;
         ehandler = null;
         lang = null;
-        deathEnabled = true;
-        onlineEnabled = true;
         isUpdate = false;
         this.onLoad();
         this.onEnable();
         this.getLogger().info(reloadDone);
         for (String s : names) {
-            this.getServer().getPlayer(s).sendMessage(__(reloadDone));
+            this.getServer().getPlayer(s).sendMessage(_(reloadDone));
         }
     }
 
@@ -254,7 +250,8 @@ public class Playtime extends JavaPlugin {
     }
 
     /**
-     * Finds a match for an online player, or offline if there is no good match.
+     * Finds a match for an online player, or returns the provided string if
+     * there is no good match.
      *
      * @since 1.1
      * @version 1.1
@@ -320,44 +317,6 @@ public class Playtime extends JavaPlugin {
     }
 
     /**
-     * Returns whether or not AFK is enabled
-     *
-     * @since 1.2.0
-     * @version 1.2.0
-     *
-     * @deprecated
-     *
-     * @return Status of AFK runnable
-     */
-    public boolean isAFKEnabled() {
-        return phandler != null;
-    }
-
-    /**
-     * Returns whether or not death timing is enabled
-     *
-     * @since 1.2.0
-     * @version 1.2.0
-     *
-     * @return Status of Death checking
-     */
-    public boolean isDeathEnabled() {
-        return deathEnabled;
-    }
-
-    /**
-     * Returns whether or not online timing is enabled
-     *
-     * @since 1.3.0
-     * @version 1.3.0
-     *
-     * @return Status of online tracking
-     */
-    public boolean isOnlineEnabled() {
-        return onlineEnabled;
-    }
-
-    /**
      * Returns the status of the update check
      *
      * @since 1.3.0
@@ -391,7 +350,7 @@ public class Playtime extends JavaPlugin {
      * @param encoded String with unconverted color codes
      * @return string with correct chat colors included
      */
-    public static String __(String encoded) {
+    public static String _(String encoded) {
         return ChatColor.translateAlternateColorCodes('&', "[&e" + Playtime.getPlugin().getDescription().getName() + "&f] &6" + encoded);
     }
 
@@ -481,7 +440,18 @@ public class Playtime extends JavaPlugin {
         isBusy = busy;
         return isBusy;
     }
-
+    
+    /**
+     * Returns whether the plugin is running for the first time or not
+     * 
+     * This is used for verifying whether or not to run functions that are used
+     * when the server first starts up
+     * 
+     * @since 1.4.0
+     * @version 1.4.1
+     * 
+     * @return If this is the plugin's first run from booting
+     */
     public boolean firstRun() {
         return !reloaded;
     }

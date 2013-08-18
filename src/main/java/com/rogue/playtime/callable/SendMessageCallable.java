@@ -16,7 +16,7 @@
  */
 package com.rogue.playtime.callable;
 
-import static com.rogue.playtime.Playtime.__;
+import static com.rogue.playtime.Playtime._;
 import java.util.concurrent.Callable;
 import org.bukkit.Bukkit;
 
@@ -37,7 +37,7 @@ public class SendMessageCallable implements Callable {
     }
 
     public Object call() {
-        Bukkit.getPlayer(player).sendMessage(__(message));
+        Bukkit.getPlayer(player).sendMessage(_(message));
         return null;
     }
 }

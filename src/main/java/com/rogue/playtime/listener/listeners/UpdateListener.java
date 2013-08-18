@@ -17,7 +17,7 @@
 package com.rogue.playtime.listener.listeners;
 
 import com.rogue.playtime.Playtime;
-import static com.rogue.playtime.Playtime.__;
+import static com.rogue.playtime.Playtime._;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -34,14 +34,12 @@ public class UpdateListener implements Listener {
 
     private final Playtime plugin;
     
-    public UpdateListener (Playtime p) {
+    public UpdateListener(Playtime p) {
         plugin = p;
     }
     
     /**
-     * Sends a notification to ops/players with all of the plugin's permissions,
-     * registers the player with the AFK checker if it is enabled, and fires any
-     * login events registered by the player.
+     * Sends a notification to ops/players with all of the plugin's permissions
      *
      * @since 1.2.0
      * @versino 1.4.1
@@ -52,7 +50,7 @@ public class UpdateListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e) {
         if (e.getPlayer().hasPermission("playtime.updatenotice")) {
             if (plugin.isUpdateAvailable()) {
-                e.getPlayer().sendMessage(__(plugin.getCipher().getString("listener.update")));
+                e.getPlayer().sendMessage(_(plugin.getCipher().getString("listener.update")));
             }
         }
     }

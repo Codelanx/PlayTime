@@ -17,7 +17,7 @@
 package com.rogue.playtime.command.commands;
 
 import com.rogue.playtime.command.CommandBase;
-import static com.rogue.playtime.Playtime.__;
+import static com.rogue.playtime.Playtime._;
 import static com.rogue.playtime.command.CommandBase.plugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -41,25 +41,25 @@ public class OnlineCommand implements CommandBase {
             check = plugin.getBestPlayer(args[0]);
             perm += ".others";
         } else {
-            sender.sendMessage(__(plugin.getCipher().getString("command.commands.online.console")));
+            sender.sendMessage(_(plugin.getCipher().getString("command.commands.online.console")));
             return true;
         }
         if (sender.hasPermission(perm)) {
-            if (plugin.isOnlineEnabled()) {
+            if (plugin.getConfigurationLoader().getBoolean("check.online-time")) {
                 int time = plugin.getDataManager().getDataHandler().getValue("onlinetime", check);
                 int minutes = time % 60;
                 if (time >= 60) {
                     int hours = time / 60;
-                    sender.sendMessage(__(plugin.getCipher().getString("command.commands.online.playtime-hours", check, hours, (hours == 1 ? "" : "s"), minutes, (minutes == 1 ? "" : "s"))));
+                    sender.sendMessage(_(plugin.getCipher().getString("command.commands.online.playtime-hours", check, hours, (hours == 1 ? "" : "s"), minutes, (minutes == 1 ? "" : "s"))));
                 } else {
-                    sender.sendMessage(__(plugin.getCipher().getString("command.commands.online.playtime-minutes", check, minutes, (minutes == 1 ? "" : "s"))));
+                    sender.sendMessage(_(plugin.getCipher().getString("command.commands.online.playtime-minutes", check, minutes, (minutes == 1 ? "" : "s"))));
                 }
             } else {
-                sender.sendMessage(__(plugin.getCipher().getString("command.commands.online.disabled")));
+                sender.sendMessage(_(plugin.getCipher().getString("command.commands.online.disabled")));
             }
 
         } else {
-            sender.sendMessage(__(plugin.getCipher().getString("command.commands.online.noperm")));
+            sender.sendMessage(_(plugin.getCipher().getString("command.commands.online.noperm")));
         }
         return false;
     }

@@ -16,7 +16,7 @@
  */
 package com.rogue.playtime.command.commands;
 
-import static com.rogue.playtime.Playtime.__;
+import static com.rogue.playtime.Playtime._;
 import com.rogue.playtime.command.CommandBase;
 import static com.rogue.playtime.command.CommandBase.plugin;
 import org.bukkit.command.Command;
@@ -41,7 +41,7 @@ public class PlayCommand implements CommandBase {
             check = plugin.getBestPlayer(args[0]);
             perm += ".others";
         } else {
-            sender.sendMessage(__(plugin.getCipher().getString("command.commands.play.console")));
+            sender.sendMessage(_(plugin.getCipher().getString("command.commands.play.console")));
             return true;
         }
         if (sender.hasPermission(perm)) {
@@ -49,13 +49,13 @@ public class PlayCommand implements CommandBase {
             int minutes = time % 60;
             if (time >= 60) {
                 int hours = time / 60;
-                sender.sendMessage(__(plugin.getCipher().getString("command.commands.play.playtime-hours", check, hours, (hours == 1 ? "" : "s"), minutes, (minutes == 1 ? "" : "s"))));
+                sender.sendMessage(_(plugin.getCipher().getString("command.commands.play.playtime-hours", check, hours, (hours == 1 ? "" : "s"), minutes, (minutes == 1 ? "" : "s"))));
             } else {
-                sender.sendMessage(__(plugin.getCipher().getString("command.commands.play.playtime-minutes", check, minutes, (minutes == 1 ? "" : "s"))));
+                sender.sendMessage(_(plugin.getCipher().getString("command.commands.play.playtime-minutes", check, minutes, (minutes == 1 ? "" : "s"))));
             }
 
         } else {
-            sender.sendMessage(__(plugin.getCipher().getString("command.commands.play.noperm")));
+            sender.sendMessage(_(plugin.getCipher().getString("command.commands.play.noperm")));
         }
         return true;
     }

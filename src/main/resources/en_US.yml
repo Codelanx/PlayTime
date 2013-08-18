@@ -115,6 +115,7 @@ runnable:
     version-error: 'Version check was not completed'
     error: 'Error occured while checking for an update'
 main:
+  debug: 'Debug level set to {0}!'
   metrics: 'Enabling Metrics...'
   update: 'Update checks disabled!'
   execs: 'Enabling executable manager...'

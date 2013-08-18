@@ -17,7 +17,7 @@
 package com.rogue.playtime.command.commands;
 
 import com.rogue.playtime.command.CommandBase;
-import static com.rogue.playtime.Playtime.__;
+import static com.rogue.playtime.Playtime._;
 import static com.rogue.playtime.command.CommandBase.plugin;
 import java.util.Map;
 import org.bukkit.Bukkit;
@@ -62,7 +62,7 @@ public class DeathTopCommand implements CommandBase {
         }
         Map<String, Integer> players = plugin.getDataManager().getDataHandler().getTopPlayers("deathtime", i);
         if (players == null) {
-            sender.sendMessage(__(plugin.getCipher().getString("command.commands.deathtop.disabled-flatfile")));
+            sender.sendMessage(_(plugin.getCipher().getString("command.commands.deathtop.disabled-flatfile")));
         }
         if (scoreboard) {
             Player p = (Player)sender;
@@ -77,7 +77,7 @@ public class DeathTopCommand implements CommandBase {
                 score.setScore(players.get(s)/60);
             }
             p.setScoreboard(scoreBoard);
-            p.sendMessage(__(plugin.getCipher().getString("command.commands.deathtop.clear")));
+            p.sendMessage(_(plugin.getCipher().getString("command.commands.deathtop.clear")));
             
         } else {
             StringBuilder sb = new StringBuilder(plugin.getCipher().getString("command.commands.deathtop.console-title", i));

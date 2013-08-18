@@ -105,7 +105,7 @@ public class ConvertToRunnable implements Runnable {
      * on multiple values within inserts or union selects.
      * 
      * @since 1.4.0
-     * @version 1.4.0
+     * @version 1.4.1
      * 
      * @param rows The number of rows to evaluate
      * @return The estimated time as a readable string
@@ -114,6 +114,6 @@ public class ConvertToRunnable implements Runnable {
         long time = Math.round(rows / (369 + ((2 / 3) - 0.2)));
         long seconds = time % 60;
         long minutes = time / 60;
-        return ((minutes >= 1) ? ((minutes != 1) ? minutes + " " + plugin.getCipher().getString("variables.minutes") : minutes + " " + plugin.getCipher().getString("variables.minute")) : "") + " " + ((seconds != 1) ? seconds + " " + plugin.getCipher().getString("variables.seconds") + "." : seconds + " " + plugin.getCipher().getString("variables.second") + ".");
+        return ((minutes >= 1) ? minutes + " " + ((minutes != 1) ? plugin.getCipher().getString("variables.minutes") : plugin.getCipher().getString("variables.minute")) + " " : "") + seconds + " " + ((seconds != 1) ? plugin.getCipher().getString("variables.seconds") : plugin.getCipher().getString("variables.second")) + ".";
     }
 }

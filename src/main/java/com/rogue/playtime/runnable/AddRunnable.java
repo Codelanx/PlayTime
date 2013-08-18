@@ -21,6 +21,7 @@ import com.rogue.playtime.data.mysql.MySQL;
 import com.rogue.playtime.data.sqlite.SQLite;
 import com.rogue.playtime.data.yaml.YAML;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import org.bukkit.entity.Player;
 
@@ -28,14 +29,25 @@ import org.bukkit.entity.Player;
  *
  * @since 1.4.0
  * @author 1Rogue
- * @version 1.4.0
+ * @version 1.4.1
  */
 public class AddRunnable implements Runnable {
 
-    Playtime plugin;
+    private final Playtime plugin;
+    private final boolean afkEnabled;
+    private final ArrayList<String> timers;
 
     public AddRunnable(Playtime p) {
         plugin = p;
+        afkEnabled = plugin.getPlayerHandler() != null;
+        timers = new ArrayList();
+        timers.add("playtime");
+        if (plugin.getConfigurationLoader().getBoolean("check.death-time")) {
+            timers.add("deathtime");
+        }
+        if (plugin.getConfigurationLoader().getBoolean("check.online-time")) {
+            timers.add("onlinetime");
+        }
     }
 
     public void run() {
@@ -47,11 +59,7 @@ public class AddRunnable implements Runnable {
             StringBuilder sb = new StringBuilder("INSERT INTO `playTime` (`username`) VALUES ");
             if (players.length > 0) {
                 for (Player p : players) {
-                    if (plugin.isAFKEnabled()) {
-                        if (!plugin.getPlayerHandler().getPlayer(p.getName()).isAFK()) {
-                            sb.append("('").append(p.getName()).append("'), ");
-                        }
-                    } else {
+                    if (!afkEnabled || !plugin.getPlayerHandler().isAFK(p.getName())) {
                         sb.append("('").append(p.getName()).append("'), ");
                     }
                 }
@@ -61,10 +69,16 @@ public class AddRunnable implements Runnable {
                     }
                     return;
                 }
+                sb = new StringBuilder(sb.substring(0, sb.length() - 2));
+                sb.append(" ON DUPLICATE KEY UPDATE ");
+                for (String timer : timers) {
+                    sb.append("`").append(timer).append("`=`").append(timer).append("`+1, ");
+                }
+                sb = new StringBuilder(sb.substring(0, sb.length() - 2));
                 if (plugin.getDebug() >= 1) {
                     plugin.getLogger().info(plugin.getCipher().getString("runnable.add.update"));
                     if (plugin.getDebug() >= 2) {
-                        plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.query", sb.substring(0, sb.length() - 2) + " ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1" + (plugin.isDeathEnabled() ? ", `deathtime`=`deathtime`+1" : "") + ", `onlinetime`=`onlinetime`+1"));
+                        plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.query", sb.toString()));
                     }
                 }
                 complete = true;
@@ -72,7 +86,7 @@ public class AddRunnable implements Runnable {
             try {
                 db.open();
                 if (db.checkConnection() && complete) {
-                    db.update(sb.substring(0, sb.length() - 2) + " ON DUPLICATE KEY UPDATE `playtime`=`playtime`+1" + (plugin.isDeathEnabled() ? ", `deathtime`=`deathtime`+1" : "") + ", `onlinetime`=`onlinetime`+1");
+                    db.update(sb.toString());
                 }
                 db.close();
             } catch (Exception ex) {
@@ -85,19 +99,15 @@ public class AddRunnable implements Runnable {
             Player[] players = plugin.getServer().getOnlinePlayers();
             if (players.length > 0) {
                 StringBuilder sb = new StringBuilder("INSERT OR IGNORE INTO `playTime` ");
-                StringBuilder sb2 = new StringBuilder("UPDATE `playTime` SET `playtime`=`playtime`+1");
-                sb2.append((plugin.isDeathEnabled()) ? ", `deathtime`=`deathtime`+1" : "").append(", `onlinetime`=`onlinetime`+1 WHERE username IN (");
+                StringBuilder sb2 = new StringBuilder("UPDATE `playTime` SET ");
+                for (String timer : timers) {
+                    sb2.append("`").append(timer).append("`=`").append(timer).append("`+1, ");
+                }
+                sb2 = new StringBuilder(sb.substring(0, sb.length() - 2));
+                sb2.append(" WHERE username IN (");
                 int i = 0;
                 for (Player p : players) {
-                    if ((plugin.isAFKEnabled()) && !plugin.getPlayerHandler().getPlayer(p.getName()).isAFK()) {
-                        sb2.append("'").append(p.getName()).append("', ");
-                        if (i > 0) {
-                            sb.append("UNION SELECT NULL, '").append(p.getName()).append("', 0, 0, 0 ");
-                        } else {
-                            sb.append("SELECT NULL AS 'column1', '").append(p.getName()).append("' AS 'column2', 0 AS 'column3', 0 AS 'column4', 0 AS 'column5' ");
-                            i++;
-                        }
-                    } else if (!plugin.isAFKEnabled()) {
+                    if (!afkEnabled || !plugin.getPlayerHandler().isAFK(p.getName())) {
                         sb2.append("'").append(p.getName()).append("', ");
                         if (i > 0) {
                             sb.append("UNION SELECT NULL, '").append(p.getName()).append("', 0, 0, 0 ");
@@ -139,37 +149,12 @@ public class AddRunnable implements Runnable {
             YAML yaml = new YAML();
             Player[] players = plugin.getServer().getOnlinePlayers();
             for (Player p : players) {
-                if (plugin.isAFKEnabled()) {
-                    if (!plugin.getPlayerHandler().getPlayer(p.getName()).isAFK()) {
-                        if (plugin.isDeathEnabled()) {
-                            yaml.incrementValue("users." + p.getName() + ".playtime");
-                            yaml.incrementValue("users." + p.getName() + ".deathtime");
-                            yaml.incrementValue("users." + p.getName() + ".onlinetime");
-                            if (plugin.getDebug() == 3) {
-                                plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.update", p.getName()));
-                            }
-                        } else {
-                            yaml.incrementValue("users." + p.getName() + ".playtime");
-                            yaml.incrementValue("users." + p.getName() + ".onlinetime");
-                            if (plugin.getDebug() == 3) {
-                                plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.update", p.getName()));
-                            }
-                        }
+                if (!afkEnabled || !plugin.getPlayerHandler().isAFK(p.getName())) {
+                    for (String timer : timers) {
+                        yaml.incrementValue("users." + p.getName() + "." + timer);
                     }
-                } else {
-                    if (plugin.isDeathEnabled()) {
-                        yaml.incrementValue("users." + p.getName() + ".playtime");
-                        yaml.incrementValue("users." + p.getName() + ".deathtime");
-                        yaml.incrementValue("users." + p.getName() + ".onlinetime");
-                        if (plugin.getDebug() == 3) {
-                            plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.update", p.getName()));
-                        }
-                    } else {
-                        yaml.incrementValue("users." + p.getName() + ".playtime");
-                        yaml.incrementValue("users." + p.getName() + ".onlinetime");
-                        if (plugin.getDebug() == 3) {
-                            plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.update", p.getName()));
-                        }
+                    if (plugin.getDebug() == 3) {
+                        plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.update", p.getName()));
                     }
                 }
             }

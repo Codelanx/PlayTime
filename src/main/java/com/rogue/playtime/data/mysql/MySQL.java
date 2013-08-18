@@ -30,13 +30,47 @@ import java.util.logging.Level;
  *
  * @since 1.1
  * @author 1Rogue
- * @version 1.4.0
+ * @version 1.4.1
  */
 public class MySQL {
 
     private static int connections = 0;
+    private static String HOST = "";
+    private static String USER = "";
+    private static String PASS = "";
+    private static String DATABASE = "";
+    private static String PORT = "";
     private Connection con = null;
     private Playtime plugin = Playtime.getPlugin();
+    
+    /**
+     * Sets the static variables to use in future MySQL connections
+     * 
+     * @since 1.4.1
+     * @version 1.4.1
+     * 
+     * @param host The hostname to use
+     * @param user The username to use
+     * @param pass The password to use
+     * @param database The database to use
+     * @param port The port number to use
+     */
+    public MySQL(String host, String user, String pass, String database, String port) {
+        HOST = host;
+        USER = user;
+        PASS = pass;
+        DATABASE = database;
+        PORT = port;
+    }
+    
+    /**
+     * Allows calling a new MySQL instance with previous connection options
+     * 
+     * @since 1.4.1
+     * @version 1.4.1
+     */
+    public MySQL() {
+    }
 
     /**
      * Opens a connection to the MySQL database. Make sure to call MySQL.close()
@@ -51,10 +85,10 @@ public class MySQL {
      */
     public Connection open() throws SQLException {
         Properties connectionProps = new Properties();
-        connectionProps.put("user", MySQL_Vars.USER);
-        connectionProps.put("password", MySQL_Vars.PASS);
+        connectionProps.put("user", USER);
+        connectionProps.put("password", PASS);
 
-        con = DriverManager.getConnection("jdbc:mysql://" + MySQL_Vars.HOST + ":" + MySQL_Vars.PORT + "/" + MySQL_Vars.DATABASE, connectionProps);
+        con = DriverManager.getConnection("jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE, connectionProps);
         if (plugin.getDebug() >= 2) {
             plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.mysql.instance.open", ++connections));
         }
@@ -72,7 +106,7 @@ public class MySQL {
      * @throws SQLException 
      */
     public boolean checkTable(String tablename) throws SQLException {
-        ResultSet count = query("SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = '" + MySQL_Vars.DATABASE + "') AND (TABLE_NAME = '" + tablename + "')");
+        ResultSet count = query("SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = '" + DATABASE + "') AND (TABLE_NAME = '" + tablename + "')");
         int i = 0;
         if (count.next()) {
             i = count.getInt(1);
