@@ -106,6 +106,7 @@ runnable:
     version-error: 'Überprüfung der Version wurde nicht abgeschlossen'
     error: 'Bei der Suche nach einer Aktualisierung ist ein Fehler aufgetreten'
 main:
+  debug: 'Debug level set to {0}!'
   metrics: 'Enabling Metrics...'
   update: 'Update checks disabled!'
   execs: 'Enabling executable manager...'
@@ -113,8 +114,7 @@ main:
   command: 'Enabling Command Handler...'
   player: 'Enabling Player Handler...'
   afk: 'AFK checking disabled!'
-  listener: 'Enabling listener...'
-  listener-disabled: 'Listener Disabled!'
+  listener: 'Enabling listener manager...'
   event: 'Enabling event system...'
   event-disabled: 'Disabling event system!'
   enabled: 'Enabled! ({0})'

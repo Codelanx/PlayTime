@@ -78,11 +78,6 @@ data:
       error-save: 'Error saving user YAML configuration!'
   manager:
     no-flat: 'Flatfile storage is currently broken! Using SQLite...'
-event:
-  hours: 'hours'
-  minutes: 'minutes'
-  hour: 'hour'
-  minute: 'minute'
 listener:
   update: 'An update is available for Playtime!'
 player:
@@ -101,10 +96,6 @@ runnable:
     rows: 'Adding {0} rows to SQLite database. Estimated time: {1}'
     complete: 'Conversion complete!'
     noflat: 'You cannot convert to flat file storage!'
-    second: 'second'
-    minute: 'minute'
-    seconds: 'seconds'
-    minutes: 'minutes'
   reset:
     error: 'Error updating time for {0}'
   startconvert:
@@ -115,6 +106,7 @@ runnable:
     version-error: 'Version check was not completed'
     error: 'Error occured while checking for an update'
 main:
+  debug: 'Debug level set to {0}!'
   metrics: 'Enabling Metrics...'
   update: 'Update checks disabled!'
   execs: 'Enabling executable manager...'
