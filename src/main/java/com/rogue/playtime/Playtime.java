@@ -28,7 +28,6 @@ import com.rogue.playtime.metrics.Metrics;
 import com.rogue.playtime.player.PlayerHandler;
 import com.rogue.playtime.runnable.AFKRunnable;
 import com.rogue.playtime.runnable.UpdateRunnable;
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -70,7 +69,6 @@ public class Playtime extends JavaPlugin {
      */
     @Override
     public void onLoad() {
-        File file = new File(getDataFolder() + File.separator + "config.yml");
 
         this.getLogger().info("Loading Configuration mananger...");
         cloader = new ConfigurationLoader(this);
@@ -134,14 +132,12 @@ public class Playtime extends JavaPlugin {
         this.getLogger().info(lang.getString("main.command"));
         chandler = new CommandHandler(this);
         chandler.registerExecs();
-
-        boolean afkEnabled = this.cloader.getBoolean("afk.enabled");
-        boolean events = this.cloader.getBoolean("events.enabled");
+        
         boolean deathEnabled = this.cloader.getBoolean("check.death-time");
         boolean onlineEnabled = this.cloader.getBoolean("check.online-time");
 
 
-        if (afkEnabled) {
+        if (this.cloader.getBoolean("afk.enabled")) {
             this.getLogger().info(lang.getString("main.player"));
             phandler = new PlayerHandler(this, cloader.getInt("afk.interval"), cloader.getInt("afk.timeout"));
             execmanager.runAsyncTaskRepeat(new AFKRunnable(this), phandler.getAFKCheckInterval(), phandler.getAFKCheckInterval());
@@ -150,7 +146,7 @@ public class Playtime extends JavaPlugin {
             phandler = null;
         }
 
-        if (events) {
+        if (this.cloader.getBoolean("events.enabled")) {
             this.getLogger().info(lang.getString("main.event"));
             ehandler = new EventHandler(this);
         } else {
