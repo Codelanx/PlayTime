@@ -430,7 +430,6 @@ public class Playtime extends JavaPlugin {
      * @return The updated busy status
      */
     public boolean setBusy(boolean busy) {
-        this.getLogger().log(Level.INFO, "isBusy set to {0}!", (busy) ? "true" : "false");
         isBusy = busy;
         return isBusy;
     }
