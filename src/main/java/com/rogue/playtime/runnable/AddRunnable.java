@@ -29,13 +29,13 @@ import org.bukkit.entity.Player;
  *
  * @since 1.4.0
  * @author 1Rogue
- * @version 1.4.1
+ * @version 1.4.2
  */
 public class AddRunnable implements Runnable {
 
     private final Playtime plugin;
     private final boolean afkEnabled;
-    private final ArrayList<String> timers;
+    private ArrayList<String> timers;
 
     public AddRunnable(Playtime p) {
         plugin = p;
@@ -103,8 +103,8 @@ public class AddRunnable implements Runnable {
                 for (String timer : timers) {
                     sb2.append("`").append(timer).append("`=`").append(timer).append("`+1, ");
                 }
-                sb2 = new StringBuilder(sb.substring(0, sb.length() - 2));
-                sb2.append(" WHERE username IN (");
+                sb2 = new StringBuilder(sb2.substring(0, sb2.length() - 2));
+                sb2.append(" WHERE `username` IN (");
                 int i = 0;
                 for (Player p : players) {
                     if (!afkEnabled || !plugin.getPlayerHandler().isAFK(p.getName())) {

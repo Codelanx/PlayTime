@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.rogue</groupId>
-  <artifactId>Playtime</artifactId>
+  <artifactId>playtime</artifactId>
   <version>1.4.2</version>
   <name>Playtime</name>
   
@@ -34,7 +34,7 @@
                 </includes>
             </resource>
         </resources>
-        <finalName>${project.artifactId}-${project.version}</finalName>
+        <finalName>${project.name}-${project.version}</finalName>
   </build>
   
   <dependencies>

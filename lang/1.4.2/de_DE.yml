@@ -1,0 +1,129 @@
+version: 2
+command:
+  commands:
+    death:
+      console: 'Du kannst die Überlebenszeit eines Nicht-Spielers nicht abrufen!'
+      playtime-hours: '{0} ist seit {1} Stunde{2} und {3} Minuten{4} nicht gestorben.'
+      playtime-minutes: '{0} Überlebt seit {1} Minuten{2}.'
+      disabled: 'Die Auskunft über Spieler-Tode ist deaktiviert!'
+      noperm: 'Es ist dir nicht erlaubt, das zu tun!'
+    deathtop:
+      disabled-flatfile: '&e/deathtimetop&6 ist deaktiviert wegen der &eflatfile&6 data!'
+      title: 'Beste Überlebenszeiten'
+      title-shown: 'Beste Überlebenszeiten (in Stunden):'
+      clear: 'Verwende &e/deathtimetop clear&6 um die Rangliste auszublenden.'
+      console-title: 'Die {0} Spieler mit der höchsten Todeszeit (in Stunden):'
+    online:
+      console: 'Du kannst die Online-Zeit eines Nicht-Spielers nicht abrufen!'
+      playtime-hours: '{0} ist online seit {1} Stunden{2} und {3} Minuten{4}.'
+      playtime-minutes: '{0} ist online seit {1} Minuten{2}.'
+      disabled: 'Die Auskunft über Online-Zeiten ist deaktiviert!'
+      noperm: 'Es ist dir nicht erlaubt, das zu tun!'
+    onlinetop:
+      disabled-flatfile: '&e/onlinetimetop&6 ist deaktiviert wegen der &eflatfile&6 data!'
+      title: 'Längste Online-Zeiten'
+      title-shown: 'Längste Online-Zeiten (in Stunden):'
+      clear: 'Verwende &e/onlinetimetop clear&6 um die Rangliste auszublenden.'
+      console-title: 'Die {0} Spieler mit den längsten Online-Zeiten (in Stunden):'
+    play:
+      console: 'Du kannst die Spielzeit eines Nicht-Spielers nicht abrufen!'
+      playtime-hours: '{0} Hat {1} Stunden{2} und {3} Minuten{4} gespielt.'
+      playtime-minutes: '{0} Hat {1} Minuten{2} gespielt.'
+      noperm: 'Es ist dir nicht erlaubt, das zu tun!'
+    playtop:
+      disabled-flatfile: '&e/playtimetop&6 ist deaktiviert wegen der &eflatfile&6 data!'
+      title: 'Längste Spielzeiten'
+      title-shown: 'Längste Spielzeiten (in Stunden):'
+      clear: 'Verwende &e/playtimetop clear&6 um die Rangliste auszublenden.'
+      console-title: 'Die {0} Spieler mit der längsten Spielzeit (in Stunden):'
+    pt:
+      longtime: 'Bitte beachte, dass es etwas dauern kann, diese Rangliste zu laden, es ist abhängig von der Größe der Datenbasis.'
+      datainuse: 'Daten Manager wird gerade benutzt!'
+      convert: 'Umwandeln der Daten Typ ''{0}'' zu ''{1}''!'
+      swap: 'Wechsel der Daten Typ ''{0}'' zu ''{1}''!'
+      confirm: 'Bitte bestätige die Handlung mit &e/pt &6confirm oder breche sie ab mit &e/pt cancel'
+      flatfile: 'Umwandeln von Daten zu flatfiles ist nicht erlaubt!'
+      baddata: 'Unbekannter Datenwert ''{0}'''
+      version: 'Version &e{0}&f - &6Developed by 1Rogue'
+  handler:
+    busy: 'Playtime ist momentan mit einer Funktion beschäftigt, bitte versuch es in einer Minute nochmal!'
+data:
+  mysql:
+    main:
+      connecting: 'Verbinde zur MySQL Datenbasis...'
+      connect-success: 'Erfolgreich verbunden mit der Datenbasis!'
+      create-table: 'Erstelle Tabelle ''playTime'' in Datenbasis ''{0}'''
+      missing-user: 'Spalte Nutzername fehlt! Stelle Tabelle wieder her...'
+      missing-playtime: 'Spalte Spielzeit fehlt! Repariere...'
+      reset-column: 'Spalte wird zurückgesetzt {0}'
+      updating-table: 'Aktualisiere SQL Tabelle für {0}'
+      setting-defaults: 'Setze Werte für die Spalte {0}'
+      uptodate: 'SQL Tabelle ist aktualisiert!'
+      error: 'Fehler beim Verbinden zur MySQL Datenbasis... schalte ab!'
+    instance:
+      open: 'Öffne MySQL VErbindungen: {0}'
+  sqlite:
+    main:
+      connecting: 'Verbinde zur SQLite Datenbasis...'
+      connect-success: 'Erfolgreich verbunden zur Datenbasis!'
+      create-table: 'Creating table ''playTime'' in Datenbasis'
+      reset-column: 'Spalte wird zurüchgesetzt {0}'
+      error: 'Fehler in der SQLite Datenbasis, schalte ab!'
+    instance:
+      open: 'Öffne SQLite Verbindungen: {0}'
+      error: 'Fehler beim laden der Verbindung zu SQLite, deaktiviere!'
+  yaml:
+    instance:
+      error-create: 'Fehler beim Erstellen der Nutzer YAML Datei!'
+      error-save: 'Fehler beim speichern der Nutzer YAML Konfiguration!'
+  manager:
+    no-flat: 'Flatfile Speicher ist zur Zeit defekt! Verwende SQLite...'
+listener:
+  update: 'Ein Update für playTime ist verfügbar!'
+player:
+  set-afk: 'Setze {0} als AFK!'
+runnable:
+  afk:
+    check: 'AFK Überprüfung gestartet'
+    time: 'Zeit erhöht für {0}!'
+    location: 'Aktualisiere Position für {0}!'
+  add:
+    none: 'Es sind keine Spieler zu aktualisieren.'
+    query: 'SQL Anfrage für Aktualisierung:\n{0}'
+    update: 'Aktualisiere Werte für {0}!'
+    values: 'Spieler aktualisiert!'
+  convertto:
+    rows: 'Ergänze {0} Reihen in der SQLite Datenbasis. Geschätzte Zeit: {1}'
+    complete: 'Umwandlung abgeschlossen!'
+    noflat: 'Umwandlung zu flat file Speicher nicht möglich!'
+  reset:
+    error: 'Fehler beim aktualisieren der Zeit für {0}'
+  startconvert:
+    mysql:
+      download: 'Downloading MySQL database...'
+  update:
+    dev: 'Du verwendest einen dev Build, Abfragen von Aktualisierungen sind deaktiviert'
+    version-error: 'Überprüfung der Version wurde nicht abgeschlossen'
+    error: 'Bei der Suche nach einer Aktualisierung ist ein Fehler aufgetreten'
+main:
+  debug: 'Debug level set to {0}!'
+  metrics: 'Enabling Metrics...'
+  update: 'Update checks disabled!'
+  execs: 'Enabling executable manager...'
+  data: 'Enabling Data Manager...'
+  command: 'Enabling Command Handler...'
+  player: 'Enabling Player Handler...'
+  afk: 'AFK checking disabled!'
+  listener: 'Enabling listener manager...'
+  event: 'Enabling event system...'
+  event-disabled: 'Disabling event system!'
+  enabled: 'Enabled! ({0})'
+  reloaded: 'Playtime reloaded!'
+variables:
+  second: 'sekunde'
+  seconds: 'sekunden'
+  minute: 'minute'
+  minutes: 'minuten'
+  hour: 'stunde'
+  hours: 'stunden'
+  and: 'und'

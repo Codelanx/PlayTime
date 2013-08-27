@@ -30,7 +30,7 @@ import org.bukkit.command.CommandSender;
  *
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.4.0
+ * @version 1.4.2
  */
 public class CommandHandler implements CommandExecutor {
 
@@ -76,7 +76,7 @@ public class CommandHandler implements CommandExecutor {
      * Executes the proper command within Playtime
      *
      * @since 1.3.0
-     * @version 1.4.0
+     * @version 1.4.2
      *
      * @param sender The command executor
      * @param cmd The command instance
@@ -87,7 +87,7 @@ public class CommandHandler implements CommandExecutor {
      */
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (!plugin.isBusy()) {
+        if (this.isReload(commandLabel, args) || !plugin.isBusy()) {
             if (commands.containsKey(commandLabel)) {
                 return commands.get(commandLabel).execute(sender, cmd, commandLabel, args);
             }
@@ -95,5 +95,21 @@ public class CommandHandler implements CommandExecutor {
             sender.sendMessage(_(plugin.getCipher().getString("command.handler.busy")));
         }
         return false;
+    }
+
+    /**
+     * Returns whether or not the command is a reload.
+     *
+     * Ex. /pt reload
+     *
+     * @since 1.4.2
+     * @version 1.4.2
+     *
+     * @param cmd The command name
+     * @param args The command arguments
+     * @return True if reload, false otherwise
+     */
+    private boolean isReload(String cmd, String[] args) {
+        return cmd.equalsIgnoreCase("pt") && args.length > 0 && args[0].equalsIgnoreCase("reload");
     }
 }

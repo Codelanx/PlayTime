@@ -118,7 +118,7 @@ public class Data_MySQL implements DataHandler {
             if (db.checkConnection()) {
                 plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.connect-success"));
                 if (!db.checkTable("playTime")) {
-                    plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.mysql.create-table", plugin.getConfig().getString("managers.mysql.database")));
+                    plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.mysql.main.create-table", plugin.getConfig().getString("managers.mysql.database")));
                     int result = db.update("CREATE TABLE `playTime` ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL DEFAULT 0, deathtime int NOT NULL DEFAULT 0, onlinetime int NOT NULL DEFAULT 0, PRIMARY KEY (id), UNIQUE KEY (username)) ENGINE=MyISAM;");
                 } else {
                     try {

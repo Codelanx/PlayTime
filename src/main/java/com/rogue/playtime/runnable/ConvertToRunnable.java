@@ -27,7 +27,7 @@ import java.sql.SQLException;
  *
  * @since 1.4.0
  * @author 1Rogue
- * @version 1.4.0
+ * @version 1.4.2
  */
 public class ConvertToRunnable implements Runnable {
 
@@ -46,8 +46,6 @@ public class ConvertToRunnable implements Runnable {
     public void run() {
         DataManager dm = new DataManager(plugin, false);
         if (convert.equals("mysql")) {
-            plugin.getConfigurationLoader().getConfig().set("data.manager", convert);
-            plugin.getConfigurationLoader().saveConfig();
             dm.select(convert);
             dm.setup();
 
@@ -95,18 +93,20 @@ public class ConvertToRunnable implements Runnable {
                 plugin.getExecutiveManager().runCallable(new SendMessageCallable(s, plugin.getCipher().getString("runnable.convertto.noflat")), 0L);
             }
         }
+        plugin.getConfigurationLoader().getConfig().set("data.manager", convert);
+        plugin.getConfigurationLoader().saveConfig();
         plugin.setBusy(false);
     }
-    
+
     /**
      * Returns an estimation of how long SQLite conversion will take based on
      * the number of rows required to add. The converter uses individual INSERT
      * statements for each row, which is unfortunate due to SQLite's limitations
      * on multiple values within inserts or union selects.
-     * 
+     *
      * @since 1.4.0
      * @version 1.4.1
-     * 
+     *
      * @param rows The number of rows to evaluate
      * @return The estimated time as a readable string
      */

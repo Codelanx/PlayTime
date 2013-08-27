@@ -36,7 +36,6 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -94,7 +93,7 @@ public class Playtime extends JavaPlugin {
     public void onEnable() {
         final long startTime = System.nanoTime();
 
-        if (Bukkit.getOnlinePlayers().length > 0) {
+        if (!reloaded && Bukkit.getOnlinePlayers().length > 0) {
             reloaded = true;
         }
 
@@ -132,7 +131,7 @@ public class Playtime extends JavaPlugin {
         this.getLogger().info(lang.getString("main.command"));
         chandler = new CommandHandler(this);
         chandler.registerExecs();
-        
+
         boolean deathEnabled = this.cloader.getBoolean("check.death-time");
         boolean onlineEnabled = this.cloader.getBoolean("check.online-time");
 
@@ -158,11 +157,8 @@ public class Playtime extends JavaPlugin {
 
         final long endTime = System.nanoTime();
         if (reloaded) {
-            AFKListener afkl = (AFKListener) listener.getListener("afk");
-            if (afkl != null) {
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    afkl.onPlayerJoin(new PlayerJoinEvent(p, ""));
-                }
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                phandler.putPlayer(p.getName(), 0, p.getLocation());
             }
         }
         this.setBusy(false);
@@ -195,6 +191,7 @@ public class Playtime extends JavaPlugin {
     public void reload(String... names) {
         String reloadDone = lang.getString("main.reloaded");
         this.setBusy(true);
+        reloaded = true;
         this.onDisable();
         try {
             Thread.sleep(250L);
@@ -433,19 +430,20 @@ public class Playtime extends JavaPlugin {
      * @return The updated busy status
      */
     public boolean setBusy(boolean busy) {
+        this.getLogger().log(Level.INFO, "isBusy set to {0}!", (busy) ? "true" : "false");
         isBusy = busy;
         return isBusy;
     }
-    
+
     /**
      * Returns whether the plugin is running for the first time or not
-     * 
+     *
      * This is used for verifying whether or not to run functions that are used
      * when the server first starts up
-     * 
+     *
      * @since 1.4.0
      * @version 1.4.1
-     * 
+     *
      * @return If this is the plugin's first run from booting
      */
     public boolean firstRun() {

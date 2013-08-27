@@ -4,7 +4,7 @@ prefix: PlayTime
 description: Keeps track of how long a player has played on the server
 version: ${project.version}
 authors: [1Rogue, unlucky4ever]
-website: https://github.com/1Rogue
+website: http://dev.bukkit.org/bukkit-plugins/playtime
 commands:
   playtime:
     description: Lookup your play time on the server

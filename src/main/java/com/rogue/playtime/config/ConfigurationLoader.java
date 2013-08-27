@@ -48,35 +48,36 @@ public class ConfigurationLoader {
      * @since 1.3.0
      * @version 1.4.0
      */
-    public void verifyConfig() {
+    private void verifyConfig() {
         if (plugin.getDataFolder().exists()) {
             plugin.getDataFolder().mkdir();
         }
         if (!file.exists()) {
             plugin.saveDefaultConfig();
-            return;
-        }
-        yaml = YamlConfiguration.loadConfiguration(file);
-        if (!yaml.isSet("general.debug-level")) { yaml.set("general.debug-level", 0); }
-        if (!yaml.isSet("general.update-check")) { yaml.set("general.update-check", true); }
-        if (!yaml.isSet("language.use-github")) { yaml.set("language.use-github", true); }
-        if (!yaml.isSet("language.locale")) { yaml.set("language.locale", "en_US"); }
-        if (!yaml.isSet("check.death-time")) { yaml.set("check.death-time", true); }
-        if (!yaml.isSet("check.online-time")) { yaml.set("check.online-time", true); }
-        if (!yaml.isSet("afk.enabled")) { yaml.set("afk.enabled", true); }
-        if (!yaml.isSet("afk.interval")) { yaml.set("afk.interval", 60); }
-        if (!yaml.isSet("afk.timeout")) { yaml.set("afk.timeout", 900); }
-        if (!yaml.isSet("afk.check-chat")) { yaml.set("afk.check-chat", false); }
-        if (!yaml.isSet("events.enabled")) { yaml.set("events.enabled", true); }
-        if (!yaml.isSet("events.interval")) { yaml.set("events.interval", 600); }
-        if (!yaml.isSet("data.manager")) { yaml.set("data.manager", "flatfile"); }
-        if (!yaml.isSet("managers.mysql.host")) { yaml.set("managers.mysql.host", "localhost"); }
-        if (!yaml.isSet("managers.mysql.port")) { yaml.set("managers.mysql.port", "3306"); }
-        if (!yaml.isSet("managers.mysql.database")) { yaml.set("managers.mysql.database", "minecraft"); }
-        if (!yaml.isSet("managers.mysql.username")) { yaml.set("managers.mysql.username", "root"); }
-        if (!yaml.isSet("managers.mysql.password")) { yaml.set("managers.mysql.password", "password"); }
+            yaml = YamlConfiguration.loadConfiguration(file);
+        } else {
+            yaml = YamlConfiguration.loadConfiguration(file);
+            if (!yaml.isSet("general.debug-level")) { yaml.set("general.debug-level", 0); }
+            if (!yaml.isSet("general.update-check")) { yaml.set("general.update-check", true); }
+            if (!yaml.isSet("language.use-github")) { yaml.set("language.use-github", true); }
+            if (!yaml.isSet("language.locale")) { yaml.set("language.locale", "en_US"); }
+            if (!yaml.isSet("check.death-time")) { yaml.set("check.death-time", true); }
+            if (!yaml.isSet("check.online-time")) { yaml.set("check.online-time", true); }
+            if (!yaml.isSet("afk.enabled")) { yaml.set("afk.enabled", true); }
+            if (!yaml.isSet("afk.interval")) { yaml.set("afk.interval", 60); }
+            if (!yaml.isSet("afk.timeout")) { yaml.set("afk.timeout", 900); }
+            if (!yaml.isSet("afk.check-chat")) { yaml.set("afk.check-chat", false); }
+            if (!yaml.isSet("events.enabled")) { yaml.set("events.enabled", true); }
+            if (!yaml.isSet("events.interval")) { yaml.set("events.interval", 600); }
+            if (!yaml.isSet("data.manager")) { yaml.set("data.manager", "flatfile"); }
+            if (!yaml.isSet("managers.mysql.host")) { yaml.set("managers.mysql.host", "localhost"); }
+            if (!yaml.isSet("managers.mysql.port")) { yaml.set("managers.mysql.port", "3306"); }
+            if (!yaml.isSet("managers.mysql.database")) { yaml.set("managers.mysql.database", "minecraft"); }
+            if (!yaml.isSet("managers.mysql.username")) { yaml.set("managers.mysql.username", "root"); }
+            if (!yaml.isSet("managers.mysql.password")) { yaml.set("managers.mysql.password", "password"); }
 
-        this.saveConfig();
+            this.saveConfig();
+        }
     }
 
     /**
