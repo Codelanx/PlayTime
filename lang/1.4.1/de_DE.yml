@@ -4,7 +4,7 @@ command:
     death:
       console: 'Du kannst die Überlebenszeit eines Nicht-Spielers nicht abrufen!'
       playtime-hours: '{0} ist seit {1} Stunde{2} und {3} Minuten{4} nicht gestorben.'
-      playtime-minutes: '{0} Überlebt seit {1} Minuten{2}.'
+      playtime-minutes: '{0} Überlebt seit {1} Minute{2}.'
       disabled: 'Die Auskunft über Spieler-Tode ist deaktiviert!'
       noperm: 'Es ist dir nicht erlaubt, das zu tun!'
     deathtop:
@@ -15,8 +15,8 @@ command:
       console-title: 'Die {0} Spieler mit der höchsten Todeszeit (in Stunden):'
     online:
       console: 'Du kannst die Online-Zeit eines Nicht-Spielers nicht abrufen!'
-      playtime-hours: '{0} ist online seit {1} Stunden{2} und {3} Minuten{4}.'
-      playtime-minutes: '{0} ist online seit {1} Minuten{2}.'
+      playtime-hours: '{0} ist online seit {1} Stunde{2} und {3} Minute{4}.'
+      playtime-minutes: '{0} ist online seit {1} Minute{2}.'
       disabled: 'Die Auskunft über Online-Zeiten ist deaktiviert!'
       noperm: 'Es ist dir nicht erlaubt, das zu tun!'
     onlinetop:
@@ -61,7 +61,7 @@ data:
       uptodate: 'SQL Tabelle ist aktualisiert!'
       error: 'Fehler beim Verbinden zur MySQL Datenbasis... schalte ab!'
     instance:
-      open: 'Öffne MySQL VErbindungen: {0}'
+      open: 'Öffne MySQL Verbindungen: {0}'
   sqlite:
     main:
       connecting: 'Verbinde zur SQLite Datenbasis...'
@@ -120,10 +120,10 @@ main:
   enabled: 'Enabled! ({0})'
   reloaded: 'Playtime reloaded!'
 variables:
-  second: 'sekunde'
-  seconds: 'sekunden'
-  minute: 'minute'
-  minutes: 'minuten'
-  hour: 'stunde'
-  hours: 'stunden'
+  second: 'Sekunde'
+  seconds: 'Sekunden'
+  minute: 'Minute'
+  minutes: 'Minuten'
+  hour: 'Stunde'
+  hours: 'Stunden'
   and: 'und'
