@@ -112,7 +112,7 @@ public class SQLite {
      * @return 0 for no returned results, or the number of returned rows
      * @throws SQLException 
      */
-    public int update(String query) throws SQLException {
+    public synchronized int update(String query) throws SQLException {
         Statement stmt = con.createStatement();
         return stmt.executeUpdate(query);
     }

@@ -89,7 +89,7 @@ public class AddRunnable implements Runnable {
                     db.update(sb.toString());
                 }
                 db.close();
-            } catch (Exception ex) {
+            } catch (SQLException ex) {
                 plugin.getLogger().log(Level.SEVERE, null);
                 if (plugin.getDebug() == 3) {
                     ex.printStackTrace();

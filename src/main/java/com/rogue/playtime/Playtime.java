@@ -23,7 +23,6 @@ import com.rogue.playtime.event.EventHandler;
 import com.rogue.playtime.executables.ExecutiveManager;
 import com.rogue.playtime.lang.Cipher;
 import com.rogue.playtime.listener.ListenerManager;
-import com.rogue.playtime.listener.listeners.AFKListener;
 import com.rogue.playtime.metrics.Metrics;
 import com.rogue.playtime.player.PlayerHandler;
 import com.rogue.playtime.runnable.AFKRunnable;
@@ -36,6 +35,7 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -177,6 +177,7 @@ public class Playtime extends JavaPlugin {
     @Override
     public void onDisable() {
         execmanager.cancelAllTasks();
+        HandlerList.unregisterAll(this);
         dmanager.getDataHandler().cleanup();
     }
 

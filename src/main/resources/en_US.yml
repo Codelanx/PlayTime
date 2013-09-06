@@ -64,7 +64,7 @@ data:
       open: 'Open MySQL connections: {0}'
   sqlite:
     main:
-      connecting: '"Connecting to SQLite database..."'
+      connecting: 'Connecting to SQLite database...'
       connect-success: 'Successfully connected to database!'
       create-table: 'Creating table ''playTime'' in database'
       reset-column: 'Resetting column {0}'
