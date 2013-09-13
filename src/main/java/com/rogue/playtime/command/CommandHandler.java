@@ -34,42 +34,27 @@ import org.bukkit.command.CommandSender;
  */
 public class CommandHandler implements CommandExecutor {
 
-    protected Playtime plugin;
-    private Map<String, CommandBase> commands = new HashMap();
+    private final Playtime plugin;
+    private final Map<String, CommandBase> commands = new HashMap();
 
-    public CommandHandler(Playtime p) {
-        plugin = p;
-
-        PlayCommand playtime = new PlayCommand();
-        commands.put(playtime.getName(), playtime);
-        DeathCommand death = new DeathCommand();
-        commands.put(death.getName(), death);
-        OnlineCommand online = new OnlineCommand();
-        commands.put(online.getName(), online);
-        PlayTopCommand playtop = new PlayTopCommand();
-        commands.put(playtop.getName(), playtop);
-        DeathTopCommand deathtop = new DeathTopCommand();
-        commands.put(deathtop.getName(), deathtop);
-        OnlineTopCommand onlinetop = new OnlineTopCommand();
-        commands.put(onlinetop.getName(), onlinetop);
-        PTCommand pt = new PTCommand();
-        commands.put(pt.getName(), pt);
-    }
-
-    /**
-     * Registers the commands to this command executor.
-     *
-     * @since 1.3.0
-     * @version 1.4.0
-     */
-    public void registerExecs() {
-        plugin.getCommand("playtime").setExecutor(this);
-        plugin.getCommand("deathtime").setExecutor(this);
-        plugin.getCommand("onlinetime").setExecutor(this);
-        plugin.getCommand("playtimetop").setExecutor(this);
-        plugin.getCommand("deathtimetop").setExecutor(this);
-        plugin.getCommand("onlinetimetop").setExecutor(this);
-        plugin.getCommand("pt").setExecutor(this);
+    public CommandHandler(Playtime plugin) {
+        this.plugin = plugin;
+        
+        CommandBase[] cmds = new CommandBase[] {
+            new PlayCommand(),
+            new DeathCommand(),
+            new OnlineCommand(),
+            new PlayTopCommand(),
+            new DeathTopCommand(),
+            new OnlineTopCommand(),
+            new PTCommand()
+        };
+        
+        final CommandHandler chand = this;
+        for (CommandBase cmd : cmds) {
+            this.commands.put(cmd.getName(), cmd);
+            this.plugin.getCommand(cmd.getName()).setExecutor(chand);
+        }
     }
 
     /**
@@ -87,9 +72,9 @@ public class CommandHandler implements CommandExecutor {
      */
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (this.isReload(commandLabel, args) || !plugin.isBusy()) {
-            if (commands.containsKey(commandLabel)) {
-                return commands.get(commandLabel).execute(sender, cmd, commandLabel, args);
+        if (this.isReload(commandLabel, args) || !this.plugin.isBusy()) {
+            if (this.commands.containsKey(commandLabel)) {
+                return this.commands.get(commandLabel).execute(sender, cmd, commandLabel, args);
             }
         } else {
             sender.sendMessage(_(plugin.getCipher().getString("command.handler.busy")));
@@ -110,6 +95,6 @@ public class CommandHandler implements CommandExecutor {
      * @return True if reload, false otherwise
      */
     private boolean isReload(String cmd, String[] args) {
-        return cmd.equalsIgnoreCase("pt") && args.length > 0 && args[0].equalsIgnoreCase("reload");
+        return cmd.equalsIgnoreCase("pt") && args.length == 1 && args[0].equalsIgnoreCase("reload");
     }
 }

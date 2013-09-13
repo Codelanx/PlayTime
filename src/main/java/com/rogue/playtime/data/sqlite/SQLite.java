@@ -55,7 +55,7 @@ public class SQLite {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(SQLite.class.getName()).log(Level.SEVERE, plugin.getCipher().getString("data.sqlite.instance.open"), ex);
+            Logger.getLogger(SQLite.class.getName()).log(Level.SEVERE, plugin.getCipher().getString("data.sqlite.instance.error"), ex);
             Bukkit.getServer().getPluginManager().disablePlugin(plugin);
         }
         con = DriverManager.getConnection("jdbc:sqlite:" + plugin.getDataFolder() + File.separator + "users.db");

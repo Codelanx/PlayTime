@@ -130,7 +130,6 @@ public class Playtime extends JavaPlugin {
 
         this.getLogger().info(lang.getString("main.command"));
         chandler = new CommandHandler(this);
-        chandler.registerExecs();
 
         boolean deathEnabled = this.cloader.getBoolean("check.death-time");
         boolean onlineEnabled = this.cloader.getBoolean("check.online-time");
