@@ -184,36 +184,37 @@ public class Playtime extends JavaPlugin {
      * Reloads the plugin
      *
      * @since 1.4.0
-     * @version 1.4.0
+     * @version 1.4.2
      *
      * @param names Players to notify when the reload is complete
      */
-    public void reload(String... names) {
-        String reloadDone = lang.getString("main.reloaded");
+    public void reload(final String... names) {
+        final String reloadDone = lang.getString("main.reloaded");
+        final Playtime plugin = this;
         this.setBusy(true);
-        reloaded = true;
+        this.reloaded = true;
         this.onDisable();
-        try {
-            Thread.sleep(250L);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        debug = 0;
-        execmanager = null;
-        listener = null;
-        phandler = null;
-        chandler = null;
-        dmanager = null;
-        cloader = null;
-        ehandler = null;
-        lang = null;
-        isUpdate = false;
-        this.onLoad();
-        this.onEnable();
-        this.getLogger().info(reloadDone);
-        for (String s : names) {
-            this.getServer().getPlayer(s).sendMessage(_(reloadDone));
-        }
+        Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+            
+            public void run() {
+                plugin.debug = 0;
+                plugin.execmanager = null;
+                plugin.listener = null;
+                plugin.phandler = null;
+                plugin.chandler = null;
+                plugin.dmanager = null;
+                plugin.cloader = null;
+                plugin.ehandler = null;
+                plugin.lang = null;
+                plugin.isUpdate = false;
+                plugin.onLoad();
+                plugin.onEnable();
+                plugin.getLogger().info(reloadDone);
+                for (String s : names) {
+                    plugin.getServer().getPlayer(s).sendMessage(_(reloadDone));
+                }
+            }
+        }, 250L);
     }
 
     /**
