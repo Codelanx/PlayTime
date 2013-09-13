@@ -214,7 +214,7 @@ public class Playtime extends JavaPlugin {
                     plugin.getServer().getPlayer(s).sendMessage(_(reloadDone));
                 }
             }
-        }, 250L);
+        }, 10L);
     }
 
     /**
