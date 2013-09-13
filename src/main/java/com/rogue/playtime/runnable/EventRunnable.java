@@ -67,7 +67,12 @@ public class EventRunnable implements Runnable {
                 SQLite db = new SQLite();
                 try {
                     db.open();
-                    ResultSet ret = db.query("SELECT * FROM `playTime` WHERE (`" + type + "`%" + min + ") <= " + (max - min - 1) + " AND `" + type + "`>= " + min);
+                    ResultSet ret;
+                    if (this.min == 1 || this.min == 0) {
+                        ret = db.query("SELECT * FROM `playTime` WHERE `" + type + "` >= 1");
+                    } else {
+                        ret = db.query("SELECT * FROM `playTime` WHERE (`" + type + "`%" + min + ") <= " + (max - min - 1) + " AND `" + type + "`>= " + min);
+                    }
                     while (ret.next()) {
                         users.put(ret.getString("username"), ret.getInt(type));
                     }
@@ -82,7 +87,12 @@ public class EventRunnable implements Runnable {
                 MySQL db = new MySQL();
                 try {
                     db.open();
-                    ResultSet ret = db.query("SELECT * FROM `playTime` WHERE MOD(`" + type + "`, " + min + ") <= " + (max - min - 1) + " AND `" + type + "` >= " + min);
+                    ResultSet ret;
+                    if (this.min == 1 || this.min == 0) {
+                        ret = db.query("SELECT * FROM `playTime` WHERE `" + type + "` >= 1");
+                    } else {
+                        ret = db.query("SELECT * FROM `playTime` WHERE MOD(`" + type + "`, " + min + ") <= " + (max - min - 1) + " AND `" + type + "` >= " + min);
+                    }
                     while (ret.next()) {
                         users.put(ret.getString("username"), ret.getInt(type));
                     }
