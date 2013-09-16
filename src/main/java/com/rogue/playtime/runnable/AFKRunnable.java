@@ -40,10 +40,10 @@ public class AFKRunnable implements Runnable {
     public void run() {
         Map<String, PlaytimePlayer> players = plugin.getPlayerHandler().getPlayers();
         if (Bukkit.getOnlinePlayers().length > 0) {
+            if (plugin.getDebug() >= 1) {
+                plugin.getLogger().info(plugin.getCipher().getString("runnable.afk.check"));
+            }
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if (plugin.getDebug() >= 1) {
-                    plugin.getLogger().info(plugin.getCipher().getString("runnable.afk.check"));
-                }
                 if (!players.get(p.getName().toLowerCase()).isAFK() && p.getLocation().equals(players.get(p.getName().toLowerCase()).getSavedLocation())) {
                     plugin.getPlayerHandler().incrementTime(p.getName());
                     if (plugin.getDebug() >= 3) {
