@@ -32,25 +32,25 @@ import java.util.logging.Level;
 public class ResetRunnable implements Runnable {
 
     private Playtime plugin;
-    private final String user;
-    private final String value;
+    private final String username;
+    private final String column;
 
-    public ResetRunnable(Playtime p, String username, String column) {
-        plugin = p;
-        user = username;
-        value = column;
+    public ResetRunnable(Playtime plugin, String username, String column) {
+        this.plugin = plugin;
+        this.username = username;
+        this.column = column;
     }
 
     public void run() {
-        String current = plugin.getDataManager().getDataHandler().getName();
+        String current = this.plugin.getDataManager().getDataHandler().getName();
         if (current.equals("mysql")) {
             MySQL db = new MySQL();
             try {
                 db.open();
-                db.update("UPDATE `playTime` SET `" + value + "`=0 WHERE `username`='" + user + "'");
+                db.update("UPDATE `playTime` SET `" + this.column + "`=0 WHERE `username`='" + this.username + "'");
             } catch (SQLException ex) {
-                Playtime.getPlugin().getLogger().log(Level.SEVERE, plugin.getCipher().getString("runnable.reset.error", value.substring(0, value.length() - 5)));
-                if (Playtime.getPlugin().getDebug() == 3) {
+                this.plugin.getLogger().log(Level.SEVERE, this.plugin.getCipher().getString("runnable.reset.error", this.column.substring(0, this.column.length() - 5)));
+                if (this.plugin.getDebug() == 3) {
                     ex.printStackTrace();
                 }
             } finally {
@@ -60,10 +60,10 @@ public class ResetRunnable implements Runnable {
             SQLite db = new SQLite();
             try {
                 db.open();
-                db.update("UPDATE `playTime` SET `" + value + "`=0 WHERE `username`='" + user + "'");
+                db.update("UPDATE `playTime` SET `" + this.column + "`=0 WHERE `username`='" + this.username + "'");
             } catch (SQLException ex) {
-                Playtime.getPlugin().getLogger().log(Level.SEVERE, plugin.getCipher().getString("runnable.reset.error", value.substring(0, value.length() - 5)));
-                if (Playtime.getPlugin().getDebug() == 3) {
+                this.plugin.getLogger().log(Level.SEVERE, this.plugin.getCipher().getString("runnable.reset.error", this.column.substring(0, this.column.length() - 5)));
+                if (this.plugin.getDebug() == 3) {
                     ex.printStackTrace();
                 }
             } finally {
@@ -71,7 +71,7 @@ public class ResetRunnable implements Runnable {
             }
         } else if (current.equals("flatfile")) {
             YAML yaml = new YAML();
-            yaml.getFile().set("users." + user + "." + value, 0);
+            yaml.getFile().set("users." + this.username + "." + this.column, 0);
             yaml.forceSave();
         }
     }

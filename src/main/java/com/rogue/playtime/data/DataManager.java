@@ -19,8 +19,8 @@ package com.rogue.playtime.data;
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.data.mysql.Data_MySQL;
 import com.rogue.playtime.data.sqlite.Data_SQLite;
-import com.rogue.playtime.data.yaml.Data_YAML;
 import com.rogue.playtime.runnable.ConvertToRunnable;
+import java.util.logging.Level;
 
 /**
  *
@@ -44,7 +44,7 @@ public class DataManager {
      * operations
      */
     public DataManager(Playtime p, boolean automatic) {
-        plugin = p;
+        this.plugin = p;
         if (automatic) {
             startData();
         }
@@ -62,7 +62,7 @@ public class DataManager {
      * @version 1.4.0
      */
     private void startData() {
-        this.select(plugin.getConfigurationLoader().getString("data.manager"));
+        this.select(this.plugin.getConfigurationLoader().getString("data.manager"));
         this.setup();
         this.start();
 
@@ -81,12 +81,12 @@ public class DataManager {
     public void select(String type) {
         type = type.toLowerCase();
         if (type.equals("mysql")) {
-            data = new Data_MySQL();
+            this.data = new Data_MySQL(this.plugin);
         } else {
-            data = new Data_SQLite();
+            this.data = new Data_SQLite(this.plugin);
         }
         if (type.equals("flatfile")) {
-            plugin.getLogger().severe(plugin.getCipher().getString("data.manager.no-flat"));
+            this.plugin.getLogger().log(Level.SEVERE, this.plugin.getCipher().getString("data.manager.no-flat"));
         }
     }
 
@@ -97,8 +97,8 @@ public class DataManager {
      * @version 1.3.0
      */
     public void setup() {
-        data.init();
-        data.verifyFormat();
+        this.data.init();
+        this.data.verifyFormat();
     }
 
     /**
@@ -108,7 +108,7 @@ public class DataManager {
      * @version 1.4.0
      */
     public void start() {
-        data.startRunnables();
+        this.data.startRunnables();
     }
 
     /**
@@ -120,7 +120,7 @@ public class DataManager {
      * @return Data Handler
      */
     public DataHandler getDataHandler() {
-        return data;
+        return this.data;
     }
 
     /**
@@ -133,7 +133,7 @@ public class DataManager {
      * @param players Any players to notify after the completion
      */
     public void convertData(String newType, String... players) {
-        data.startConversion(newType, players);
+        this.data.startConversion(newType, players);
     }
 
     /**
@@ -147,6 +147,6 @@ public class DataManager {
      * @param players Any players to notify after the completion
      */
     public void convertTo(String newType, String query, String... players) {
-        plugin.getExecutiveManager().runAsyncTask(new ConvertToRunnable(newType, plugin, query, players), 0L);
+        this.plugin.getExecutiveManager().runAsyncTask(new ConvertToRunnable(newType, plugin, query, players), 0L);
     }
 }

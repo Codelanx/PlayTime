@@ -32,6 +32,8 @@ import org.bukkit.plugin.Plugin;
 
 /**
  * Adapted from TotalPermissions
+ * 
+ * TODO: Coding standard, fix up, allow support for multiple languages at once
  *
  * @version 1.4.0
  * @author 1Rogue
@@ -39,6 +41,7 @@ import org.bukkit.plugin.Plugin;
  */
 public class Cipher {
 
+    private final Playtime plugin;
     private FileConfiguration langFile;
     private final String langFileLocGithub = "https://raw.github.com/1Rogue/Playtime/master/lang/<version>/<lang>.yml";
     private final String langFileLocJar = "<lang>.yml";
@@ -46,6 +49,7 @@ public class Cipher {
     private final String language;
 
     public Cipher(Playtime plugin) {
+        this.plugin = plugin;
         language = plugin.getConfigurationLoader().getString("language.locale");
         //load file from github in preps for future use
         if (language.equalsIgnoreCase("custom")) {
@@ -120,7 +124,7 @@ public class Cipher {
     public String getString(String path, Object... vars) {
         String string = langFile.getString(path);
         if (string == null) {
-            FileConfiguration fromJar = getFromJar(Playtime.getPlugin(), this.langFileLocJar.replace("<lang>", "en_US"));
+            FileConfiguration fromJar = getFromJar(this.plugin, this.langFileLocJar.replace("<lang>", "en_US"));
             if (fromJar != null) {
                 string = fromJar.getString(path);
             }

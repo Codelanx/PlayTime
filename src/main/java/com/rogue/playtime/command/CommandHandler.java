@@ -41,13 +41,13 @@ public class CommandHandler implements CommandExecutor {
         this.plugin = plugin;
         
         CommandBase[] cmds = new CommandBase[] {
-            new PlayCommand(),
-            new DeathCommand(),
-            new OnlineCommand(),
-            new PlayTopCommand(),
-            new DeathTopCommand(),
-            new OnlineTopCommand(),
-            new PTCommand()
+            new PlayCommand(this.plugin),
+            new DeathCommand(this.plugin),
+            new OnlineCommand(this.plugin),
+            new PlayTopCommand(this.plugin),
+            new DeathTopCommand(this.plugin),
+            new OnlineTopCommand(this.plugin),
+            new PTCommand(this.plugin)
         };
         
         final CommandHandler chand = this;
@@ -77,7 +77,7 @@ public class CommandHandler implements CommandExecutor {
                 return this.commands.get(commandLabel).execute(sender, cmd, commandLabel, args);
             }
         } else {
-            sender.sendMessage(_(plugin.getCipher().getString("command.handler.busy")));
+            sender.sendMessage(_(this.plugin.getCipher().getString("command.handler.busy")));
         }
         return false;
     }

@@ -34,8 +34,8 @@ public class OnlineListener implements Listener {
 
     private final Playtime plugin;
 
-    public OnlineListener(Playtime p) {
-        plugin = p;
+    public OnlineListener(Playtime plugin) {
+        this.plugin = plugin;
     }
 
     /**
@@ -48,6 +48,6 @@ public class OnlineListener implements Listener {
      */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerQuit(PlayerQuitEvent e) {
-        plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(plugin, e.getPlayer().getName(), "onlinetime"), 0L);
+        this.plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(this.plugin, e.getPlayer().getName(), "onlinetime"), 0L);
     }
 }

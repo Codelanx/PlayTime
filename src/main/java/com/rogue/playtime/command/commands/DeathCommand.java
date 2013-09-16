@@ -16,9 +16,9 @@
  */
 package com.rogue.playtime.command.commands;
 
+import com.rogue.playtime.Playtime;
 import com.rogue.playtime.command.CommandBase;
 import static com.rogue.playtime.Playtime._;
-import static com.rogue.playtime.command.CommandBase.plugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -30,6 +30,12 @@ import org.bukkit.entity.Player;
  * @version 1.4.0
  */
 public class DeathCommand implements CommandBase {
+    
+    private final Playtime plugin;
+    
+    public DeathCommand(Playtime plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -38,28 +44,28 @@ public class DeathCommand implements CommandBase {
         if (args.length == 0 && sender instanceof Player) {
             check = sender.getName();
         } else if (args.length == 1) {
-            check = plugin.getBestPlayer(args[0]);
+            check = this.plugin.getBestPlayer(args[0]);
             perm += ".others";
         } else {
-            sender.sendMessage(_(plugin.getCipher().getString("command.commands.death.console")));
+            sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.death.console")));
             return true;
         }
         if (sender.hasPermission(perm)) {
-            if (plugin.getConfigurationLoader().getBoolean("check.death-time")) {
-                int time = plugin.getDataManager().getDataHandler().getValue("deathtime", check);
+            if (this.plugin.getConfigurationLoader().getBoolean("check.death-time")) {
+                int time = this.plugin.getDataManager().getDataHandler().getValue("deathtime", check);
                 int minutes = time % 60;
                 if (time >= 60) {
                     int hours = time / 60;
-                    sender.sendMessage(_(plugin.getCipher().getString("command.commands.death.playtime-hours", check, hours, (hours == 1 ? "" : "s"), minutes, (minutes == 1 ? "" : "s"))));
+                    sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.death.playtime-hours", check, hours, (hours == 1 ? "" : "s"), minutes, (minutes == 1 ? "" : "s"))));
                 } else {
-                    sender.sendMessage(_(plugin.getCipher().getString("command.commands.death.playtime-minutes", check, minutes, (minutes == 1 ? "" : "s"))));
+                    sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.death.playtime-minutes", check, minutes, (minutes == 1 ? "" : "s"))));
                 }
             } else {
-                sender.sendMessage(_(plugin.getCipher().getString("command.commands.death.disabled")));
+                sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.death.disabled")));
             }
 
         } else {
-            sender.sendMessage(_(plugin.getCipher().getString("command.commands.death.noperm")));
+            sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.death.noperm")));
         }
         return false;
     }

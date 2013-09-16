@@ -34,8 +34,8 @@ public class DeathListener implements Listener {
 
     private final Playtime plugin;
 
-    public DeathListener(Playtime p) {
-        plugin = p;
+    public DeathListener(Playtime plugin) {
+        this.plugin = plugin;
     }
 
     /**
@@ -48,6 +48,6 @@ public class DeathListener implements Listener {
      */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerDeath(PlayerDeathEvent e) {
-        plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(plugin, e.getEntity().getName(), "deathtime"), 0L);
+        this.plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(this.plugin, e.getEntity().getName(), "deathtime"), 0L);
     }
 }

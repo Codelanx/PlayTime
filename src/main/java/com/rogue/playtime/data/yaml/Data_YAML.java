@@ -36,6 +36,10 @@ public class Data_YAML implements DataHandler {
 
     private YAML yaml;
     private Playtime plugin;
+    
+    public Data_YAML(Playtime plugin) {
+        this.plugin = plugin;
+    }
 
     public String getName() {
         return "flatfile";
@@ -45,7 +49,7 @@ public class Data_YAML implements DataHandler {
         if (data.equals("onlinetime") && !Bukkit.getPlayer(username).isOnline()) {
             return -1;
         }
-        return yaml.getFile().getInt("users." + plugin.getBestPlayer(username) + "." + data);
+        return this.yaml.getFile().getInt("users." + this.plugin.getBestPlayer(username) + "." + data);
     }
 
     public Map<String, Integer> getTopPlayers(String data, int amount) {
@@ -57,31 +61,30 @@ public class Data_YAML implements DataHandler {
     }
 
     public void verifyFormat() {
-        if (plugin.firstRun()) {
-            ConfigurationSection section = yaml.getFile().getConfigurationSection("users");
+        if (this.plugin.firstRun()) {
+            ConfigurationSection section = this.yaml.getFile().getConfigurationSection("users");
             for (String s : section.getKeys(false)) {
-                yaml.getFile().set("users." + s + ".onlinetime", 0);
+                this.yaml.getFile().set("users." + s + ".onlinetime", 0);
             }
-            yaml.forceSave();
+            this.yaml.forceSave();
         }
     }
 
     public void init() {
-        yaml = new YAML();
-        plugin = Playtime.getPlugin();
+        this.yaml = new YAML();
     }
 
     public void startRunnables() {
-        plugin.getExecutiveManager().runAsyncTaskRepeat(new AddRunnable(plugin), 60L, 60L);
+        this.plugin.getExecutiveManager().runAsyncTaskRepeat(new AddRunnable(this.plugin), 60L, 60L);
     }
 
     public void startConversion(String newType, String... players) {
-        plugin.onDisable();
-        plugin.getExecutiveManager().runAsyncTask(new StartConvertRunnable(plugin, newType, players), 0L);
+        this.plugin.onDisable();
+        this.plugin.getExecutiveManager().runAsyncTask(new StartConvertRunnable(this.plugin, newType, players), 0L);
     }
 
     public void cleanup() {
-        yaml.forceSave();
-        yaml = null;
+        this.yaml.forceSave();
+        this.yaml = null;
     }
 }

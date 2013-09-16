@@ -37,42 +37,46 @@ import org.bukkit.Bukkit;
  */
 public class Data_MySQL implements DataHandler {
 
-    private Playtime plugin = Playtime.getPlugin();
+    private Playtime plugin;
     private MySQL db;
+    
+    public Data_MySQL(Playtime plugin) {
+        this.plugin = plugin;
+    }
 
     public String getName() {
         return "mysql";
     }
 
     public int getValue(String data, String username) {
-        username = plugin.getBestPlayer(username);
+        username = this.plugin.getBestPlayer(username);
         if (data.equals("onlinetime") && !Bukkit.getPlayer(username).isOnline()) {
             return -1;
         }
-        db = new MySQL();
+        this.db = new MySQL();
         int ret = 0;
         try {
-            db.open();
-            ResultSet result = db.query("SELECT `" + data + "` FROM `playTime` WHERE `username`='" + username + "'");
+            this.db.open();
+            ResultSet result = this.db.query("SELECT `" + data + "` FROM `playTime` WHERE `username`='" + username + "'");
             if (result.next()) {
                 ret = result.getInt(1);
             }
         } catch (SQLException e) {
-            if (Playtime.getPlugin().getDebug() == 3) {
+            if (this.plugin.getDebug() == 3) {
                 e.printStackTrace();
             }
         } finally {
-            db.close();
+            this.db.close();
         }
         return ret;
     }
 
     public Map<String, Integer> getTopPlayers(String data, int amount) {
-        db = new MySQL();
+        this.db = new MySQL();
         Map<String, Integer> players = new HashMap();
         try {
-            db.open();
-            ResultSet result = db.query("SELECT * FROM `playTime` ORDER BY `" + data + "` DESC LIMIT " + amount);
+            this.db.open();
+            ResultSet result = this.db.query("SELECT * FROM `playTime` ORDER BY `" + data + "` DESC LIMIT " + amount);
             boolean end = false;
             while (!end) {
                 if (result.next()) {
@@ -82,140 +86,140 @@ public class Data_MySQL implements DataHandler {
                 }
             }
         } catch (SQLException e) {
-            if (Playtime.getPlugin().getDebug() == 3) {
+            if (this.plugin.getDebug() == 3) {
                 e.printStackTrace();
             }
         } finally {
-            db.close();
+            this.db.close();
         }
         return players;
     }
 
     public Map<String, Integer> getPlayersInRange(String timer, int minimum, int maximum) {
-        db = new MySQL();
+        this.db = new MySQL();
         Map<String, Integer> back = new HashMap();
         try {
-            db.open();
-            ResultSet ret = db.query("SELECT * FROM `playTime` WHERE `" + timer + "` BETWEEN " + minimum + " AND " + maximum);
+            this.db.open();
+            ResultSet ret = this.db.query("SELECT * FROM `playTime` WHERE `" + timer + "` BETWEEN " + minimum + " AND " + maximum);
             while (ret.next()) {
                 back.put(ret.getString("username"), ret.getInt(timer));
             }
         } catch (SQLException e) {
-            if (plugin.getDebug() == 3) {
+            if (this.plugin.getDebug() == 3) {
                 e.printStackTrace();
             }
         } finally {
-            db.close();
+            this.db.close();
         }
         return back;
     }
 
     public void verifyFormat() {
-        db = new MySQL();
-        plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.connecting"));
+        this.db = new MySQL();
+        this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.connecting"));
         try {
-            db.open();
-            if (db.checkConnection()) {
-                plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.connect-success"));
-                if (!db.checkTable("playTime")) {
-                    plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.mysql.main.create-table", plugin.getConfig().getString("managers.mysql.database")));
-                    int result = db.update("CREATE TABLE `playTime` ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL DEFAULT 0, deathtime int NOT NULL DEFAULT 0, onlinetime int NOT NULL DEFAULT 0, PRIMARY KEY (id), UNIQUE KEY (username)) ENGINE=MyISAM;");
+            this.db.open();
+            if (this.db.checkConnection()) {
+                this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.connect-success"));
+                if (!this.db.checkTable("playTime")) {
+                    this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("data.mysql.main.create-table", this.plugin.getConfig().getString("managers.mysql.database")));
+                    int result = this.db.update("CREATE TABLE `playTime` ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL DEFAULT 0, deathtime int NOT NULL DEFAULT 0, onlinetime int NOT NULL DEFAULT 0, PRIMARY KEY (id), UNIQUE KEY (username)) ENGINE=MyISAM;");
                 } else {
                     try {
-                        db.update("ALTER TABLE `playTime` ADD COLUMN `username` VARCHAR(32) NULL DEFAULT NULL AFTER `id`, ADD UNIQUE INDEX `username` (`username`)");
-                        plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.missing-user"));
-                        db.update("DROP TABLE `playTime`");
-                        db.update("CREATE TABLE playTime ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL, deathtime int NOT NULL, PRIMARY KEY (id), UNIQUE KEY (username)) ENtestingGINE=MyISAM;");
+                        this.db.update("ALTER TABLE `playTime` ADD COLUMN `username` VARCHAR(32) NULL DEFAULT NULL AFTER `id`, ADD UNIQUE INDEX `username` (`username`)");
+                        this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.missing-user"));
+                        this.db.update("DROP TABLE `playTime`");
+                        this.db.update("CREATE TABLE playTime ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL, deathtime int NOT NULL, PRIMARY KEY (id), UNIQUE KEY (username)) ENtestingGINE=MyISAM;");
                     } catch (SQLException e) {
                     }
                     try {
-                        db.update("ALTER TABLE `playTime` ADD `playtime` int NOT NULL DEFAULT 0 AFTER `username`");
-                        plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.missing-playtime"));
-                        plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.reset-column", "`playtime`"));
+                        this.db.update("ALTER TABLE `playTime` ADD `playtime` int NOT NULL DEFAULT 0 AFTER `username`");
+                        this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.missing-playtime"));
+                        this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.reset-column", "`playtime`"));
                     } catch (SQLException e) {
                     }
                     try {
-                        db.update("ALTER TABLE `playTime` ADD UNIQUE INDEX `username` (`username`)");
-                        plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.updating-table", "1.1"));
+                        this.db.update("ALTER TABLE `playTime` ADD UNIQUE INDEX `username` (`username`)");
+                        this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.updating-table", "1.1"));
                     } catch (SQLException e) {
                     }
                     try {
-                        db.update("ALTER TABLE `playTime` ADD deathtime int NOT NULL AFTER `playtime`");
-                        plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.updating-table", "1.2.0"));
+                        this.db.update("ALTER TABLE `playTime` ADD deathtime int NOT NULL AFTER `playtime`");
+                        this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.updating-table", "1.2.0"));
                     } catch (SQLException e) {
                     }
                     try {
-                        db.update("ALTER TABLE `playTime` ADD onlinetime int NOT NULL DEFAULT 1 AFTER `deathtime`");
-                        plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.updating-table", "1.3.0"));
+                        this.db.update("ALTER TABLE `playTime` ADD onlinetime int NOT NULL DEFAULT 1 AFTER `deathtime`");
+                        this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.updating-table", "1.3.0"));
                     } catch (SQLException e) {
                     }
                     try {
-                        db.update("ALTER TABLE `playTime` CHANGE COLUMN `playtime` `playtime` int NOT NULL DEFAULT 0 AFTER `username`");
-                        if (plugin.getDebug() >= 1) {
-                            plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.setting-defaults", "`playtime`"));
+                        this.db.update("ALTER TABLE `playTime` CHANGE COLUMN `playtime` `playtime` int NOT NULL DEFAULT 0 AFTER `username`");
+                        if (this.plugin.getDebug() >= 1) {
+                            this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.setting-defaults", "`playtime`"));
                         }
                     } catch (SQLException e) {
                     }
                     try {
-                        db.update("ALTER TABLE `playTime` CHANGE COLUMN `deathtime` `deathtime` int NOT NULL DEFAULT 0 AFTER `playtime`");
-                        if (plugin.getDebug() >= 1) {
-                            plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.setting-defaults", "`deathtime`"));
+                        this.db.update("ALTER TABLE `playTime` CHANGE COLUMN `deathtime` `deathtime` int NOT NULL DEFAULT 0 AFTER `playtime`");
+                        if (this.plugin.getDebug() >= 1) {
+                            this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.setting-defaults", "`deathtime`"));
                         }
                     } catch (SQLException e) {
                     }
                     try {
-                        db.update("ALTER TABLE `playTime` CHANGE COLUMN `onlinetime` `onlinetime` int NOT NULL DEFAULT 0 AFTER `deathtime`");
-                        if (plugin.getDebug() >= 1) {
-                            plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.setting-defaults", "`onlinetime`"));
+                        this.db.update("ALTER TABLE `playTime` CHANGE COLUMN `onlinetime` `onlinetime` int NOT NULL DEFAULT 0 AFTER `deathtime`");
+                        if (this.plugin.getDebug() >= 1) {
+                            this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.setting-defaults", "`onlinetime`"));
                         }
                     } catch (SQLException e) {
                     }
-                    if (plugin.firstRun()) {
+                    if (this.plugin.firstRun()) {
                         try {
-                            db.update("UPDATE `playTime` SET `onlinetime`=0");
-                            if (plugin.getDebug() >= 1) {
-                                plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.reset-column", "`onlinetime`"));
+                            this.db.update("UPDATE `playTime` SET `onlinetime`=0");
+                            if (this.plugin.getDebug() >= 1) {
+                                this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.reset-column", "`onlinetime`"));
                             }
                         } catch (SQLException e) {
                         }
                     }
-                    plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.uptodate"));
+                    this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.uptodate"));
                 }
             }
         } catch (SQLException ex) {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            db.close();
+            this.db.close();
         }
     }
 
     public void init() {
-        db = new MySQL(plugin.getConfig().getString("managers.mysql.host"), plugin.getConfig().getString("managers.mysql.username"), plugin.getConfig().getString("managers.mysql.password"), plugin.getConfig().getString("managers.mysql.database"), plugin.getConfig().getString("managers.mysql.port"));
+        this.db = new MySQL(this.plugin.getConfig().getString("managers.mysql.host"), this.plugin.getConfig().getString("managers.mysql.username"), this.plugin.getConfig().getString("managers.mysql.password"), this.plugin.getConfig().getString("managers.mysql.database"), this.plugin.getConfig().getString("managers.mysql.port"));
     }
 
     public void startRunnables() {
-        db = new MySQL();
+        this.db = new MySQL();
         try {
-            db.open();
-            if (db.checkConnection()) {
-                plugin.getExecutiveManager().runAsyncTaskRepeat(new AddRunnable(plugin), 60L, 60L);
+            this.db.open();
+            if (this.db.checkConnection()) {
+                this.plugin.getExecutiveManager().runAsyncTaskRepeat(new AddRunnable(this.plugin), 60L, 60L);
             } else {
-                plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.error"));
-                plugin.getServer().getPluginManager().disablePlugin(plugin);
+                this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.error"));
+                this.plugin.getServer().getPluginManager().disablePlugin(this.plugin);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            db.close();
+            this.db.close();
         }
     }
 
     public void startConversion(String newType, String... players) {
-        plugin.onDisable();
-        plugin.getExecutiveManager().runAsyncTask(new StartConvertRunnable(plugin, newType, players), 0L);
+        this.plugin.onDisable();
+        this.plugin.getExecutiveManager().runAsyncTask(new StartConvertRunnable(this.plugin, newType, players), 0L);
     }
 
     public void cleanup() {
-        db = null;
+        this.db = null;
     }
 }

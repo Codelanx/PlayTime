@@ -27,20 +27,20 @@ import java.util.List;
  */
 public class Event {
     
-    private final String name;
-    private final String type;
-    private final Integer hours;
-    private final List<String> run;
+    private final String eventName;
+    private final String timer;
+    private final Integer trigger;
+    private final List<String> commands;
     private final boolean repeat;
     private final boolean login;
     
-    public Event(String cname, String timer, Integer trigger, List<String> commands, boolean repeated, boolean atLogin) {
-        name = cname;
-        type = timer;
-        hours = trigger;
-        run = commands;
-        repeat = repeated;
-        login = atLogin;
+    public Event(String eventName, String timer, Integer trigger, List<String> commands, boolean repeat, boolean login) {
+        this.eventName = eventName;
+        this.timer = timer;
+        this.trigger = trigger;
+        this.commands = commands;
+        this.repeat = repeat;
+        this.login = login;
     }
     
     /**
@@ -52,7 +52,7 @@ public class Event {
      * @return Event name
      */
     public String getName() {
-        return name;
+        return this.eventName;
     }
     
     /**
@@ -64,7 +64,7 @@ public class Event {
      * @return Event timer type
      */
     public String getType() {
-        return type;
+        return this.timer;
     }
     
     /**
@@ -76,7 +76,7 @@ public class Event {
      * @return Event trigger time
      */
     public Integer getTrigger() {
-        return hours;
+        return this.trigger;
     }
     
     /**
@@ -88,7 +88,7 @@ public class Event {
      * @return Event commands
      */
     public List<String> getCommands() {
-        return run;
+        return this.commands;
     }
     
     /**
@@ -100,7 +100,7 @@ public class Event {
      * @return If the event repeats
      */
     public boolean isRepeated() {
-        return repeat;
+        return this.repeat;
     }
     
     /**
@@ -112,7 +112,7 @@ public class Event {
      * @return If the event is used upon logging in.
      */
     public boolean isLoginEvent() {
-        return login;
+        return this.login;
     }
 
 }

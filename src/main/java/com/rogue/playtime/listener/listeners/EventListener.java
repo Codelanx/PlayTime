@@ -33,8 +33,8 @@ public class EventListener implements Listener {
 
     private final Playtime plugin;
 
-    public EventListener(Playtime p) {
-        plugin = p;
+    public EventListener(Playtime plugin) {
+        this.plugin = plugin;
     }
 
     /**
@@ -47,6 +47,6 @@ public class EventListener implements Listener {
      */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent e) {
-        plugin.getEventHandler().fireLoginEvents(e.getPlayer().getName());
+        this.plugin.getEventHandler().fireLoginEvents(e.getPlayer().getName());
     }
 }

@@ -16,7 +16,6 @@
  */
 package com.rogue.playtime.command;
 
-import com.rogue.playtime.Playtime;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -27,8 +26,6 @@ import org.bukkit.command.CommandSender;
  * @version 1.3.0
  */
 public interface CommandBase {
-    
-    public Playtime plugin = Playtime.getPlugin();
 
     /**
      * Executes a relevant command grabbed from the CommandHandler.

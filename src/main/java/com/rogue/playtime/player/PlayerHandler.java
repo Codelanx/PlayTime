@@ -17,7 +17,7 @@
 package com.rogue.playtime.player;
 
 import com.rogue.playtime.Playtime;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import org.bukkit.Location;
 
@@ -30,14 +30,14 @@ import org.bukkit.Location;
 public class PlayerHandler {
 
     private final Playtime plugin;
-    private final int timer;
-    private final int timeEnd;
-    private HashMap<String, PlaytimePlayer> players = new HashMap<String, PlaytimePlayer>();
+    private final int interval;
+    private final int timeout;
+    private ConcurrentHashMap<String, PlaytimePlayer> players = new ConcurrentHashMap();
 
-    public PlayerHandler(Playtime p, int interval, int timeout) {
-        plugin = p;
-        timer = interval;
-        timeEnd = timeout;
+    public PlayerHandler(Playtime plugin, int interval, int timeout) {
+        this.plugin = plugin;
+        this.interval = interval;
+        this.timeout = timeout;
     }
 
     /**
@@ -193,12 +193,12 @@ public class PlayerHandler {
     public void incrementTime(String name) {
         PlaytimePlayer temp = this.getPlayer(name.toLowerCase());
         if (temp != null) {
-            temp.setTime(this.getPlayer(name.toLowerCase()).getTime() + timer);
-            if (this.checkTime(name) >= timeEnd) {
-                if (plugin.getDebug() >= 2) {
-                    plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("player.set-afk", name));
+            temp.setTime(this.getPlayer(name.toLowerCase()).getTime() + this.interval);
+            if (this.checkTime(name) >= this.timeout) {
+                if (this.plugin.getDebug() >= 2) {
+                    this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("player.set-afk", name));
                 }
-                plugin.getPlayerHandler().updatePlayer(name, true);
+                this.plugin.getPlayerHandler().updatePlayer(name, true);
             }
         }
     }
@@ -212,7 +212,7 @@ public class PlayerHandler {
      * @return The int value of the AFK timeout
      */
     public int getAFKTimeout() {
-        return timeEnd;
+        return this.timeout;
     }
 
     /**
@@ -224,7 +224,7 @@ public class PlayerHandler {
      * @return The int value of the AFK checking interval
      */
     public int getAFKCheckInterval() {
-        return timer;
+        return this.interval;
     }
 
     /**
@@ -235,7 +235,7 @@ public class PlayerHandler {
      *
      * @return Map of PlaytimePlayers players
      */
-    public HashMap<String, PlaytimePlayer> getPlayers() {
-        return players;
+    public ConcurrentHashMap<String, PlaytimePlayer> getPlayers() {
+        return this.players;
     }
 }

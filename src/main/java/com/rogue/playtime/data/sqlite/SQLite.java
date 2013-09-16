@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 
 /**
- * Instantiable MySQL connector
+ * Instantiable SQLite connector
  *
  * @since 1.3.0
  * @author 1Rogue
@@ -38,7 +38,15 @@ public class SQLite {
 
     private static int connections = 0;
     private Connection con = null;
-    private Playtime plugin = Playtime.getPlugin();
+    private Playtime plugin;
+    
+    public SQLite(Playtime plugin) {
+        this.plugin = plugin;
+    }
+    
+    public SQLite() {
+        this.plugin = Playtime.getPlugin();
+    }
 
     /**
      * Opens a connection to the SQLite database. Make sure to call
@@ -55,14 +63,14 @@ public class SQLite {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(SQLite.class.getName()).log(Level.SEVERE, plugin.getCipher().getString("data.sqlite.instance.error"), ex);
-            Bukkit.getServer().getPluginManager().disablePlugin(plugin);
+            Logger.getLogger(SQLite.class.getName()).log(Level.SEVERE, this.plugin.getCipher().getString("data.sqlite.instance.error"), ex);
+            Bukkit.getServer().getPluginManager().disablePlugin(this.plugin);
         }
-        con = DriverManager.getConnection("jdbc:sqlite:" + plugin.getDataFolder() + File.separator + "users.db");
-        if (plugin.getDebug() >= 2) {
-            plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.sqlite.instance.open", ++connections));
+        this.con = DriverManager.getConnection("jdbc:sqlite:" + this.plugin.getDataFolder() + File.separator + "users.db");
+        if (this.plugin.getDebug() >= 2) {
+            this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("data.sqlite.instance.open", ++connections));
         }
-        return con;
+        return this.con;
     }
 
     /**
@@ -97,7 +105,7 @@ public class SQLite {
      * @throws SQLException
      */
     public ResultSet query(String query) throws SQLException {
-        Statement stmt = con.createStatement();
+        Statement stmt = this.con.createStatement();
         return stmt.executeQuery(query);
     }
 
@@ -113,7 +121,7 @@ public class SQLite {
      * @throws SQLException
      */
     public synchronized int update(String query) throws SQLException {
-        Statement stmt = con.createStatement();
+        Statement stmt = this.con.createStatement();
         return stmt.executeUpdate(query);
     }
 
@@ -125,9 +133,9 @@ public class SQLite {
      */
     public void close() {
         try {
-            con.close();
-            if (plugin.getDebug() >= 2) {
-                plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.sqlite.instance.open", --connections));
+            this.con.close();
+            if (this.plugin.getDebug() >= 2) {
+                this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("data.sqlite.instance.open", --connections));
             }
         } catch (SQLException e) {
             this.plugin.getLogger().log(Level.WARNING, this.plugin.getCipher().getString("data.sqlite.instance.close-error"));

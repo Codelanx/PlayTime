@@ -38,42 +38,46 @@ import org.bukkit.Bukkit;
  */
 public class Data_SQLite implements DataHandler {
 
-    private Playtime plugin = Playtime.getPlugin();
+    private Playtime plugin;
     private SQLite db;
+    
+    public Data_SQLite(Playtime plugin) {
+        this.plugin = plugin;
+    }
 
     public String getName() {
         return "sqlite";
     }
 
     public int getValue(String data, String username) {
-        username = plugin.getBestPlayer(username);
+        username = this.plugin.getBestPlayer(username);
         if (data.equals("onlinetime") && !Bukkit.getPlayer(username).isOnline()) {
             return -1;
         }
-        db = new SQLite();
+        this.db = new SQLite();
         int ret = 0;
         try {
-            db.open();
-            ResultSet result = db.query("SELECT `" + data + "` FROM `playTime` WHERE `username`='" + username + "'");
+            this.db.open();
+            ResultSet result = this.db.query("SELECT `" + data + "` FROM `playTime` WHERE `username`='" + username + "'");
             if (result.next()) {
                 ret = result.getInt(1);
             }
         } catch (SQLException e) {
-            if (Playtime.getPlugin().getDebug() == 3) {
+            if (this.plugin.getDebug() == 3) {
                 e.printStackTrace();
             }
         } finally {
-            db.close();
+            this.db.close();
         }
         return ret;
     }
 
     public Map<String, Integer> getTopPlayers(String data, int amount) {
-        db = new SQLite();
+        this.db = new SQLite();
         Map<String, Integer> players = new HashMap();
         try {
-            db.open();
-            ResultSet result = db.query("SELECT * FROM `playTime` ORDER BY `" + data + "` DESC LIMIT " + amount);
+            this.db.open();
+            ResultSet result = this.db.query("SELECT * FROM `playTime` ORDER BY `" + data + "` DESC LIMIT " + amount);
             boolean end = false;
             while (!end) {
                 if (result.next()) {
@@ -83,61 +87,61 @@ public class Data_SQLite implements DataHandler {
                 }
             }
         } catch (SQLException e) {
-            if (Playtime.getPlugin().getDebug() == 3) {
+            if (this.plugin.getDebug() == 3) {
                 e.printStackTrace();
             }
         } finally {
-            db.close();
+            this.db.close();
         }
         return players;
     }
 
     public Map<String, Integer> getPlayersInRange(String timer, int minimum, int maximum) {
-        db = new SQLite();
+        this.db = new SQLite();
         Map<String, Integer> back = new HashMap();
         try {
-            db.open();
-            ResultSet ret = db.query("SELECT `username` FROM `playTime` WHERE `" + timer + "` BETWEEN " + minimum + " AND " + maximum);
+            this.db.open();
+            ResultSet ret = this.db.query("SELECT `username` FROM `playTime` WHERE `" + timer + "` BETWEEN " + minimum + " AND " + maximum);
             while (ret.next()) {
                 back.put(ret.getString("username"), ret.getInt(timer));
             }
         } catch (SQLException e) {
-            if (plugin.getDebug() == 3) {
+            if (this.plugin.getDebug() == 3) {
                 e.printStackTrace();
             }
         } finally {
-            db.close();
+            this.db.close();
         }
         return back;
     }
 
     public void verifyFormat() {
-        db = new SQLite();
-        plugin.getLogger().info(plugin.getCipher().getString("data.sqlite.main.connecting"));
+        this.db = new SQLite();
+        this.plugin.getLogger().info(this.plugin.getCipher().getString("data.sqlite.main.connecting"));
         try {
-            db.open();
-            plugin.getLogger().info(plugin.getCipher().getString("data.sqlite.main.connect-success"));
-            if (!db.checkTable("playTime")) {
-                plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.sqlite.main.create-table"));
-                db.update("CREATE TABLE playTime ( id INTEGER NOT NULL PRIMARY KEY, username VARCHAR(32) NOT NULL UNIQUE, playtime INTEGER NOT NULL DEFAULT 0, deathtime INTEGER NOT NULL DEFAULT 0, onlinetime INTEGER NOT NULL DEFAULT 0)");
+            this.db.open();
+            this.plugin.getLogger().info(this.plugin.getCipher().getString("data.sqlite.main.connect-success"));
+            if (!this.db.checkTable("playTime")) {
+                this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("data.sqlite.main.create-table"));
+                this.db.update("CREATE TABLE playTime ( id INTEGER NOT NULL PRIMARY KEY, username VARCHAR(32) NOT NULL UNIQUE, playtime INTEGER NOT NULL DEFAULT 0, deathtime INTEGER NOT NULL DEFAULT 0, onlinetime INTEGER NOT NULL DEFAULT 0)");
             } else {
-                if (plugin.firstRun()) {
+                if (this.plugin.firstRun()) {
                     try {
-                        db.update("UPDATE `playTime` SET `onlinetime`=0");
-                        if (plugin.getDebug() >= 1) {
-                            plugin.getLogger().info(plugin.getCipher().getString("data.sqlite.main.reset-column", "`onlinetime`"));
+                        this.db.update("UPDATE `playTime` SET `onlinetime`=0");
+                        if (this.plugin.getDebug() >= 1) {
+                            this.plugin.getLogger().info(this.plugin.getCipher().getString("data.sqlite.main.reset-column", "`onlinetime`"));
                         }
                     } catch (SQLException e) {
                     }
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, plugin.getCipher().getString("data.sqlite.main.error"), ex);
-            File file = new File(plugin.getDataFolder() + File.separator + "users.db");
+            Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, this.plugin.getCipher().getString("data.sqlite.main.error"), ex);
+            File file = new File(this.plugin.getDataFolder() + File.separator + "users.db");
             file.delete();
-            Bukkit.getServer().getPluginManager().disablePlugin(plugin);
+            Bukkit.getServer().getPluginManager().disablePlugin(this.plugin);
         } finally {
-            db.close();
+            this.db.close();
         }
     }
 
@@ -145,15 +149,15 @@ public class Data_SQLite implements DataHandler {
     }
 
     public void startRunnables() {
-        plugin.getExecutiveManager().runAsyncTaskRepeat(new AddRunnable(plugin), 60L, 60L);
+        this.plugin.getExecutiveManager().runAsyncTaskRepeat(new AddRunnable(this.plugin), 60L, 60L);
     }
 
     public void startConversion(String newType, String... players) {
-        plugin.onDisable();
-        plugin.getExecutiveManager().runAsyncTask(new StartConvertRunnable(plugin, newType, players), 0L);
+        this.plugin.onDisable();
+        this.plugin.getExecutiveManager().runAsyncTask(new StartConvertRunnable(this.plugin, newType, players), 0L);
     }
 
     public void cleanup() {
-        db = null;
+        this.db = null;
     }
 }

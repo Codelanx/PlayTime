@@ -37,21 +37,21 @@ public class ListenerManager {
     public ListenerManager(Playtime plugin) {
         
         if (plugin.getPlayerHandler() != null) {
-            listeners.put("afk", new AFKListener(plugin, plugin.getConfigurationLoader().getBoolean("afk.check-chat")));
+            this.listeners.put("afk", new AFKListener(plugin, plugin.getConfigurationLoader().getBoolean("afk.check-chat")));
         }
         if (plugin.getConfigurationLoader().getBoolean("check.death-time")) {
-            listeners.put("death", new DeathListener(plugin));
+            this.listeners.put("death", new DeathListener(plugin));
         }
         if (plugin.getEventHandler() != null) {
-            listeners.put("event", new EventListener(plugin));
+            this.listeners.put("event", new EventListener(plugin));
         }
         if (plugin.getConfigurationLoader().getBoolean("check.online-time")) {
-            listeners.put("online", new OnlineListener(plugin));
+            this.listeners.put("online", new OnlineListener(plugin));
         }
         if (plugin.getConfigurationLoader().getBoolean("update-check")) {
-            listeners.put("update", new UpdateListener(plugin));
+            this.listeners.put("update", new UpdateListener(plugin));
         }
-        for (Listener l : listeners.values()) {
+        for (Listener l : this.listeners.values()) {
             Bukkit.getPluginManager().registerEvents(l, plugin);
         }
     }
@@ -69,7 +69,7 @@ public class ListenerManager {
      * @return The listener class, null if disabled
      */
     public Listener getListener(String name) {
-        return listeners.get(name);
+        return this.listeners.get(name);
     }
 
 }

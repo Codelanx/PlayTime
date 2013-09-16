@@ -36,9 +36,9 @@ public class ConfigurationLoader {
     private YamlConfiguration yaml = null;
     private File file;
 
-    public ConfigurationLoader(Playtime p) {
-        plugin = p;
-        file = new File(plugin.getDataFolder(), "config.yml");
+    public ConfigurationLoader(Playtime plugin) {
+        this.plugin = plugin;
+        this.file = new File(this.plugin.getDataFolder(), "config.yml");
         verifyConfig();
     }
 
@@ -49,32 +49,32 @@ public class ConfigurationLoader {
      * @version 1.4.0
      */
     private void verifyConfig() {
-        if (plugin.getDataFolder().exists()) {
-            plugin.getDataFolder().mkdir();
+        if (this.plugin.getDataFolder().exists()) {
+            this.plugin.getDataFolder().mkdir();
         }
-        if (!file.exists()) {
-            plugin.saveDefaultConfig();
-            yaml = YamlConfiguration.loadConfiguration(file);
+        if (!this.file.exists()) {
+            this.plugin.saveDefaultConfig();
+            this.yaml = YamlConfiguration.loadConfiguration(this.file);
         } else {
-            yaml = YamlConfiguration.loadConfiguration(file);
-            if (!yaml.isSet("general.debug-level")) { yaml.set("general.debug-level", 0); }
-            if (!yaml.isSet("general.update-check")) { yaml.set("general.update-check", true); }
-            if (!yaml.isSet("language.use-github")) { yaml.set("language.use-github", true); }
-            if (!yaml.isSet("language.locale")) { yaml.set("language.locale", "en_US"); }
-            if (!yaml.isSet("check.death-time")) { yaml.set("check.death-time", true); }
-            if (!yaml.isSet("check.online-time")) { yaml.set("check.online-time", true); }
-            if (!yaml.isSet("afk.enabled")) { yaml.set("afk.enabled", true); }
-            if (!yaml.isSet("afk.interval")) { yaml.set("afk.interval", 60); }
-            if (!yaml.isSet("afk.timeout")) { yaml.set("afk.timeout", 900); }
-            if (!yaml.isSet("afk.check-chat")) { yaml.set("afk.check-chat", false); }
-            if (!yaml.isSet("events.enabled")) { yaml.set("events.enabled", true); }
-            if (!yaml.isSet("events.interval")) { yaml.set("events.interval", 600); }
-            if (!yaml.isSet("data.manager")) { yaml.set("data.manager", "flatfile"); }
-            if (!yaml.isSet("managers.mysql.host")) { yaml.set("managers.mysql.host", "localhost"); }
-            if (!yaml.isSet("managers.mysql.port")) { yaml.set("managers.mysql.port", "3306"); }
-            if (!yaml.isSet("managers.mysql.database")) { yaml.set("managers.mysql.database", "minecraft"); }
-            if (!yaml.isSet("managers.mysql.username")) { yaml.set("managers.mysql.username", "root"); }
-            if (!yaml.isSet("managers.mysql.password")) { yaml.set("managers.mysql.password", "password"); }
+            this.yaml = YamlConfiguration.loadConfiguration(this.file);
+            if (!this.yaml.isSet("general.debug-level")) { this.yaml.set("general.debug-level", 0); }
+            if (!this.yaml.isSet("general.update-check")) { this.yaml.set("general.update-check", true); }
+            if (!this.yaml.isSet("language.use-github")) { this.yaml.set("language.use-github", true); }
+            if (!this.yaml.isSet("language.locale")) { this.yaml.set("language.locale", "en_US"); }
+            if (!this.yaml.isSet("check.death-time")) { this.yaml.set("check.death-time", true); }
+            if (!this.yaml.isSet("check.online-time")) { this.yaml.set("check.online-time", true); }
+            if (!this.yaml.isSet("afk.enabled")) { this.yaml.set("afk.enabled", true); }
+            if (!this.yaml.isSet("afk.interval")) { this.yaml.set("afk.interval", 60); }
+            if (!this.yaml.isSet("afk.timeout")) { this.yaml.set("afk.timeout", 900); }
+            if (!this.yaml.isSet("afk.check-chat")) { this.yaml.set("afk.check-chat", false); }
+            if (!this.yaml.isSet("events.enabled")) { this.yaml.set("events.enabled", true); }
+            if (!this.yaml.isSet("events.interval")) { this.yaml.set("events.interval", 600); }
+            if (!this.yaml.isSet("data.manager")) { this.yaml.set("data.manager", "flatfile"); }
+            if (!this.yaml.isSet("managers.mysql.host")) { this.yaml.set("managers.mysql.host", "localhost"); }
+            if (!this.yaml.isSet("managers.mysql.port")) { this.yaml.set("managers.mysql.port", "3306"); }
+            if (!this.yaml.isSet("managers.mysql.database")) { this.yaml.set("managers.mysql.database", "minecraft"); }
+            if (!this.yaml.isSet("managers.mysql.username")) { this.yaml.set("managers.mysql.username", "root"); }
+            if (!this.yaml.isSet("managers.mysql.password")) { this.yaml.set("managers.mysql.password", "password"); }
 
             this.saveConfig();
         }
@@ -88,7 +88,7 @@ public class ConfigurationLoader {
      */
     public void saveConfig() {
         try {
-            yaml.save(file);
+            this.yaml.save(this.file);
         } catch (IOException ex) {
             Logger.getLogger(ConfigurationLoader.class.getName()).log(Level.SEVERE, "Error saving configuration file!", ex);
         }
@@ -103,7 +103,7 @@ public class ConfigurationLoader {
      * @return YamlConfiguration file, null if verifyConfig() has not been run
      */
     public YamlConfiguration getConfig() {
-        return yaml;
+        return this.yaml;
     }
     
     /**
@@ -116,7 +116,7 @@ public class ConfigurationLoader {
      * @return String value
      */
     public synchronized String getString(String path) {
-        return yaml.getString(path);
+        return this.yaml.getString(path);
     }
     
     /**
@@ -129,7 +129,7 @@ public class ConfigurationLoader {
      * @return int value
      */
     public synchronized int getInt(String path) {
-        return yaml.getInt(path);
+        return this.yaml.getInt(path);
     }
     
     /**
@@ -142,6 +142,6 @@ public class ConfigurationLoader {
      * @return boolean value
      */
     public synchronized boolean getBoolean(String path) {
-        return yaml.getBoolean(path);
+        return this.yaml.getBoolean(path);
     }
 }

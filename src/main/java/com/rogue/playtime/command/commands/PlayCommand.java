@@ -16,9 +16,9 @@
  */
 package com.rogue.playtime.command.commands;
 
+import com.rogue.playtime.Playtime;
 import static com.rogue.playtime.Playtime._;
 import com.rogue.playtime.command.CommandBase;
-import static com.rogue.playtime.command.CommandBase.plugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -30,6 +30,12 @@ import org.bukkit.entity.Player;
  * @version 1.4.0
  */
 public class PlayCommand implements CommandBase {
+    
+    private final Playtime plugin;
+    
+    public PlayCommand(Playtime plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -38,24 +44,24 @@ public class PlayCommand implements CommandBase {
         if (args.length == 0 && sender instanceof Player) {
             check = sender.getName();
         } else if (args.length == 1) {
-            check = plugin.getBestPlayer(args[0]);
+            check = this.plugin.getBestPlayer(args[0]);
             perm += ".others";
         } else {
-            sender.sendMessage(_(plugin.getCipher().getString("command.commands.play.console")));
+            sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.play.console")));
             return true;
         }
         if (sender.hasPermission(perm)) {
-            int time = plugin.getDataManager().getDataHandler().getValue("playtime", check);
+            int time = this.plugin.getDataManager().getDataHandler().getValue("playtime", check);
             int minutes = time % 60;
             if (time >= 60) {
                 int hours = time / 60;
-                sender.sendMessage(_(plugin.getCipher().getString("command.commands.play.playtime-hours", check, hours, (hours == 1 ? "" : "s"), minutes, (minutes == 1 ? "" : "s"))));
+                sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.play.playtime-hours", check, hours, (hours == 1 ? "" : "s"), minutes, (minutes == 1 ? "" : "s"))));
             } else {
-                sender.sendMessage(_(plugin.getCipher().getString("command.commands.play.playtime-minutes", check, minutes, (minutes == 1 ? "" : "s"))));
+                sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.play.playtime-minutes", check, minutes, (minutes == 1 ? "" : "s"))));
             }
 
         } else {
-            sender.sendMessage(_(plugin.getCipher().getString("command.commands.play.noperm")));
+            sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.play.noperm")));
         }
         return true;
     }

@@ -16,9 +16,9 @@
  */
 package com.rogue.playtime.command.commands;
 
+import com.rogue.playtime.Playtime;
 import com.rogue.playtime.command.CommandBase;
 import static com.rogue.playtime.Playtime._;
-import static com.rogue.playtime.command.CommandBase.plugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -30,6 +30,12 @@ import org.bukkit.entity.Player;
  * @version 1.4.0
  */
 public class OnlineCommand implements CommandBase {
+    
+    private final Playtime plugin;
+    
+    public OnlineCommand(Playtime plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -38,28 +44,28 @@ public class OnlineCommand implements CommandBase {
         if (args.length == 0 && sender instanceof Player) {
             check = sender.getName();
         } else if (args.length == 1) {
-            check = plugin.getBestPlayer(args[0]);
+            check = this.plugin.getBestPlayer(args[0]);
             perm += ".others";
         } else {
-            sender.sendMessage(_(plugin.getCipher().getString("command.commands.online.console")));
+            sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.online.console")));
             return true;
         }
         if (sender.hasPermission(perm)) {
-            if (plugin.getConfigurationLoader().getBoolean("check.online-time")) {
-                int time = plugin.getDataManager().getDataHandler().getValue("onlinetime", check);
+            if (this.plugin.getConfigurationLoader().getBoolean("check.online-time")) {
+                int time = this.plugin.getDataManager().getDataHandler().getValue("onlinetime", check);
                 int minutes = time % 60;
                 if (time >= 60) {
                     int hours = time / 60;
-                    sender.sendMessage(_(plugin.getCipher().getString("command.commands.online.playtime-hours", check, hours, (hours == 1 ? "" : "s"), minutes, (minutes == 1 ? "" : "s"))));
+                    sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.online.playtime-hours", check, hours, (hours == 1 ? "" : "s"), minutes, (minutes == 1 ? "" : "s"))));
                 } else {
-                    sender.sendMessage(_(plugin.getCipher().getString("command.commands.online.playtime-minutes", check, minutes, (minutes == 1 ? "" : "s"))));
+                    sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.online.playtime-minutes", check, minutes, (minutes == 1 ? "" : "s"))));
                 }
             } else {
-                sender.sendMessage(_(plugin.getCipher().getString("command.commands.online.disabled")));
+                sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.online.disabled")));
             }
 
         } else {
-            sender.sendMessage(_(plugin.getCipher().getString("command.commands.online.noperm")));
+            sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.online.noperm")));
         }
         return false;
     }

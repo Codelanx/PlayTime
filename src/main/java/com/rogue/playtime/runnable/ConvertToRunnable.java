@@ -32,72 +32,72 @@ import java.sql.SQLException;
 public class ConvertToRunnable implements Runnable {
 
     private Playtime plugin;
-    private final String[] player;
+    private final String[] players;
     private final String query;
-    private final String convert;
+    private final String newType;
 
-    public ConvertToRunnable(String newType, Playtime p, String inQuery, String... players) {
-        convert = newType;
-        plugin = p;
-        query = inQuery;
-        player = players;
+    public ConvertToRunnable(String newType, Playtime plugin, String query, String... players) {
+        this.newType = newType;
+        this.plugin = plugin;
+        this.query = query;
+        this.players = players;
     }
 
     public void run() {
-        DataManager dm = new DataManager(plugin, false);
-        if (convert.equals("mysql")) {
-            dm.select(convert);
+        DataManager dm = new DataManager(this.plugin, false);
+        if (this.newType.equals("mysql")) {
+            dm.select(this.newType);
             dm.setup();
 
             MySQL db = new MySQL();
             try {
                 db.open();
                 db.update("TRUNCATE TABLE `playTime`");
-                db.update(query);
+                db.update(this.query);
             } catch (SQLException e) {
-                if (plugin.getDebug() == 3) {
+                if (this.plugin.getDebug() == 3) {
                     e.printStackTrace();
                 }
             } finally {
                 db.close();
             }
-            plugin.reload();
-        } else if (convert.equals("sqlite")) {
-            plugin.getConfigurationLoader().getConfig().set("data.manager", convert);
-            plugin.getConfigurationLoader().saveConfig();
-            dm.select(convert);
+            this.plugin.reload();
+        } else if (this.newType.equals("sqlite")) {
+            this.plugin.getConfigurationLoader().getConfig().set("data.manager", this.newType);
+            this.plugin.getConfigurationLoader().saveConfig();
+            dm.select(this.newType);
             dm.setup();
 
             SQLite db = new SQLite();
             try {
                 db.open();
                 db.update("DELETE FROM `playTime`");
-                String[] queries = query.split("\n");
-                for (String p : player) {
-                    plugin.getExecutiveManager().runCallable(new SendMessageCallable(p, plugin.getCipher().getString("runnable.convertto.rows", queries.length, getTime(queries.length))), 0L);
+                String[] queries = this.query.split("\n");
+                for (String p : this.players) {
+                    this.plugin.getExecutiveManager().runCallable(new SendMessageCallable(p, this.plugin.getCipher().getString("runnable.convertto.rows", queries.length, getTime(queries.length))), 0L);
                 }
                 for (String s : queries) {
                     db.update(s);
                 }
             } catch (SQLException e) {
-                if (plugin.getDebug() == 3) {
+                if (this.plugin.getDebug() == 3) {
                     e.printStackTrace();
                 }
             } finally {
                 db.close();
             }
-            plugin.reload();
-            for (String p : player) {
-                plugin.getExecutiveManager().runCallable(new SendMessageCallable(p, plugin.getCipher().getString("runnable.convertto.complete")), 0L);
+            this.plugin.reload();
+            for (String p : this.players) {
+                this.plugin.getExecutiveManager().runCallable(new SendMessageCallable(p, this.plugin.getCipher().getString("runnable.convertto.complete")), 0L);
             }
-        } else if (convert.equals("flatfile")) {
-            for (String s : player) {
-                plugin.getExecutiveManager().runCallable(new SendMessageCallable(s, plugin.getCipher().getString("runnable.convertto.noflat")), 0L);
+        } else if (this.newType.equals("flatfile")) {
+            for (String s : this.players) {
+                this.plugin.getExecutiveManager().runCallable(new SendMessageCallable(s, this.plugin.getCipher().getString("runnable.convertto.noflat")), 0L);
             }
         }
-        plugin.getConfigurationLoader().getConfig().set("data.manager", convert);
-        plugin.getConfigurationLoader().saveConfig();
-        plugin.setBusy(false);
+        this.plugin.getConfigurationLoader().getConfig().set("data.manager", this.newType);
+        this.plugin.getConfigurationLoader().saveConfig();
+        this.plugin.setBusy(false);
     }
 
     /**
@@ -116,6 +116,6 @@ public class ConvertToRunnable implements Runnable {
         long time = Math.round(rows / (369 + ((2 / 3) - 0.2)));
         long seconds = time % 60;
         long minutes = time / 60;
-        return ((minutes >= 1) ? minutes + " " + ((minutes != 1) ? plugin.getCipher().getString("variables.minutes") : plugin.getCipher().getString("variables.minute")) + " " : "") + seconds + " " + ((seconds != 1) ? plugin.getCipher().getString("variables.seconds") : plugin.getCipher().getString("variables.second")) + ".";
+        return ((minutes >= 1) ? minutes + " " + ((minutes != 1) ? this.plugin.getCipher().getString("variables.minutes") : this.plugin.getCipher().getString("variables.minute")) + " " : "") + seconds + " " + ((seconds != 1) ? this.plugin.getCipher().getString("variables.seconds") : this.plugin.getCipher().getString("variables.second")) + ".";
     }
 }

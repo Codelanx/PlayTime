@@ -26,15 +26,15 @@ import org.bukkit.Location;
  */
 public class PlaytimePlayer {
 
-    private String theName = "";
-    private int theTime = 0;
-    private Location theSavedPlace = null;
+    private String name = "";
+    private int time = 0;
+    private Location location = null;
     private boolean afk = false;
 
     public PlaytimePlayer(String name, int time, Location location) {
-        theName = name;
-        theTime = time;
-        theSavedPlace = location;
+        this.name = name;
+        this.time = time;
+        this.location = location;
     }
 
     /**
@@ -46,7 +46,7 @@ public class PlaytimePlayer {
      * @param time The supplied time
      */
     public void setTime(int time) {
-        theTime = time;
+        this.time = time;
     }
 
     /**
@@ -58,7 +58,7 @@ public class PlaytimePlayer {
      * @param location The saved location
      */
     public void setSavedLocation(Location location) {
-        theSavedPlace = location;
+        this.location = location;
     }
 
     /**
@@ -70,7 +70,7 @@ public class PlaytimePlayer {
      * @return Starting AFK time
      */
     public int getTime() {
-        return theTime;
+        return this.time;
     }
 
     /**
@@ -82,7 +82,7 @@ public class PlaytimePlayer {
      * @return The saved location
      */
     public Location getSavedLocation() {
-        return theSavedPlace;
+        return this.location;
     }
 
     /**
@@ -94,7 +94,7 @@ public class PlaytimePlayer {
      * @param value Value to set AFK for
      */
     public void setAFK(boolean value) {
-        afk = value;
+        this.afk = value;
     }
 
     /**
@@ -106,7 +106,7 @@ public class PlaytimePlayer {
      * @return AFK status
      */
     public boolean isAFK() {
-        return afk;
+        return this.afk;
     }
 
     /**
@@ -118,6 +118,6 @@ public class PlaytimePlayer {
      * @return The name of the player
      */
     public String getName() {
-        return theName;
+        return this.name;
     }
 }

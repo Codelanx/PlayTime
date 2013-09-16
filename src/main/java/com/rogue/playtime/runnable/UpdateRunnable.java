@@ -28,6 +28,8 @@ import com.rogue.playtime.Playtime;
 /**
  * Adopted from TotalPermissions
  * 
+ * TODO: Coding standard, cleanup
+ * 
  * @since 1.1
  * @author Lord_Ralex
  * @version 1.4.0

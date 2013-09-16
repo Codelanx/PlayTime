@@ -16,9 +16,9 @@
  */
 package com.rogue.playtime.command.commands;
 
+import com.rogue.playtime.Playtime;
 import com.rogue.playtime.command.CommandBase;
 import static com.rogue.playtime.Playtime._;
-import static com.rogue.playtime.command.CommandBase.plugin;
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -37,6 +37,12 @@ import org.bukkit.scoreboard.ScoreboardManager;
  * @version 1.4.0
  */
 public class PlayTopCommand implements CommandBase {
+    
+    private final Playtime plugin;
+    
+    public PlayTopCommand(Playtime plugin) {
+        this.plugin = plugin;
+    }
 
     public boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         boolean scoreboard = false;
@@ -60,27 +66,27 @@ public class PlayTopCommand implements CommandBase {
                 }
             } catch (NumberFormatException e) {}
         }
-        Map<String, Integer> players = plugin.getDataManager().getDataHandler().getTopPlayers("playtime", i);
+        Map<String, Integer> players = this.plugin.getDataManager().getDataHandler().getTopPlayers("playtime", i);
         if (players == null) {
-            sender.sendMessage(_(plugin.getCipher().getString("command.commands.playtop.disabled-flatfile")));
+            sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.playtop.disabled-flatfile")));
         }
         if (scoreboard) {
             Player p = (Player)sender;
             ScoreboardManager sbm = Bukkit.getScoreboardManager();
             Scoreboard scoreBoard = sbm.getNewScoreboard();
-            Objective objv = scoreBoard.registerNewObjective(plugin.getCipher().getString("command.commands.playtop.title"), "dummy");
+            Objective objv = scoreBoard.registerNewObjective(this.plugin.getCipher().getString("command.commands.playtop.title"), "dummy");
             objv.setDisplaySlot(DisplaySlot.SIDEBAR);
-            objv.setDisplayName(plugin.getCipher().getString("command.commands.playtop.title-shown"));
+            objv.setDisplayName(this.plugin.getCipher().getString("command.commands.playtop.title-shown"));
             Score score;
             for (String s : players.keySet()) {
                 score = objv.getScore(Bukkit.getOfflinePlayer(s));
                 score.setScore(players.get(s)/60);
             }
             p.setScoreboard(scoreBoard);
-            p.sendMessage(_(plugin.getCipher().getString("command.commands.playtop.clear")));
+            p.sendMessage(_(this.plugin.getCipher().getString("command.commands.playtop.clear")));
             
         } else {
-            StringBuilder sb = new StringBuilder(plugin.getCipher().getString("command.commands.playtop.console-title", i));
+            StringBuilder sb = new StringBuilder(this.plugin.getCipher().getString("command.commands.playtop.console-title", i));
             for (String s : players.keySet()) {
                 sb.append('\n').append(s).append(" - ").append(players.get(s)/60);
             }

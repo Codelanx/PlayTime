@@ -37,78 +37,79 @@ public class AddRunnable implements Runnable {
     private final boolean afkEnabled;
     private ArrayList<String> timers;
 
-    public AddRunnable(Playtime p) {
-        plugin = p;
-        afkEnabled = plugin.getPlayerHandler() != null;
-        timers = new ArrayList();
-        timers.add("playtime");
-        if (plugin.getConfigurationLoader().getBoolean("check.death-time")) {
-            timers.add("deathtime");
+    public AddRunnable(Playtime plugin) {
+        this.plugin = plugin;
+        this.afkEnabled = this.plugin.getPlayerHandler() != null;
+        this.timers = new ArrayList();
+        this.timers.add("playtime");
+        if (this.plugin.getConfigurationLoader().getBoolean("check.death-time")) {
+            this.timers.add("deathtime");
         }
-        if (plugin.getConfigurationLoader().getBoolean("check.online-time")) {
-            timers.add("onlinetime");
+        if (this.plugin.getConfigurationLoader().getBoolean("check.online-time")) {
+            this.timers.add("onlinetime");
         }
     }
 
     public void run() {
-        String current = plugin.getDataManager().getDataHandler().getName();
+        String current = this.plugin.getDataManager().getDataHandler().getName();
         if (current.equals("mysql")) {
-            Player[] players = plugin.getServer().getOnlinePlayers();
+            Player[] players = this.plugin.getServer().getOnlinePlayers();
             MySQL db = new MySQL();
-            boolean complete = false;
             StringBuilder sb = new StringBuilder("INSERT INTO `playTime` (`username`) VALUES ");
             if (players.length > 0) {
                 for (Player p : players) {
-                    if (!afkEnabled || !plugin.getPlayerHandler().isAFK(p.getName())) {
+                    if (!this.afkEnabled || !this.plugin.getPlayerHandler().isAFK(p.getName())) {
                         sb.append("('").append(p.getName()).append("'), ");
                     }
                 }
                 if (sb.toString().endsWith(" VALUES ")) {
-                    if (plugin.getDebug() >= 1) {
-                        plugin.getLogger().info(plugin.getCipher().getString("runnable.add.none"));
+                    if (this.plugin.getDebug() >= 1) {
+                        this.plugin.getLogger().info(this.plugin.getCipher().getString("runnable.add.none"));
                     }
                     return;
                 }
                 sb = new StringBuilder(sb.substring(0, sb.length() - 2));
                 sb.append(" ON DUPLICATE KEY UPDATE ");
-                for (String timer : timers) {
+                for (String timer : this.timers) {
                     sb.append("`").append(timer).append("`=`").append(timer).append("`+1, ");
                 }
                 sb = new StringBuilder(sb.substring(0, sb.length() - 2));
-                if (plugin.getDebug() >= 1) {
-                    plugin.getLogger().info(plugin.getCipher().getString("runnable.add.update"));
-                    if (plugin.getDebug() >= 2) {
-                        plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.query", sb.toString()));
+                if (this.plugin.getDebug() >= 1) {
+                    this.plugin.getLogger().info(this.plugin.getCipher().getString("runnable.add.update"));
+                    if (this.plugin.getDebug() >= 2) {
+                        this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("runnable.add.query", sb.toString()));
                     }
                 }
-                complete = true;
+            } else {
+                if (this.plugin.getDebug() >= 1) {
+                    this.plugin.getLogger().info(this.plugin.getCipher().getString("runnable.add.none"));
+                }
+                return;
             }
             try {
                 db.open();
-                if (db.checkConnection() && complete) {
-                    db.update(sb.toString());
-                }
+                db.update(sb.toString());
             } catch (SQLException ex) {
-                plugin.getLogger().log(Level.SEVERE, null);
-                if (plugin.getDebug() == 3) {
+                this.plugin.getLogger().log(Level.SEVERE, null);
+                if (this.plugin.getDebug() == 3) {
                     ex.printStackTrace();
                 }
             } finally {
                 db.close();
             }
         } else if (current.equals("sqlite")) {
-            Player[] players = plugin.getServer().getOnlinePlayers();
+            Player[] players = this.plugin.getServer().getOnlinePlayers();
             if (players.length > 0) {
                 StringBuilder sb = new StringBuilder("INSERT OR IGNORE INTO `playTime` ");
                 StringBuilder sb2 = new StringBuilder("UPDATE `playTime` SET ");
-                for (String timer : timers) {
+                for (String timer : this.timers) {
                     sb2.append("`").append(timer).append("`=`").append(timer).append("`+1, ");
                 }
                 sb2 = new StringBuilder(sb2.substring(0, sb2.length() - 2));
                 sb2.append(" WHERE `username` IN (");
                 int i = 0;
                 for (Player p : players) {
-                    if (!afkEnabled || !plugin.getPlayerHandler().isAFK(p.getName())) {
+                    if (!this.afkEnabled || !this.plugin.getPlayerHandler().isAFK(p.getName())) {
                         sb2.append("'").append(p.getName()).append("', ");
                         if (i > 0) {
                             sb.append("UNION SELECT NULL, '").append(p.getName()).append("', 0, 0, 0 ");
@@ -119,14 +120,14 @@ public class AddRunnable implements Runnable {
                     }
                 }
                 if (sb.toString().endsWith(" `playTime` ")) {
-                    if (plugin.getDebug() >= 1) {
-                        plugin.getLogger().info(plugin.getCipher().getString("runnable.add.none"));
+                    if (this.plugin.getDebug() >= 1) {
+                        this.plugin.getLogger().info(this.plugin.getCipher().getString("runnable.add.none"));
                     }
                     return;
                 }
-                if (plugin.getDebug() >= 2) {
-                    plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.query", sb.substring(0, sb.length() - 1)));
-                    plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.query", sb2.substring(0, sb2.length() - 2) + ")"));
+                if (this.plugin.getDebug() >= 2) {
+                    this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("runnable.add.query", sb.substring(0, sb.length() - 1)));
+                    this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("runnable.add.query", sb2.substring(0, sb2.length() - 2) + ")"));
                 }
                 SQLite db = new SQLite();
                 try {
@@ -135,12 +136,12 @@ public class AddRunnable implements Runnable {
                     db.update(sb.substring(0, sb.length() - 1));
                     db.update(sb2.substring(0, sb2.length() - 2) + ")");
 
-                    if (plugin.getDebug() >= 1) {
-                        plugin.getLogger().info(plugin.getCipher().getString("runnable.add.update"));
+                    if (this.plugin.getDebug() >= 1) {
+                        this.plugin.getLogger().info(this.plugin.getCipher().getString("runnable.add.update"));
                     }
                 } catch (SQLException ex) {
-                    plugin.getLogger().log(Level.SEVERE, null);
-                    if (plugin.getDebug() == 3) {
+                    this.plugin.getLogger().log(Level.SEVERE, null);
+                    if (this.plugin.getDebug() == 3) {
                         ex.printStackTrace();
                     }
                 } finally {
@@ -149,19 +150,19 @@ public class AddRunnable implements Runnable {
             }
         } else if (current.equals("flatfile")) {
             YAML yaml = new YAML();
-            Player[] players = plugin.getServer().getOnlinePlayers();
+            Player[] players = this.plugin.getServer().getOnlinePlayers();
             for (Player p : players) {
-                if (!afkEnabled || !plugin.getPlayerHandler().isAFK(p.getName())) {
-                    for (String timer : timers) {
+                if (!this.afkEnabled || !this.plugin.getPlayerHandler().isAFK(p.getName())) {
+                    for (String timer : this.timers) {
                         yaml.incrementValue("users." + p.getName() + "." + timer);
                     }
-                    if (plugin.getDebug() == 3) {
-                        plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.add.update", p.getName()));
+                    if (this.plugin.getDebug() == 3) {
+                        this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("runnable.add.update", p.getName()));
                     }
                 }
             }
-            if (plugin.getDebug() >= 1) {
-                plugin.getLogger().info(plugin.getCipher().getString("runnable.add.update"));
+            if (this.plugin.getDebug() >= 1) {
+                this.plugin.getLogger().info(this.plugin.getCipher().getString("runnable.add.update"));
             }
             yaml.forceSave();
         }

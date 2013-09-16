@@ -38,9 +38,9 @@ public class AFKListener implements Listener {
     private final Playtime plugin;
     private final boolean chat;
 
-    public AFKListener(Playtime p, boolean chatReset) {
-        plugin = p;
-        chat = chatReset;
+    public AFKListener(Playtime plugin, boolean chat) {
+        this.plugin = plugin;
+        this.chat = chat;
     }
 
     /**
@@ -53,7 +53,7 @@ public class AFKListener implements Listener {
      */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent e) {
-        plugin.getPlayerHandler().putPlayer(e.getPlayer().getName(), 0, e.getPlayer().getLocation());
+        this.plugin.getPlayerHandler().putPlayer(e.getPlayer().getName(), 0, e.getPlayer().getLocation());
     }
 
     /**
@@ -66,7 +66,7 @@ public class AFKListener implements Listener {
      */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerQuit(PlayerQuitEvent e) {
-        plugin.getPlayerHandler().remPlayer(e.getPlayer().getName());
+        this.plugin.getPlayerHandler().remPlayer(e.getPlayer().getName());
     }
 
     /**
@@ -79,7 +79,7 @@ public class AFKListener implements Listener {
      */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerMove(PlayerMoveEvent e) {
-        plugin.getPlayerHandler().updatePlayer(e.getPlayer().getName(), false);
+        this.plugin.getPlayerHandler().updatePlayer(e.getPlayer().getName(), false);
     }
 
     /**
@@ -92,7 +92,7 @@ public class AFKListener implements Listener {
      */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerInteract(PlayerInteractEvent e) {
-        plugin.getPlayerHandler().updatePlayer(e.getPlayer().getName(), false);
+        this.plugin.getPlayerHandler().updatePlayer(e.getPlayer().getName(), false);
     }
 
     /**
@@ -104,8 +104,8 @@ public class AFKListener implements Listener {
      * @param e Asynchronous player chat event
      */
     public void onAsyncPlayerChat(AsyncPlayerChatEvent e) {
-        if (chat) {
-            plugin.getPlayerHandler().updatePlayer(e.getPlayer().getName(), false);
+        if (this.chat) {
+            this.plugin.getPlayerHandler().updatePlayer(e.getPlayer().getName(), false);
         }
     }
 }

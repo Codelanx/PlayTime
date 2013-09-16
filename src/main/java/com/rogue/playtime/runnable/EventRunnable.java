@@ -39,46 +39,52 @@ import org.bukkit.entity.Player;
 public class EventRunnable implements Runnable {
 
     private Playtime plugin;
-    private final String name;
-    private final Integer min;
-    private final Integer max;
-    private final String type;
-    private final List<String> run;
-    private final boolean doRepeat;
+    private final String eventName;
+    private final Integer minimum;
+    private final Integer maximum;
+    private final String timer;
+    private final List<String> commands;
+    private final boolean repeat;
     private static int counter = 0;
 
-    public EventRunnable(Playtime p, String cname, String timer, Integer minimum, Integer maximum, List<String> commands, boolean repeat) {
-        plugin = p;
-        name = cname;
-        type = timer;
-        min = minimum;
-        max = maximum;
-        run = commands;
-        doRepeat = repeat;
+    public EventRunnable(Playtime plugin, String eventName, String timer, Integer minimum, Integer maximum, List<String> commands, boolean repeat) {
+        this.plugin = plugin;
+        this.eventName = eventName;
+        this.timer = timer;
+        this.minimum = minimum;
+        this.maximum = maximum;
+        this.commands = commands;
+        this.repeat = repeat;
     }
 
     public void run() {
         Map<String, Integer> users;
-        EventHandler event = plugin.getEventHandler();
-        if (doRepeat) {
-            String data = plugin.getDataManager().getDataHandler().getName();
+        EventHandler event = this.plugin.getEventHandler();
+        if (this.repeat) {
+            String data = this.plugin.getDataManager().getDataHandler().getName();
             users = new HashMap();
             if (data.equals("sqlite")) {
                 SQLite db = new SQLite();
                 try {
                     db.open();
                     ResultSet ret;
-                    if (this.min == 1 || this.min == 0) {
-                        ret = db.query("SELECT * FROM `playTime` WHERE `" + type + "` >= 1");
+                    if (this.minimum == 1 || this.minimum == 0) {
+                        ret = db.query("SELECT * FROM `playTime` WHERE `"
+                                + this.timer + "` >= 1");
                     } else {
-                        ret = db.query("SELECT * FROM `playTime` WHERE (`" + type + "`%" + min + ") <= " + (max - min - 1) + " AND `" + type + "`>= " + min);
+                        ret = db.query("SELECT * FROM `playTime` WHERE (`"
+                                + this.timer + "`%" + this.minimum + ") <= "
+                                + (this.maximum - this.minimum - 1)
+                                + " AND `"
+                                + this.timer + "`>= "
+                                + this.minimum);
                     }
                     while (ret.next()) {
-                        users.put(ret.getString("username"), ret.getInt(type));
+                        users.put(ret.getString("username"), ret.getInt(this.timer));
                     }
                     ret.close();
                 } catch (SQLException e) {
-                    if (plugin.getDebug() == 3) {
+                    if (this.plugin.getDebug() == 3) {
                         e.printStackTrace();
                     }
                 } finally {
@@ -89,17 +95,23 @@ public class EventRunnable implements Runnable {
                 try {
                     db.open();
                     ResultSet ret;
-                    if (this.min == 1 || this.min == 0) {
-                        ret = db.query("SELECT * FROM `playTime` WHERE `" + type + "` >= 1");
+                    if (this.minimum == 1 || this.minimum == 0) {
+                        ret = db.query("SELECT * FROM `playTime` WHERE `"
+                                + this.timer
+                                + "` >= 1");
                     } else {
-                        ret = db.query("SELECT * FROM `playTime` WHERE MOD(`" + type + "`, " + min + ") <= " + (max - min - 1) + " AND `" + type + "` >= " + min);
+                        ret = db.query("SELECT * FROM `playTime` WHERE MOD(`"
+                                + this.timer + "`, " + this.minimum + ") <= "
+                                + (this.maximum - this.minimum - 1)
+                                + " AND `" + this.timer
+                                + "` >= " + this.minimum);
                     }
                     while (ret.next()) {
-                        users.put(ret.getString("username"), ret.getInt(type));
+                        users.put(ret.getString("username"), ret.getInt(this.timer));
                     }
                     ret.close();
                 } catch (SQLException e) {
-                    if (plugin.getDebug() == 3) {
+                    if (this.plugin.getDebug() == 3) {
                         e.printStackTrace();
                     }
                 } finally {
@@ -110,27 +122,44 @@ public class EventRunnable implements Runnable {
                 for (String user : users.keySet()) {
                     Player p = Bukkit.getPlayer(user);
                     if (p.isOnline()) {
-                        for (String cmd : run) {
+                        for (String cmd : this.commands) {
                             if (event.isMessage(cmd.split(" ")[0])) {
-                                plugin.getExecutiveManager().runCallable(new SendMessageCallable(user, event.replaceMessage(cmd).replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))), 0L);
+                                this.plugin.getExecutiveManager().runCallable(new SendMessageCallable(user, 
+                                        event.replaceMessage(cmd)
+                                        .replace("%u", user)
+                                        .replace("%t", this.plugin.getEventHandler().toReadable(users.get(user)))
+                                        ), 0L);
                             } else {
-                                plugin.getExecutiveManager().runCallable(new ConsoleCommandCallable(cmd.replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))), 0L);
+                                this.plugin.getExecutiveManager().runCallable(new ConsoleCommandCallable(
+                                        cmd.replace("%u", user)
+                                        .replace("%t", this.plugin.getEventHandler()
+                                        .toReadable(users.get(user)))
+                                        ), 0L);
                             }
                         }
                     }
                 }
             }
         } else {
-            users = plugin.getDataManager().getDataHandler().getPlayersInRange(type, min, max);
+            users = this.plugin.getDataManager().getDataHandler().getPlayersInRange(this.timer, this.minimum, this.maximum);
             if (!users.isEmpty()) {
                 for (String user : users.keySet()) {
                     Player p = Bukkit.getPlayer(user);
                     if (p.isOnline()) {
-                        for (String cmd : run) {
+                        for (String cmd : this.commands) {
                             if (event.isMessage(cmd.split(" ")[0])) {
-                                plugin.getExecutiveManager().runCallable(new SendMessageCallable(user, event.replaceMessage(cmd).replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))), 0L);
+                                this.plugin.getExecutiveManager().runCallable(new SendMessageCallable(user,
+                                        event.replaceMessage(cmd)
+                                        .replace("%u", user)
+                                        .replace("%t", this.plugin.getEventHandler()
+                                        .toReadable(users.get(user)))
+                                        ), 0L);
                             } else {
-                                plugin.getExecutiveManager().runCallable(new ConsoleCommandCallable(cmd.replace("%u", user).replace("%t", plugin.getEventHandler().toReadable(users.get(user)))), 0L);
+                                this.plugin.getExecutiveManager().runCallable(new ConsoleCommandCallable(
+                                        cmd.replace("%u", user)
+                                        .replace("%t", this.plugin.getEventHandler()
+                                        .toReadable(users.get(user)))
+                                        ), 0L);
                             }
                         }
                     }

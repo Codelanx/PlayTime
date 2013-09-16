@@ -34,8 +34,8 @@ public class UpdateListener implements Listener {
 
     private final Playtime plugin;
     
-    public UpdateListener(Playtime p) {
-        plugin = p;
+    public UpdateListener(Playtime plugin) {
+        this.plugin = plugin;
     }
     
     /**
@@ -49,8 +49,8 @@ public class UpdateListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent e) {
         if (e.getPlayer().hasPermission("playtime.updatenotice")) {
-            if (plugin.isUpdateAvailable()) {
-                e.getPlayer().sendMessage(_(plugin.getCipher().getString("listener.update")));
+            if (this.plugin.isUpdateAvailable()) {
+                e.getPlayer().sendMessage(_(this.plugin.getCipher().getString("listener.update")));
             }
         }
     }

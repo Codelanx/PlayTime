@@ -41,9 +41,9 @@ public class EventHandler {
     private File file;
     private Map<String, Event> events = new HashMap();
 
-    public EventHandler(Playtime p) {
-        plugin = p;
-        file = new File(plugin.getDataFolder(), "events.yml");
+    public EventHandler(Playtime plugin) {
+        this.plugin = plugin;
+        this.file = new File(this.plugin.getDataFolder(), "events.yml");
         loadEvents();
     }
     
@@ -54,26 +54,26 @@ public class EventHandler {
      * @version 1.4.0
      */
     private void loadEvents() {
-        if (plugin.getDataFolder().exists()) {
-            plugin.getDataFolder().mkdir();
+        if (this.plugin.getDataFolder().exists()) {
+            this.plugin.getDataFolder().mkdir();
         }
-        if (!file.exists()) {
-            plugin.saveResource("events.yml", true);
+        if (!this.file.exists()) {
+            this.plugin.saveResource("events.yml", true);
             return;
         }
-        yaml = YamlConfiguration.loadConfiguration(file);
-        ConfigurationSection eventSection = yaml.getConfigurationSection("events");
+        this.yaml = YamlConfiguration.loadConfiguration(this.file);
+        ConfigurationSection eventSection = this.yaml.getConfigurationSection("events");
         if (eventSection == null) {
             return;
         }
-        int interval = plugin.getConfigurationLoader().getInt("events.interval");
-        if (plugin.getDataManager().getDataHandler().getName().equals("flatfile")) {
+        int interval = this.plugin.getConfigurationLoader().getInt("events.interval");
+        if (this.plugin.getDataManager().getDataHandler().getName().equals("flatfile")) {
             for (String s : eventSection.getKeys(false)) {
-                evalYAMLEvent(s, yaml.getBoolean("events." + s + ".at-login"));
+                evalYAMLEvent(s, this.yaml.getBoolean("events." + s + ".at-login"));
             }
         } else {
             for (String s : eventSection.getKeys(false)) {
-                evalEvent(s, interval, yaml.getBoolean("events." + s + ".at-login"));
+                evalEvent(s, interval, this.yaml.getBoolean("events." + s + ".at-login"));
             }
         }
 
@@ -90,19 +90,19 @@ public class EventHandler {
      * @param login If the event is a login event
      */
     private void evalEvent(String name, int interval, boolean login) {
-        String timer = yaml.getString("events." + name + ".type");
+        String timer = this.yaml.getString("events." + name + ".type");
         if (!timer.equalsIgnoreCase("deathtime") && !timer.equalsIgnoreCase("onlinetime") && !timer.equalsIgnoreCase("playtime")) {
             timer = "playtime";
         }
-        List<String> commands = yaml.getStringList("events." + name + ".commands");
+        List<String> commands = this.yaml.getStringList("events." + name + ".commands");
         if (commands.isEmpty()) {
             return;
         }
-        Integer minutes = yaml.getInt("events." + name + ".time");
+        Integer minutes = this.yaml.getInt("events." + name + ".time");
         if (login) {
-            events.put(name, new Event(name, timer, minutes, commands, yaml.getBoolean("events." + name + ".repeat"), login));
+            this.events.put(name, new Event(name, timer, minutes, commands, this.yaml.getBoolean("events." + name + ".repeat"), login));
         } else {
-            plugin.getExecutiveManager().runAsyncTaskRepeat(new EventRunnable(plugin, name, timer, minutes, (minutes + interval), commands, yaml.getBoolean("events." + name + ".repeat")), interval * 60L, interval * 60L);
+            this.plugin.getExecutiveManager().runAsyncTaskRepeat(new EventRunnable(this.plugin, name, timer, minutes, (minutes + interval), commands, this.yaml.getBoolean("events." + name + ".repeat")), interval * 60L, interval * 60L);
         }
     }
     
@@ -116,17 +116,17 @@ public class EventHandler {
      * @param login If the event is a login event
      */
     private void evalYAMLEvent(String name, boolean login) {
-        String timer = yaml.getString("events." + name + ".type");
+        String timer = this.yaml.getString("events." + name + ".type");
         if (!timer.equalsIgnoreCase("deathtime") && !timer.equalsIgnoreCase("onlinetime") && !timer.equalsIgnoreCase("playtime")) {
             timer = "playtime";
         }
-        List<String> commands = yaml.getStringList("events." + name + ".commands");
+        List<String> commands = this.yaml.getStringList("events." + name + ".commands");
         if (commands.isEmpty()) {
             return;
         }
-        Integer minutes = yaml.getInt("events." + name + ".time");
-        boolean repeat = yaml.getBoolean("events." + name + ".repeat");
-        events.put(name, new Event(name, timer, minutes, commands, yaml.getBoolean("events." + name + ".repeat"), login));
+        Integer minutes = this.yaml.getInt("events." + name + ".time");
+        boolean repeat = this.yaml.getBoolean("events." + name + ".repeat");
+        this.events.put(name, new Event(name, timer, minutes, commands, this.yaml.getBoolean("events." + name + ".repeat"), login));
     }
 
     /**
@@ -139,7 +139,7 @@ public class EventHandler {
      * @return Map of events in use
      */
     public Map<String, Event> getEvents() {
-        return events;
+        return this.events;
     }
 
     /**
@@ -154,11 +154,11 @@ public class EventHandler {
     public void fireEvents(List<String> fire, String username) {
         ConsoleCommandSender ccs = Bukkit.getConsoleSender();
         for (String s : fire) {
-            for (String c : events.get(s).getCommands()) {
+            for (String c : this.events.get(s).getCommands()) {
                 if (this.isMessage(c)) {
-                    Bukkit.getPlayer(username).sendMessage(_(this.replaceMessage(c).replace("%u", username).replace("%t", plugin.getDataManager().getDataHandler().getValue(events.get(s).getType(), username) + "")));
+                    Bukkit.getPlayer(username).sendMessage(_(this.replaceMessage(c).replace("%u", username).replace("%t", this.plugin.getDataManager().getDataHandler().getValue(this.events.get(s).getType(), username) + "")));
                 } else {
-                    Bukkit.dispatchCommand(ccs, c.replace("%u", username).replace("%t", plugin.getDataManager().getDataHandler().getValue(events.get(s).getType(), username) + ""));
+                    Bukkit.dispatchCommand(ccs, c.replace("%u", username).replace("%t", this.plugin.getDataManager().getDataHandler().getValue(this.events.get(s).getType(), username) + ""));
                 }
             }
         }
@@ -174,13 +174,13 @@ public class EventHandler {
      */
     public void fireLoginEvents(String username) {
         ConsoleCommandSender ccs = Bukkit.getConsoleSender();
-        for (Event e : events.values()) {
+        for (Event e : this.events.values()) {
             if (e.isLoginEvent()) {
                 for (String c : e.getCommands()) {
                     if (this.isMessage(c.split(" ")[0])) {
-                        Bukkit.getPlayer(username).sendMessage(_(this.replaceMessage(c).replace("%u", username).replace("%t", this.toReadable(plugin.getDataManager().getDataHandler().getValue(e.getType(), username)))));
+                        Bukkit.getPlayer(username).sendMessage(_(this.replaceMessage(c).replace("%u", username).replace("%t", this.toReadable(this.plugin.getDataManager().getDataHandler().getValue(e.getType(), username)))));
                     } else {
-                        Bukkit.dispatchCommand(ccs, c.replace("%u", username).replace("%t", plugin.getDataManager().getDataHandler().getValue(e.getType(), username) + ""));
+                        Bukkit.dispatchCommand(ccs, c.replace("%u", username).replace("%t", this.plugin.getDataManager().getDataHandler().getValue(e.getType(), username) + ""));
                     }
                 }
             }
@@ -235,6 +235,6 @@ public class EventHandler {
     public String toReadable(int time) {
         long minutes = time % 60;
         long hours = time / 60;
-        return ((hours >= 1) ? hours + " " + ((hours != 1) ? plugin.getCipher().getString("variables.hours") : plugin.getCipher().getString("variables.hours")) + " " : "") + minutes + " " + ((minutes != 1) ? plugin.getCipher().getString("variables.minutes") : plugin.getCipher().getString("variables.minute")) + ".";
+        return ((hours >= 1) ? hours + " " + ((hours != 1) ? this.plugin.getCipher().getString("variables.hours") : this.plugin.getCipher().getString("variables.hours")) + " " : "") + minutes + " " + ((minutes != 1) ? this.plugin.getCipher().getString("variables.minutes") : this.plugin.getCipher().getString("variables.minute")) + ".";
     }
 }

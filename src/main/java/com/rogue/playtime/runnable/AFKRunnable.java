@@ -31,28 +31,28 @@ import org.bukkit.entity.Player;
  */
 public class AFKRunnable implements Runnable {
 
-    Playtime plugin;
+    private final Playtime plugin;
 
-    public AFKRunnable(Playtime p) {
-        plugin = p;
+    public AFKRunnable(Playtime plugin) {
+        this.plugin = plugin;
     }
 
     public void run() {
-        Map<String, PlaytimePlayer> players = plugin.getPlayerHandler().getPlayers();
+        Map<String, PlaytimePlayer> players = this.plugin.getPlayerHandler().getPlayers();
         if (Bukkit.getOnlinePlayers().length > 0) {
-            if (plugin.getDebug() >= 1) {
-                plugin.getLogger().info(plugin.getCipher().getString("runnable.afk.check"));
+            if (this.plugin.getDebug() >= 1) {
+                this.plugin.getLogger().info(this.plugin.getCipher().getString("runnable.afk.check"));
             }
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (!players.get(p.getName().toLowerCase()).isAFK() && p.getLocation().equals(players.get(p.getName().toLowerCase()).getSavedLocation())) {
-                    plugin.getPlayerHandler().incrementTime(p.getName());
-                    if (plugin.getDebug() >= 3) {
-                        plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.afk.time", p.getName()));
+                    this.plugin.getPlayerHandler().incrementTime(p.getName());
+                    if (this.plugin.getDebug() >= 3) {
+                        this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("runnable.afk.time", p.getName()));
                     }
                 } else if (!players.get(p.getName().toLowerCase()).isAFK()) {
-                    plugin.getPlayerHandler().updatePlayer(p.getName(), p.getLocation());
-                    if (plugin.getDebug() >= 2) {
-                        plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("runnable.afk.location", p.getName()));
+                    this.plugin.getPlayerHandler().updatePlayer(p.getName(), p.getLocation());
+                    if (this.plugin.getDebug() >= 2) {
+                        this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("runnable.afk.location", p.getName()));
                     }
                 }
             }

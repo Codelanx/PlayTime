@@ -41,7 +41,7 @@ public class MySQL {
     private static String DATABASE = "";
     private static String PORT = "";
     private Connection con = null;
-    private Playtime plugin = Playtime.getPlugin();
+    private Playtime plugin;
 
     /**
      * Sets the static variables to use in future MySQL connections
@@ -61,6 +61,7 @@ public class MySQL {
         PASS = pass;
         DATABASE = database;
         PORT = port;
+        this.plugin = Playtime.getPlugin();
     }
 
     /**
@@ -68,8 +69,15 @@ public class MySQL {
      *
      * @since 1.4.1
      * @version 1.4.1
+     * 
+     * @param plugins The main plugin instance, does not need to be set
      */
-    public MySQL() {
+    public MySQL(Playtime... plugins) {
+        if (plugins.length != 1) {
+            this.plugin = Playtime.getPlugin();
+        } else {
+            this.plugin = plugins[0];
+        }
     }
 
     /**
@@ -88,11 +96,11 @@ public class MySQL {
         connectionProps.put("user", USER);
         connectionProps.put("password", PASS);
 
-        con = DriverManager.getConnection("jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE, connectionProps);
-        if (plugin.getDebug() >= 2) {
-            plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.mysql.instance.open", ++connections));
+        this.con = DriverManager.getConnection("jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE, connectionProps);
+        if (this.plugin.getDebug() >= 2) {
+            this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("data.mysql.instance.open", ++connections));
         }
-        return con;
+        return this.con;
     }
 
     /**
@@ -126,7 +134,7 @@ public class MySQL {
      * @throws SQLException
      */
     public ResultSet query(String query) throws SQLException {
-        Statement stmt = con.createStatement();
+        Statement stmt = this.con.createStatement();
         return stmt.executeQuery(query);
     }
 
@@ -141,7 +149,7 @@ public class MySQL {
      * @throws SQLException
      */
     public int update(String query) throws SQLException {
-        Statement stmt = con.createStatement();
+        Statement stmt = this.con.createStatement();
         return stmt.executeUpdate(query);
     }
 
@@ -153,9 +161,9 @@ public class MySQL {
      */
     public void close() {
         try {
-            con.close();
-            if (plugin.getDebug() >= 2) {
-                plugin.getLogger().log(Level.INFO, plugin.getCipher().getString("data.mysql.instance.open", --connections));
+            this.con.close();
+            if (this.plugin.getDebug() >= 2) {
+                this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("data.mysql.instance.open", --connections));
             }
         } catch (SQLException e) {
             this.plugin.getLogger().log(Level.WARNING, this.plugin.getCipher().getString("data.mysql.instance.close-error"));

@@ -36,9 +36,21 @@ public class YAML {
 
     private YamlConfiguration yaml;
     private final String path;
-    private Playtime plugin = Playtime.getPlugin();
+    private final Playtime plugin;
+    
+    public YAML(Playtime plugin) {
+        this.plugin = plugin;
+        path = plugin.getDataFolder() + File.separator + "users.yml";
+        File users = new File(path);
+        try {
+            yaml = this.makeYAML(users);
+        } catch (IOException ex) {
+            Logger.getLogger(YAML.class.getName()).log(Level.SEVERE, plugin.getCipher().getString("data.yaml.instance.error-create"), ex);
+        }
+    }
 
     public YAML() {
+        this.plugin = Playtime.getPlugin();
         path = plugin.getDataFolder() + File.separator + "users.yml";
         File users = new File(path);
         try {

@@ -70,7 +70,7 @@ public class Playtime extends JavaPlugin {
     public void onLoad() {
 
         this.getLogger().info("Loading Configuration mananger...");
-        cloader = new ConfigurationLoader(this);
+        this.cloader = new ConfigurationLoader(this);
 
         try {
             Thread.sleep(500L);
@@ -79,12 +79,12 @@ public class Playtime extends JavaPlugin {
         }
 
         this.getLogger().info("Loading language manager...");
-        lang = new Cipher(this);
+        this.lang = new Cipher(this);
 
     }
 
     /**
-     * Registers debug, metrics, commands, data management, and listeners.
+     * Registers this.debug, metrics, commands, data management, and listeners.
      *
      * @since 1.0
      * @version 1.4.1
@@ -93,77 +93,77 @@ public class Playtime extends JavaPlugin {
     public void onEnable() {
         final long startTime = System.nanoTime();
 
-        if (!reloaded && Bukkit.getOnlinePlayers().length > 0) {
-            reloaded = true;
+        if (!this.reloaded && Bukkit.getOnlinePlayers().length > 0) {
+            this.reloaded = true;
         }
 
-        debug = cloader.getInt("general.debug-level");
-        if (debug > 3) {
-            debug = 3;
+        this.debug = this.cloader.getInt("general.this.debug-level");
+        if (this.debug > 3) {
+            this.debug = 3;
         }
-        if (debug < 0) {
-            debug = 0;
+        if (this.debug < 0) {
+            this.debug = 0;
         }
-        if (debug >= 1) {
-            this.getLogger().info(lang.getString("main.debug", debug));
+        if (this.debug >= 1) {
+            this.getLogger().info(this.lang.getString("main.this.debug", this.debug));
         }
 
         try {
             Metrics metrics = new Metrics(this);
-            getLogger().info(lang.getString("main.metrics"));
+            getLogger().info(this.lang.getString("main.metrics"));
             metrics.start();
         } catch (IOException ex) {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        this.getLogger().info(lang.getString("main.execs"));
-        execmanager = new ExecutiveManager(this);
+        this.getLogger().info(this.lang.getString("main.execs"));
+        this.execmanager = new ExecutiveManager(this);
 
-        if (cloader.getBoolean("general.update-check")) {
-            execmanager.runAsyncTask(new UpdateRunnable(this), 10L);
+        if (this.cloader.getBoolean("general.update-check")) {
+            this.execmanager.runAsyncTask(new UpdateRunnable(this), 10L);
         } else {
-            this.getLogger().info(lang.getString("main.update"));
+            this.getLogger().info(this.lang.getString("main.update"));
         }
 
-        this.getLogger().info(lang.getString("main.data"));
-        dmanager = new DataManager(this, true);
+        this.getLogger().info(this.lang.getString("main.data"));
+        this.dmanager = new DataManager(this, true);
 
-        this.getLogger().info(lang.getString("main.command"));
-        chandler = new CommandHandler(this);
+        this.getLogger().info(this.lang.getString("main.command"));
+        this.chandler = new CommandHandler(this);
 
         boolean deathEnabled = this.cloader.getBoolean("check.death-time");
         boolean onlineEnabled = this.cloader.getBoolean("check.online-time");
 
 
         if (this.cloader.getBoolean("afk.enabled")) {
-            this.getLogger().info(lang.getString("main.player"));
-            phandler = new PlayerHandler(this, cloader.getInt("afk.interval"), cloader.getInt("afk.timeout"));
-            execmanager.runAsyncTaskRepeat(new AFKRunnable(this), phandler.getAFKCheckInterval(), phandler.getAFKCheckInterval());
+            this.getLogger().info(this.lang.getString("main.player"));
+            this.phandler = new PlayerHandler(this, this.cloader.getInt("afk.interval"), this.cloader.getInt("afk.timeout"));
+            this.execmanager.runAsyncTaskRepeat(new AFKRunnable(this), this.phandler.getAFKCheckInterval(), this.phandler.getAFKCheckInterval());
         } else {
-            this.getLogger().info(lang.getString("main.afk"));
-            phandler = null;
+            this.getLogger().info(this.lang.getString("main.afk"));
+            this.phandler = null;
         }
 
         if (this.cloader.getBoolean("events.enabled")) {
-            this.getLogger().info(lang.getString("main.event"));
-            ehandler = new EventHandler(this);
+            this.getLogger().info(this.lang.getString("main.event"));
+            this.ehandler = new EventHandler(this);
         } else {
-            this.getLogger().info(lang.getString("main.event-disabled"));
+            this.getLogger().info(this.lang.getString("main.event-disabled"));
         }
 
-        this.getLogger().info(lang.getString("main.listener"));
-        listener = new ListenerManager(this);
+        this.getLogger().info(this.lang.getString("main.this.listener"));
+        this.listener = new ListenerManager(this);
 
         final long endTime = System.nanoTime();
-        if (reloaded) {
+        if (this.reloaded) {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                phandler.putPlayer(p.getName(), 0, p.getLocation());
+                this.phandler.putPlayer(p.getName(), 0, p.getLocation());
             }
         }
         this.setBusy(false);
-        if (debug >= 1) {
+        if (this.debug >= 1) {
             final long duration = endTime - startTime;
-            this.getLogger().info(lang.getString("main.enabled", this.readableProfile(duration)));
+            this.getLogger().info(this.lang.getString("main.enabled", this.readableProfile(duration)));
         }
     }
 
@@ -175,9 +175,9 @@ public class Playtime extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        execmanager.cancelAllTasks();
+        this.execmanager.cancelAllTasks();
         HandlerList.unregisterAll(this);
-        dmanager.getDataHandler().cleanup();
+        this.dmanager.getDataHandler().cleanup();
     }
 
     /**
@@ -189,7 +189,7 @@ public class Playtime extends JavaPlugin {
      * @param names Players to notify when the reload is complete
      */
     public void reload(final String... names) {
-        final String reloadDone = lang.getString("main.reloaded");
+        final String reloadDone = this.lang.getString("main.this.reloaded");
         final Playtime plugin = this;
         this.setBusy(true);
         this.reloaded = true;
@@ -267,10 +267,10 @@ public class Playtime extends JavaPlugin {
      * @since 1.1
      * @version 1.1
      *
-     * @return The debug level
+     * @return The this.debug level
      */
     public int getDebug() {
-        return debug;
+        return this.debug;
     }
 
     /**
@@ -286,15 +286,15 @@ public class Playtime extends JavaPlugin {
     }
 
     /**
-     * Returns Playtime's listener manager
+     * Returns Playtime's this.listener manager
      *
      * @since 1.2.0
      * @version 1.4.1
      *
-     * @return The listener manager for Playtime
+     * @return The this.listener manager for Playtime
      */
     public ListenerManager getListenerManager() {
-        return listener;
+        return this.listener;
     }
 
     /**
@@ -307,7 +307,7 @@ public class Playtime extends JavaPlugin {
      * @return The plugin's player handler
      */
     public PlayerHandler getPlayerHandler() {
-        return phandler;
+        return this.phandler;
     }
 
     /**
@@ -319,7 +319,7 @@ public class Playtime extends JavaPlugin {
      * @return true if update, false if none or no check made.
      */
     public boolean isUpdateAvailable() {
-        return isUpdate;
+        return this.isUpdate;
     }
 
     /**
@@ -333,8 +333,8 @@ public class Playtime extends JavaPlugin {
      * @return The updated value
      */
     public boolean setUpdateStatus(boolean status) {
-        isUpdate = status;
-        return isUpdate;
+        this.isUpdate = status;
+        return this.isUpdate;
     }
 
     /**
@@ -357,7 +357,7 @@ public class Playtime extends JavaPlugin {
      * @return abstract data manager for Playtime
      */
     public DataManager getDataManager() {
-        return dmanager;
+        return this.dmanager;
     }
 
     /**
@@ -369,7 +369,7 @@ public class Playtime extends JavaPlugin {
      * @return The main ConfigurationLoader
      */
     public ConfigurationLoader getConfigurationLoader() {
-        return cloader;
+        return this.cloader;
     }
 
     /**
@@ -381,7 +381,7 @@ public class Playtime extends JavaPlugin {
      * @return The language file loader
      */
     public Cipher getCipher() {
-        return lang;
+        return this.lang;
     }
 
     /**
@@ -393,7 +393,7 @@ public class Playtime extends JavaPlugin {
      * @return Playtime's event handler
      */
     public EventHandler getEventHandler() {
-        return ehandler;
+        return this.ehandler;
     }
 
     /**
@@ -405,7 +405,7 @@ public class Playtime extends JavaPlugin {
      * @return Playtime's executive manager
      */
     public ExecutiveManager getExecutiveManager() {
-        return execmanager;
+        return this.execmanager;
     }
 
     /**
@@ -418,11 +418,11 @@ public class Playtime extends JavaPlugin {
      * @return true if busy, false if not
      */
     public boolean isBusy() {
-        return isBusy;
+        return this.isBusy;
     }
 
     /**
-     * Sets the plugin's "busy" mode".
+     * Sets the plugin's "busy" mode.
      *
      * @since 1.4.0
      * @version 1.4.0
@@ -431,8 +431,8 @@ public class Playtime extends JavaPlugin {
      * @return The updated busy status
      */
     public boolean setBusy(boolean busy) {
-        isBusy = busy;
-        return isBusy;
+        this.isBusy = busy;
+        return this.isBusy;
     }
 
     /**
@@ -447,6 +447,6 @@ public class Playtime extends JavaPlugin {
      * @return If this is the plugin's first run from booting
      */
     public boolean firstRun() {
-        return !reloaded;
+        return !this.reloaded;
     }
 }
