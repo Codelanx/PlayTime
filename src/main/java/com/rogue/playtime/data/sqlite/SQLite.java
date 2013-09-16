@@ -131,6 +131,9 @@ public class SQLite {
             }
         } catch (SQLException e) {
             this.plugin.getLogger().log(Level.WARNING, this.plugin.getCipher().getString("data.sqlite.instance.close-error"));
+            if (this.plugin.getDebug() >= 3) {
+                e.printStackTrace();
+            }
         }
     }
 }
