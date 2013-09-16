@@ -38,9 +38,9 @@ public class ExecutiveManager {
     private ScheduledExecutorService es;
     private List<ScheduledFuture<?>> executives = new ArrayList();
     
-    public ExecutiveManager(Playtime p) {
-        plugin = p;
-        es = Executors.newScheduledThreadPool(10);
+    public ExecutiveManager(Playtime plugin) {
+        this.plugin = plugin;
+        this.es = Executors.newScheduledThreadPool(10);
     }
     
     /**
@@ -54,7 +54,7 @@ public class ExecutiveManager {
      * @param delay Time (in seconds) between execution to wait
      */
     public void runAsyncTaskRepeat(Runnable r, long startAfter, long delay) {
-        executives.add(es.scheduleWithFixedDelay(r, startAfter, delay, TimeUnit.SECONDS));
+        this.executives.add(this.es.scheduleWithFixedDelay(r, startAfter, delay, TimeUnit.SECONDS));
     }
     
     /**
@@ -67,7 +67,7 @@ public class ExecutiveManager {
      * @param delay Time (in seconds) to wait before execution
      */
     public void runAsyncTask(Runnable r, long delay) {
-        executives.add(es.schedule(r, delay, TimeUnit.SECONDS));
+        this.executives.add(this.es.schedule(r, delay, TimeUnit.SECONDS));
     }
     
     /**
@@ -80,7 +80,7 @@ public class ExecutiveManager {
      * @param delay Time (in seconds) to wait before execution
      */
     public void runCallable(Callable<?> c, long delay) {
-        es.schedule(c, delay, TimeUnit.SECONDS);
+        this.es.schedule(c, delay, TimeUnit.SECONDS);
     }
     
     /**
@@ -90,7 +90,7 @@ public class ExecutiveManager {
      * @version 1.4.0
      */
     public void cancelAllTasks() {
-        for (ScheduledFuture<?> s : executives) {
+        for (ScheduledFuture<?> s : this.executives) {
             s.cancel(false);
         }
     }
