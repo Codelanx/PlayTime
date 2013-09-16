@@ -61,11 +61,8 @@ public class Data_MySQL implements DataHandler {
             if (Playtime.getPlugin().getDebug() == 3) {
                 e.printStackTrace();
             }
-        }
-        try {
+        } finally {
             db.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ret;
     }
@@ -84,11 +81,12 @@ public class Data_MySQL implements DataHandler {
                     end = true;
                 }
             }
-            db.close();
         } catch (SQLException e) {
             if (Playtime.getPlugin().getDebug() == 3) {
                 e.printStackTrace();
             }
+        } finally {
+            db.close();
         }
         return players;
     }
@@ -96,7 +94,7 @@ public class Data_MySQL implements DataHandler {
     public Map<String, Integer> getPlayersInRange(String timer, int minimum, int maximum) {
         db = new MySQL();
         Map<String, Integer> back = new HashMap();
-            try {
+        try {
             db.open();
             ResultSet ret = db.query("SELECT * FROM `playTime` WHERE `" + timer + "` BETWEEN " + minimum + " AND " + maximum);
             while (ret.next()) {
@@ -106,6 +104,8 @@ public class Data_MySQL implements DataHandler {
             if (plugin.getDebug() == 3) {
                 e.printStackTrace();
             }
+        } finally {
+            db.close();
         }
         return back;
     }
@@ -182,9 +182,10 @@ public class Data_MySQL implements DataHandler {
                     plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.uptodate"));
                 }
             }
-            db.close();
         } catch (SQLException ex) {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            db.close();
         }
     }
 
@@ -202,9 +203,10 @@ public class Data_MySQL implements DataHandler {
                 plugin.getLogger().info(plugin.getCipher().getString("data.mysql.main.error"));
                 plugin.getServer().getPluginManager().disablePlugin(plugin);
             }
-            db.close();
         } catch (SQLException ex) {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            db.close();
         }
     }
 

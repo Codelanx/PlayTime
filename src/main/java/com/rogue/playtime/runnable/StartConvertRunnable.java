@@ -60,11 +60,12 @@ public class StartConvertRunnable implements Runnable {
                 while (ret.next()) {
                     sb.append("INSERT OR IGNORE INTO `playTime` (`id`, `username`, `playtime`, `deathtime`, `onlinetime`) VALUES (").append(i++).append(", '").append(ret.getString(2)).append("', ").append(ret.getInt(3)).append(", ").append(ret.getInt(4)).append(", ").append(ret.getInt(5)).append(");\n");
                 }
-                db.close();
             } catch (SQLException e) {
                 if (plugin.getDebug() == 3) {
                     e.printStackTrace();
                 }
+            } finally {
+                db.close();
             }
             plugin.getDataManager().convertTo(convertTo, sb.substring(0, sb.length() - 1), player);
         } else if (current.equals("sqlite")) {
@@ -78,11 +79,12 @@ public class StartConvertRunnable implements Runnable {
                     sb.append("('").append(ret.getString(2)).append("', ").append(ret.getInt(3)).append(", ").append(ret.getInt(4)).append(", ").append(ret.getInt(5)).append("), ");
                 }
                 ret.close();
-                db.close();
             } catch (SQLException e) {
                 if (plugin.getDebug() == 3) {
                     e.printStackTrace();
                 }
+            } finally {
+                db.close();
             }
             plugin.getDataManager().convertTo(convertTo, sb.substring(0, sb.length() - 2) + " ON DUPLICATE KEY UPDATE `playtime`=`playtime`", player);
         } else if (current.equals("flatfile")) {

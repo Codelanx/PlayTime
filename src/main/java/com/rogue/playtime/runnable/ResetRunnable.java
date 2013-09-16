@@ -48,24 +48,26 @@ public class ResetRunnable implements Runnable {
             try {
                 db.open();
                 db.update("UPDATE `playTime` SET `" + value + "`=0 WHERE `username`='" + user + "'");
-                db.close();
             } catch (SQLException ex) {
                 Playtime.getPlugin().getLogger().log(Level.SEVERE, plugin.getCipher().getString("runnable.reset.error", value.substring(0, value.length() - 5)));
                 if (Playtime.getPlugin().getDebug() == 3) {
                     ex.printStackTrace();
                 }
+            } finally {
+                db.close();
             }
         } else if (current.equals("sqlite")) {
             SQLite db = new SQLite();
             try {
                 db.open();
                 db.update("UPDATE `playTime` SET `" + value + "`=0 WHERE `username`='" + user + "'");
-                db.close();
             } catch (SQLException ex) {
                 Playtime.getPlugin().getLogger().log(Level.SEVERE, plugin.getCipher().getString("runnable.reset.error", value.substring(0, value.length() - 5)));
                 if (Playtime.getPlugin().getDebug() == 3) {
                     ex.printStackTrace();
                 }
+            } finally {
+                db.close();
             }
         } else if (current.equals("flatfile")) {
             YAML yaml = new YAML();

@@ -77,11 +77,12 @@ public class EventRunnable implements Runnable {
                         users.put(ret.getString("username"), ret.getInt(type));
                     }
                     ret.close();
-                    db.close();
                 } catch (SQLException e) {
                     if (plugin.getDebug() == 3) {
                         e.printStackTrace();
                     }
+                } finally {
+                    db.close();
                 }
             } else if (data.equals("mysql")) {
                 MySQL db = new MySQL();
@@ -97,11 +98,12 @@ public class EventRunnable implements Runnable {
                         users.put(ret.getString("username"), ret.getInt(type));
                     }
                     ret.close();
-                    db.close();
                 } catch (SQLException e) {
                     if (plugin.getDebug() == 3) {
                         e.printStackTrace();
                     }
+                } finally {
+                    db.close();
                 }
             }
             if (!users.isEmpty()) {

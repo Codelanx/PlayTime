@@ -54,11 +54,12 @@ public class ConvertToRunnable implements Runnable {
                 db.open();
                 db.update("TRUNCATE TABLE `playTime`");
                 db.update(query);
-                db.close();
             } catch (SQLException e) {
                 if (plugin.getDebug() == 3) {
                     e.printStackTrace();
                 }
+            } finally {
+                db.close();
             }
             plugin.reload();
         } else if (convert.equals("sqlite")) {
@@ -78,11 +79,12 @@ public class ConvertToRunnable implements Runnable {
                 for (String s : queries) {
                     db.update(s);
                 }
-                db.close();
             } catch (SQLException e) {
                 if (plugin.getDebug() == 3) {
                     e.printStackTrace();
                 }
+            } finally {
+                db.close();
             }
             plugin.reload();
             for (String p : player) {

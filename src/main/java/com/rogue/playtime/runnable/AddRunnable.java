@@ -88,12 +88,13 @@ public class AddRunnable implements Runnable {
                 if (db.checkConnection() && complete) {
                     db.update(sb.toString());
                 }
-                db.close();
             } catch (SQLException ex) {
                 plugin.getLogger().log(Level.SEVERE, null);
                 if (plugin.getDebug() == 3) {
                     ex.printStackTrace();
                 }
+            } finally {
+                db.close();
             }
         } else if (current.equals("sqlite")) {
             Player[] players = plugin.getServer().getOnlinePlayers();
@@ -137,12 +138,13 @@ public class AddRunnable implements Runnable {
                     if (plugin.getDebug() >= 1) {
                         plugin.getLogger().info(plugin.getCipher().getString("runnable.add.update"));
                     }
-                    db.close();
                 } catch (SQLException ex) {
                     plugin.getLogger().log(Level.SEVERE, null);
                     if (plugin.getDebug() == 3) {
                         ex.printStackTrace();
                     }
+                } finally {
+                    db.close();
                 }
             }
         } else if (current.equals("flatfile")) {

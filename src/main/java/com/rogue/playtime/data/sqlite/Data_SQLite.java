@@ -62,11 +62,8 @@ public class Data_SQLite implements DataHandler {
             if (Playtime.getPlugin().getDebug() == 3) {
                 e.printStackTrace();
             }
-        }
-        try {
+        } finally {
             db.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ret;
     }
@@ -85,11 +82,12 @@ public class Data_SQLite implements DataHandler {
                     end = true;
                 }
             }
-            db.close();
         } catch (SQLException e) {
             if (Playtime.getPlugin().getDebug() == 3) {
                 e.printStackTrace();
             }
+        } finally {
+            db.close();
         }
         return players;
     }
@@ -107,6 +105,8 @@ public class Data_SQLite implements DataHandler {
             if (plugin.getDebug() == 3) {
                 e.printStackTrace();
             }
+        } finally {
+            db.close();
         }
         return back;
     }
@@ -131,12 +131,13 @@ public class Data_SQLite implements DataHandler {
                     }
                 }
             }
-            db.close();
         } catch (SQLException ex) {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, plugin.getCipher().getString("data.sqlite.main.error"), ex);
             File file = new File(plugin.getDataFolder() + File.separator + "users.db");
             file.delete();
             Bukkit.getServer().getPluginManager().disablePlugin(plugin);
+        } finally {
+            db.close();
         }
     }
 
