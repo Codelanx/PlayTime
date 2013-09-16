@@ -49,10 +49,7 @@ public class ResetRunnable implements Runnable {
                 db.open();
                 db.update("UPDATE `playTime` SET `" + this.column + "`=0 WHERE `username`='" + this.username + "'");
             } catch (SQLException ex) {
-                this.plugin.getLogger().log(Level.SEVERE, this.plugin.getCipher().getString("runnable.reset.error", this.column.substring(0, this.column.length() - 5)));
-                if (this.plugin.getDebug() == 3) {
-                    ex.printStackTrace();
-                }
+                this.plugin.getLogger().log(Level.SEVERE, this.plugin.getCipher().getString("runnable.reset.error", this.column.substring(0, this.column.length() - 5)), this.plugin.getDebug() >= 3 ? ex : "");
             } finally {
                 db.close();
             }
@@ -62,10 +59,7 @@ public class ResetRunnable implements Runnable {
                 db.open();
                 db.update("UPDATE `playTime` SET `" + this.column + "`=0 WHERE `username`='" + this.username + "'");
             } catch (SQLException ex) {
-                this.plugin.getLogger().log(Level.SEVERE, this.plugin.getCipher().getString("runnable.reset.error", this.column.substring(0, this.column.length() - 5)));
-                if (this.plugin.getDebug() == 3) {
-                    ex.printStackTrace();
-                }
+                this.plugin.getLogger().log(Level.SEVERE, this.plugin.getCipher().getString("runnable.reset.error", this.column.substring(0, this.column.length() - 5)), this.plugin.getDebug() >= 3 ? ex : "");
             } finally {
                 db.close();
             }

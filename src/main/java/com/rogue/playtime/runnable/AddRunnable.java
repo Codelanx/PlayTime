@@ -90,10 +90,7 @@ public class AddRunnable implements Runnable {
                 db.open();
                 db.update(sb.toString());
             } catch (SQLException ex) {
-                this.plugin.getLogger().log(Level.SEVERE, null);
-                if (this.plugin.getDebug() == 3) {
-                    ex.printStackTrace();
-                }
+                this.plugin.getLogger().log(Level.SEVERE, "{0}", this.plugin.getDebug() >= 3 ? ex : "null");
             } finally {
                 db.close();
             }
@@ -140,10 +137,7 @@ public class AddRunnable implements Runnable {
                         this.plugin.getLogger().info(this.plugin.getCipher().getString("runnable.add.update"));
                     }
                 } catch (SQLException ex) {
-                    this.plugin.getLogger().log(Level.SEVERE, null);
-                    if (this.plugin.getDebug() == 3) {
-                        ex.printStackTrace();
-                    }
+                    this.plugin.getLogger().log(Level.SEVERE, "{0}", this.plugin.getDebug() >= 3 ? ex : "null");
                 } finally {
                     db.close();
                 }

@@ -27,6 +27,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -84,9 +85,7 @@ public class EventRunnable implements Runnable {
                     }
                     ret.close();
                 } catch (SQLException e) {
-                    if (this.plugin.getDebug() == 3) {
-                        e.printStackTrace();
-                    }
+                    this.plugin.getLogger().log(Level.SEVERE, "{0}", this.plugin.getDebug() >= 3 ? e : "null");
                 } finally {
                     db.close();
                 }
@@ -111,9 +110,7 @@ public class EventRunnable implements Runnable {
                     }
                     ret.close();
                 } catch (SQLException e) {
-                    if (this.plugin.getDebug() == 3) {
-                        e.printStackTrace();
-                    }
+                    this.plugin.getLogger().log(Level.SEVERE, "{0}", this.plugin.getDebug() >= 3 ? e : "null");
                 } finally {
                     db.close();
                 }

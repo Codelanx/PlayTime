@@ -22,6 +22,7 @@ import com.rogue.playtime.data.DataManager;
 import com.rogue.playtime.data.mysql.MySQL;
 import com.rogue.playtime.data.sqlite.SQLite;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 /**
  *
@@ -55,9 +56,7 @@ public class ConvertToRunnable implements Runnable {
                 db.update("TRUNCATE TABLE `playTime`");
                 db.update(this.query);
             } catch (SQLException e) {
-                if (this.plugin.getDebug() == 3) {
-                    e.printStackTrace();
-                }
+                this.plugin.getLogger().log(Level.SEVERE, "{0}", this.plugin.getDebug() >= 3 ? e : "null");
             } finally {
                 db.close();
             }
@@ -80,9 +79,7 @@ public class ConvertToRunnable implements Runnable {
                     db.update(s);
                 }
             } catch (SQLException e) {
-                if (this.plugin.getDebug() == 3) {
-                    e.printStackTrace();
-                }
+                this.plugin.getLogger().log(Level.SEVERE, "{0}", this.plugin.getDebug() >= 3 ? e : "null");
             } finally {
                 db.close();
             }

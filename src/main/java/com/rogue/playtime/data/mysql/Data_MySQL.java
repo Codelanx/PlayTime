@@ -62,9 +62,7 @@ public class Data_MySQL implements DataHandler {
                 ret = result.getInt(1);
             }
         } catch (SQLException e) {
-            if (this.plugin.getDebug() == 3) {
-                e.printStackTrace();
-            }
+            this.plugin.getLogger().log(Level.SEVERE, "{0}", this.plugin.getDebug() >= 3 ? e : "null");
         } finally {
             this.db.close();
         }
@@ -86,9 +84,7 @@ public class Data_MySQL implements DataHandler {
                 }
             }
         } catch (SQLException e) {
-            if (this.plugin.getDebug() == 3) {
-                e.printStackTrace();
-            }
+            this.plugin.getLogger().log(Level.SEVERE, "{0}", this.plugin.getDebug() >= 3 ? e : "null");
         } finally {
             this.db.close();
         }
@@ -105,9 +101,7 @@ public class Data_MySQL implements DataHandler {
                 back.put(ret.getString("username"), ret.getInt(timer));
             }
         } catch (SQLException e) {
-            if (this.plugin.getDebug() == 3) {
-                e.printStackTrace();
-            }
+            this.plugin.getLogger().log(Level.SEVERE, "{0}", this.plugin.getDebug() >= 3 ? e : "null");
         } finally {
             this.db.close();
         }

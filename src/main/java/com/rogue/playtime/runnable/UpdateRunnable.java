@@ -67,15 +67,9 @@ public class UpdateRunnable implements Runnable {
             }
             plugin.setUpdateStatus(!isLatest);
         } catch (MalformedURLException ex) {
-            plugin.getLogger().log(Level.SEVERE, plugin.getCipher().getString("runnable.update.error"));
-            if (plugin.getDebug() == 3) {
-                ex.printStackTrace();
-            }
+            plugin.getLogger().log(Level.SEVERE, plugin.getCipher().getString("runnable.update.error"), this.plugin.getDebug() >= 3 ? ex : "");
         } catch (IOException ex) {
-            plugin.getLogger().log(Level.SEVERE, plugin.getCipher().getString("runnable.update.error"));
-            if (plugin.getDebug() == 3) {
-                ex.printStackTrace();
-            }
+            plugin.getLogger().log(Level.SEVERE, plugin.getCipher().getString("runnable.update.error"), this.plugin.getDebug() >= 3 ? ex : "");
         }
     }
 

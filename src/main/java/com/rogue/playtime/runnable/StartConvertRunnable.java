@@ -23,6 +23,7 @@ import com.rogue.playtime.data.sqlite.SQLite;
 import com.rogue.playtime.data.yaml.YAML;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
@@ -61,9 +62,7 @@ public class StartConvertRunnable implements Runnable {
                     sb.append("INSERT OR IGNORE INTO `playTime` (`id`, `username`, `playtime`, `deathtime`, `onlinetime`) VALUES (").append(i++).append(", '").append(ret.getString(2)).append("', ").append(ret.getInt(3)).append(", ").append(ret.getInt(4)).append(", ").append(ret.getInt(5)).append(");\n");
                 }
             } catch (SQLException e) {
-                if (this.plugin.getDebug() == 3) {
-                    e.printStackTrace();
-                }
+                this.plugin.getLogger().log(Level.SEVERE, "{0}", this.plugin.getDebug() >= 3 ? e : "null");
             } finally {
                 db.close();
             }
@@ -80,9 +79,7 @@ public class StartConvertRunnable implements Runnable {
                 }
                 ret.close();
             } catch (SQLException e) {
-                if (this.plugin.getDebug() == 3) {
-                    e.printStackTrace();
-                }
+                this.plugin.getLogger().log(Level.SEVERE, "{0}", this.plugin.getDebug() >= 3 ? e : "null");
             } finally {
                 db.close();
             }
