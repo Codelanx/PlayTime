@@ -84,7 +84,7 @@ public class Playtime extends JavaPlugin {
     }
 
     /**
-     * Registers this.debug, metrics, commands, data management, and listeners.
+     * Registers debug, metrics, commands, data management, and listeners.
      *
      * @since 1.0
      * @version 1.4.1
@@ -267,7 +267,7 @@ public class Playtime extends JavaPlugin {
      * @since 1.1
      * @version 1.1
      *
-     * @return The this.debug level
+     * @return The debug level
      */
     public int getDebug() {
         return this.debug;
@@ -286,25 +286,24 @@ public class Playtime extends JavaPlugin {
     }
 
     /**
-     * Returns Playtime's this.listener manager
+     * Returns Playtime's listener manager
      *
      * @since 1.2.0
      * @version 1.4.1
      *
-     * @return The this.listener manager for Playtime
+     * @return The listener manager for Playtime
      */
     public ListenerManager getListenerManager() {
         return this.listener;
     }
 
     /**
-     * Returns the player handler for Playtime NOTE: If AFK is disabled, this
-     * will return null
+     * Returns the player handler for Playtime
      *
      * @since 1.2.0
      * @version 1.2.0
      *
-     * @return The plugin's player handler
+     * @return The plugin's player handler, null if AFK is disabled
      */
     public PlayerHandler getPlayerHandler() {
         return this.phandler;
