@@ -62,6 +62,7 @@ data:
       error: 'Error connecting to MySQL database... shutting down!'
     instance:
       open: 'Open MySQL connections: {0}'
+      close-error: 'Attempted to close an open database instance!'
   sqlite:
     main:
       connecting: 'Connecting to SQLite database...'
@@ -71,6 +72,7 @@ data:
       error: 'Error in SQLite database, shutting down!'
     instance:
       open: 'Open SQLite connections: {0}'
+      close-error: 'Attempted to close an open database instance!'
       error: 'Error loading SQLite connection, disabling!'
   yaml:
     instance:
