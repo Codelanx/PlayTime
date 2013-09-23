@@ -73,6 +73,10 @@ public class CommandHandler implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (this.isReload(commandLabel, args) || !this.plugin.isBusy()) {
+            CommandBase command = this.commands.get(commandLabel);
+            if (command != null) {
+                return command.execute(sender, cmd, commandLabel, args);
+            }
             if (this.commands.containsKey(commandLabel)) {
                 return this.commands.get(commandLabel).execute(sender, cmd, commandLabel, args);
             }
