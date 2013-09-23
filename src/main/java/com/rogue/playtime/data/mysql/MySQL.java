@@ -69,14 +69,16 @@ public class MySQL {
      *
      * @since 1.4.1
      * @version 1.4.1
-     * 
+     *
      * @param plugins The main plugin instance, does not need to be set
      */
     public MySQL(Playtime... plugins) {
-        if (plugins.length != 1) {
-            this.plugin = Playtime.getPlugin();
-        } else {
-            this.plugin = plugins[0];
+        if (this.plugin != null) {
+            if (plugins.length != 1) {
+                this.plugin = Playtime.getPlugin();
+            } else {
+                this.plugin = plugins[0];
+            }
         }
     }
 
