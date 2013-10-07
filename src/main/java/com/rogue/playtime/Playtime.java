@@ -97,7 +97,7 @@ public class Playtime extends JavaPlugin {
             this.reloaded = true;
         }
 
-        this.debug = this.cloader.getInt("general.this.debug-level");
+        this.debug = this.cloader.getInt("general.debug-level");
         if (this.debug > 3) {
             this.debug = 3;
         }
@@ -105,7 +105,7 @@ public class Playtime extends JavaPlugin {
             this.debug = 0;
         }
         if (this.debug >= 1) {
-            this.getLogger().info(this.lang.getString("main.this.debug", this.debug));
+            this.getLogger().info(this.lang.getString("main.debug", this.debug));
         }
 
         try {
@@ -189,7 +189,7 @@ public class Playtime extends JavaPlugin {
      * @param names Players to notify when the reload is complete
      */
     public void reload(final String... names) {
-        final String reloadDone = this.lang.getString("main.this.reloaded");
+        final String reloadDone = this.lang.getString("main.reloaded");
         final Playtime plugin = this;
         this.setBusy(true);
         this.reloaded = true;
