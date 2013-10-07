@@ -151,7 +151,7 @@ public class Playtime extends JavaPlugin {
             this.getLogger().info(this.lang.getString("main.event-disabled"));
         }
 
-        this.getLogger().info(this.lang.getString("main.this.listener"));
+        this.getLogger().info(this.lang.getString("main.listener"));
         this.listener = new ListenerManager(this);
 
         final long endTime = System.nanoTime();
