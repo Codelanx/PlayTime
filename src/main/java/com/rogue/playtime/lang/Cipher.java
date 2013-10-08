@@ -16,7 +16,6 @@
  */
 package com.rogue.playtime.lang;
 
-import com.rogue.playtime.Playtime;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,7 +24,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -38,7 +39,7 @@ import org.bukkit.plugin.Plugin;
 public class Cipher {
 
     private final Plugin plugin;
-    private LangConfiguration langFile;
+    private YamlConfiguration langFile;
     private final String langFileLocGithub = "https://raw.github.com/1Rogue/Playtime/master/lang/<version>/<lang>.yml";
     private final String langFileLocJar = "<lang>.yml";
     private final String langFileLocFolder = "<plugin>" + File.separatorChar + "lang" + File.separatorChar + "<lang>.yml";
@@ -60,14 +61,14 @@ public class Cipher {
         this.language = langType;
 
         if (this.language.equalsIgnoreCase("custom")) {
-            LangConfiguration file = this.getFromFolder(plugin, this.language);
+            YamlConfiguration file = this.getFromFolder(plugin, this.language);
             if (file != null) {
                 this.langFile = file;
                 return;
             }
         }
 
-        LangConfiguration github = null;
+        YamlConfiguration github = null;
         if (useGit) {
             try {
                 github = getFromGithub(plugin, this.language);
@@ -79,7 +80,7 @@ public class Cipher {
         }
         
         try {
-            LangConfiguration file = this.getFromFolder(plugin, this.language);
+            YamlConfiguration file = this.getFromFolder(plugin, this.language);
             if (file != null) {
                 int version = file.getInt("version", 0);
                 int gitVersion = version;
@@ -132,11 +133,18 @@ public class Cipher {
      * @return The resulting String
      */
     public String getString(String path, Object... vars) {
-        String string = this.langFile.getString(path);
-        for (int i = 0; i < vars.length; i++) {
-            string = string.replace("{" + i + "}", vars[i].toString());
+        if (path == null) {
+            throw new NullPointerException("YamlConfiguration string path cannot be null!");
         }
-        return string;
+        
+        String back = this.langFile.getString(path);
+        if (back == null) {
+            back = "&cUnable to find path &6" + path + " &cin lang file &6" + this.language;
+        }
+        for (int i = 0; i < vars.length; i++) {
+            back = back.replace("{" + i + "}", vars[i].toString());
+        }
+        return ChatColor.translateAlternateColorCodes('&', back);
     }
 
     /**
@@ -147,12 +155,12 @@ public class Cipher {
      *
      * @param pl The plugin
      * @param lang The lang file to use
-     * @return The lang file as a LangConfiguration
+     * @return The lang file as a YamlConfiguration
      */
-    private LangConfiguration getFromFolder(Plugin pl, String lang) {
+    private YamlConfiguration getFromFolder(Plugin pl, String lang) {
         File file = new File(this.langFileLocFolder.replace("<plugin>", pl.getDataFolder().getPath()).replace("<lang>", lang));
         if (file.exists()) {
-            return (LangConfiguration) LangConfiguration.loadConfiguration(file);
+            return YamlConfiguration.loadConfiguration(file);
         } else {
             return null;
         }
@@ -166,12 +174,12 @@ public class Cipher {
      *
      * @param pl The plugin
      * @param lang The lang file to use
-     * @return The lang file as a LangConfiguration
+     * @return The lang file as a YamlConfiguration
      */
-    private LangConfiguration getFromJar(Plugin plugin, String lang) {
+    private YamlConfiguration getFromJar(Plugin plugin, String lang) {
         InputStream jarStream = plugin.getResource(this.langFileLocJar.replace("<lang>", lang));
         if (jarStream != null) {
-            return (LangConfiguration) LangConfiguration.loadConfiguration(jarStream);
+            return YamlConfiguration.loadConfiguration(jarStream);
         } else {
             return null;
         }
@@ -185,15 +193,15 @@ public class Cipher {
      *
      * @param pl The plugin
      * @param lang The lang file to use
-     * @return The lang file as a LangConfiguration
+     * @return The lang file as a YamlConfiguration
      */
-    private LangConfiguration getFromGithub(Plugin plugin, String lang) throws MalformedURLException, IOException {
-        LangConfiguration pluginyml = (LangConfiguration) LangConfiguration.loadConfiguration(plugin.getResource("plugin.yml"));
+    private YamlConfiguration getFromGithub(Plugin plugin, String lang) throws MalformedURLException, IOException {
+        YamlConfiguration pluginyml = YamlConfiguration.loadConfiguration(plugin.getResource("plugin.yml"));
 
         URL upstr = new URL(this.langFileLocGithub.replace("<version>", pluginyml.getString("version")).replace("<lang>", lang));
         InputStream langs = upstr.openStream();
         if (langs != null) {
-            return (LangConfiguration) LangConfiguration.loadConfiguration(langs);
+            return YamlConfiguration.loadConfiguration(langs);
         } else {
             return null;
         }
