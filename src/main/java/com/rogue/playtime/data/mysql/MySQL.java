@@ -40,8 +40,8 @@ public class MySQL {
     private static String PASS = "";
     private static String DATABASE = "";
     private static String PORT = "";
-    private Connection con = null;
     private Playtime plugin;
+    private Connection con = null;
 
     /**
      * Sets the static variables to use in future MySQL connections
@@ -54,14 +54,15 @@ public class MySQL {
      * @param pass The password to use
      * @param database The database to use
      * @param port The port number to use
+     * @param plugins The main plugin instance, does not need to be set
      */
-    public MySQL(String host, String user, String pass, String database, String port) {
+    public MySQL(String host, String user, String pass, String database, String port, Playtime... plugins) {
         HOST = host;
         USER = user;
         PASS = pass;
         DATABASE = database;
         PORT = port;
-        this.plugin = Playtime.getPlugin();
+        this.setMain(plugins);
     }
 
     /**
@@ -73,11 +74,15 @@ public class MySQL {
      * @param plugins The main plugin instance, does not need to be set
      */
     public MySQL(Playtime... plugins) {
-        if (this.plugin != null) {
-            if (plugins.length != 1) {
-                this.plugin = Playtime.getPlugin();
-            } else {
+        this.setMain(plugins);
+    }
+    
+    private void setMain(Playtime... plugins) {
+        if (this.plugin == null) {
+            if (plugins.length > 0) {
                 this.plugin = plugins[0];
+            } else {
+                this.plugin = Playtime.getPlugin();
             }
         }
     }
