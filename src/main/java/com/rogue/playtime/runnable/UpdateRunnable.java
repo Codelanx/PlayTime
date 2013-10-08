@@ -26,12 +26,9 @@ import java.util.logging.Level;
 import com.rogue.playtime.Playtime;
 
 /**
- * Adopted from TotalPermissions
- * 
- * TODO: Coding standard, cleanup
- * 
  * @since 1.1
  * @author Lord_Ralex
+ * @author 1Rogue
  * @version 1.4.0
  */
 public class UpdateRunnable implements Runnable {
@@ -42,9 +39,8 @@ public class UpdateRunnable implements Runnable {
     private String version;
     private final Playtime plugin;
 
-    public UpdateRunnable(Playtime p) {
-        super();
-        plugin = p;
+    public UpdateRunnable(Playtime plugin) {
+        this.plugin = plugin;
         version = plugin.getDescription().getVersion();
     }
 
@@ -60,12 +56,7 @@ public class UpdateRunnable implements Runnable {
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             latest = reader.readLine();
             reader.close();
-            if (latest.equalsIgnoreCase(version)) {
-                isLatest = true;
-            } else {
-                isLatest = false;
-            }
-            plugin.setUpdateStatus(!isLatest);
+            this.plugin.setUpdateStatus(!latest.equalsIgnoreCase(version));
         } catch (MalformedURLException ex) {
             plugin.getLogger().log(Level.SEVERE, plugin.getCipher().getString("runnable.update.error"), this.plugin.getDebug() >= 3 ? ex : "");
         } catch (IOException ex) {
