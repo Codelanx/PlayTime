@@ -20,7 +20,6 @@ import com.rogue.playtime.Playtime;
 import com.rogue.playtime.listener.listeners.*;
 import java.util.HashMap;
 import java.util.Map;
-import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 
 /**
@@ -48,11 +47,11 @@ public class ListenerManager {
         if (plugin.getConfigurationLoader().getBoolean("check.online-time")) {
             this.listeners.put("online", new OnlineListener(plugin));
         }
-        if (plugin.getConfigurationLoader().getBoolean("update-check")) {
+        if (plugin.getConfigurationLoader().getBoolean("general.update-check")) {
             this.listeners.put("update", new UpdateListener(plugin));
         }
         for (Listener l : this.listeners.values()) {
-            Bukkit.getPluginManager().registerEvents(l, plugin);
+            plugin.getServer().getPluginManager().registerEvents(l, plugin);
         }
     }
     
