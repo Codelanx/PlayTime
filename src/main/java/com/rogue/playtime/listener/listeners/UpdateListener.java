@@ -48,11 +48,8 @@ public class UpdateListener implements Listener {
      */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent e) {
-        e.getPlayer().sendMessage("Outside perm check");
         if (e.getPlayer().hasPermission("playtime.updatenotice")) {
-            e.getPlayer().sendMessage("Outside update check");
             if (this.plugin.isUpdateAvailable()) {
-                e.getPlayer().sendMessage(_("Sending &formatted message"));
                 e.getPlayer().sendMessage(_(this.plugin.getCipher().getString("listener.update")));
             }
         }
