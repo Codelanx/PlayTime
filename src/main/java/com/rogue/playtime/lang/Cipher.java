@@ -24,54 +24,62 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
-import org.bukkit.ChatColor;
+import java.util.logging.Logger;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 /**
- * Adapted from TotalPermissions
- * 
- * TODO: Coding standard, fix up, allow support for multiple languages at once
+ * TODO: allow support for multiple languages at once
  *
- * @version 1.4.0
+ * @version 1.4.3
  * @author 1Rogue
  * @since 1.4.0
  */
 public class Cipher {
 
-    private final Playtime plugin;
-    private FileConfiguration langFile;
+    private final Plugin plugin;
+    private LangConfiguration langFile;
     private final String langFileLocGithub = "https://raw.github.com/1Rogue/Playtime/master/lang/<version>/<lang>.yml";
     private final String langFileLocJar = "<lang>.yml";
     private final String langFileLocFolder = "<plugin>" + File.separatorChar + "lang" + File.separatorChar + "<lang>.yml";
     private final String language;
 
-    public Cipher(Playtime plugin) {
+    /**
+     * Cipher Constructor. Loads files from either a local folder, github, or
+     * the jarfile, in that listed priority.
+     * 
+     * @since 1.4.0
+     * @version 1.4.3
+     *
+     * @param plugin The main plugin instance
+     * @param langType The name of the lang file to use
+     * @param useGit Whether or not downloading from github is allowed
+     */
+    public Cipher(Plugin plugin, String langType, boolean useGit) {
         this.plugin = plugin;
-        language = plugin.getConfigurationLoader().getString("language.locale");
-        //load file from github in preps for future use
-        if (language.equalsIgnoreCase("custom")) {
-            FileConfiguration file = this.getFromFolder(plugin, language);
+        this.language = langType;
+
+        if (this.language.equalsIgnoreCase("custom")) {
+            LangConfiguration file = this.getFromFolder(plugin, this.language);
             if (file != null) {
-                setLangFile(file);
+                this.langFile = file;
                 return;
             }
         }
-        FileConfiguration github = null;
-        if (plugin.getConfigurationLoader().getBoolean("language.use-github")) {
+
+        LangConfiguration github = null;
+        if (useGit) {
             try {
-                github = getFromGithub(plugin, language);
+                github = getFromGithub(plugin, this.language);
             } catch (FileNotFoundException e) {
-                plugin.getLogger().log(Level.SEVERE, "Cannot find lang file {0}!", language);
+                plugin.getLogger().log(Level.SEVERE, "Cannot find lang file {0}!", this.language);
             } catch (IOException e) {
                 plugin.getLogger().log(Level.SEVERE, "Fatal error occured while retrieving lang files", e);
             }
         }
+        
         try {
-            //first see if there is a lang file
-            FileConfiguration file = this.getFromFolder(plugin, language);
+            LangConfiguration file = this.getFromFolder(plugin, this.language);
             if (file != null) {
                 int version = file.getInt("version", 0);
                 int gitVersion = version;
@@ -81,33 +89,35 @@ public class Cipher {
                 if (gitVersion > version) {
                     plugin.getLogger().warning("Your language file is outdated, getting new file");
                     file = github;
+                } else {
+                    github = null;
                 }
             } else {
-                file = this.getFromJar(plugin, language);
+                file = this.getFromJar(plugin, this.language);
                 if (file == null) {
                     file = github;
                     if (file == null) {
-                        throw new InvalidConfigurationException("The langauage " + language + " is unsupported");
+                        throw new InvalidConfigurationException("The langauage " + this.language + " is unsupported");
                     }
                 }
             }
-            setLangFile(file);
+            this.langFile = file;
         } catch (Exception e) {
             //and if we just completely crash and burn, then use en_US
             plugin.getLogger().log(Level.SEVERE, "Fatal error occured while loading lang files:", e);
             plugin.getLogger().log(Level.SEVERE, "Defaulting to english (en_US)");
-            setLangFile(getFromJar(plugin, language));
+            this.langFile = getFromJar(plugin, this.language);
         }
+        
         try {
-            new File(langFileLocFolder.replace("<plugin>", plugin.getDataFolder().getPath())).getParentFile().mkdirs();
-            langFile.save(langFileLocFolder.replace("<plugin>", plugin.getDataFolder().getPath()).replace("<lang>", language));
+            File f = new File(this.langFileLocFolder.replace("<plugin>",
+                    plugin.getDataFolder().getPath()).replace("<lang>", this.language));
+            f.getParentFile().mkdirs();
+            this.langFile.save(f);
         } catch (IOException ex) {
-            plugin.getLogger().log(Level.SEVERE, "Fatal error occured while saving lang files", ex);
+            Logger.getLogger(Cipher.class.getName()).log(Level.SEVERE, "Fatal error occured while saving lang files", ex);
         }
-    }
-
-    private void setLangFile(FileConfiguration file) {
-        langFile = file;
+        
     }
 
     /**
@@ -115,43 +125,34 @@ public class Cipher {
      * exist, this will default to use the en_US in the jarfile.
      *
      * @since 1.4.0
-     * @version 1.4.0
+     * @version 1.4.3
      *
      * @param path The path to the string
      * @param vars Any variables to add
      * @return The resulting String
      */
     public String getString(String path, Object... vars) {
-        String string = langFile.getString(path);
-        if (string == null) {
-            FileConfiguration fromJar = getFromJar(this.plugin, this.langFileLocJar.replace("<lang>", "en_US"));
-            if (fromJar != null) {
-                string = fromJar.getString(path);
-            }
-        }
-        if (string == null) {
-            throw new NullPointerException("The language files are missing the path. Language: " + language + " Path: " + path);
-        }
+        String string = this.langFile.getString(path);
         for (int i = 0; i < vars.length; i++) {
             string = string.replace("{" + i + "}", vars[i].toString());
         }
-        return ChatColor.translateAlternateColorCodes('&', string);
+        return string;
     }
 
     /**
      * Gets the lang file from the plugin data folder
      *
      * @since 1.4.0
-     * @version 1.4.0
+     * @version 1.4.3
      *
      * @param pl The plugin
      * @param lang The lang file to use
-     * @return The lang file as a FileConfiguration
+     * @return The lang file as a LangConfiguration
      */
-    private FileConfiguration getFromFolder(Plugin pl, String lang) {
-        File file = new File(langFileLocFolder.replace("<plugin>", pl.getDataFolder().getPath()).replace("<lang>", lang));
+    private LangConfiguration getFromFolder(Plugin pl, String lang) {
+        File file = new File(this.langFileLocFolder.replace("<plugin>", pl.getDataFolder().getPath()).replace("<lang>", lang));
         if (file.exists()) {
-            return YamlConfiguration.loadConfiguration(file);
+            return (LangConfiguration) LangConfiguration.loadConfiguration(file);
         } else {
             return null;
         }
@@ -161,16 +162,16 @@ public class Cipher {
      * Gets the lang file from the plugin jarfile
      *
      * @since 1.4.0
-     * @version 1.4.0
+     * @version 1.4.3
      *
      * @param pl The plugin
      * @param lang The lang file to use
-     * @return The lang file as a FileConfiguration
+     * @return The lang file as a LangConfiguration
      */
-    private FileConfiguration getFromJar(Plugin plugin, String lang) {
-        InputStream jarStream = plugin.getResource(langFileLocJar.replace("<lang>", lang));
+    private LangConfiguration getFromJar(Plugin plugin, String lang) {
+        InputStream jarStream = plugin.getResource(this.langFileLocJar.replace("<lang>", lang));
         if (jarStream != null) {
-            return YamlConfiguration.loadConfiguration(jarStream);
+            return (LangConfiguration) LangConfiguration.loadConfiguration(jarStream);
         } else {
             return null;
         }
@@ -180,19 +181,19 @@ public class Cipher {
      * Gets the lang file from github
      *
      * @since 1.4.0
-     * @version 1.4.0
+     * @version 1.4.3
      *
      * @param pl The plugin
      * @param lang The lang file to use
-     * @return The lang file as a FileConfiguration
+     * @return The lang file as a LangConfiguration
      */
-    private FileConfiguration getFromGithub(Plugin plugin, String lang) throws MalformedURLException, IOException {
-        YamlConfiguration pluginyml = YamlConfiguration.loadConfiguration(plugin.getResource("plugin.yml"));
+    private LangConfiguration getFromGithub(Plugin plugin, String lang) throws MalformedURLException, IOException {
+        LangConfiguration pluginyml = (LangConfiguration) LangConfiguration.loadConfiguration(plugin.getResource("plugin.yml"));
 
-        URL upstr = new URL(langFileLocGithub.replace("<version>", pluginyml.getString("version")).replace("<lang>", lang));
+        URL upstr = new URL(this.langFileLocGithub.replace("<version>", pluginyml.getString("version")).replace("<lang>", lang));
         InputStream langs = upstr.openStream();
         if (langs != null) {
-            return YamlConfiguration.loadConfiguration(langs);
+            return (LangConfiguration) LangConfiguration.loadConfiguration(langs);
         } else {
             return null;
         }

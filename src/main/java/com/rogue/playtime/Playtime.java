@@ -79,7 +79,10 @@ public class Playtime extends JavaPlugin {
         }
 
         this.getLogger().info("Loading language manager...");
-        this.lang = new Cipher(this);
+
+        this.lang = new Cipher(this,
+                this.cloader.getString("language.locale"),
+                this.cloader.getBoolean("language.use-github"));
 
     }
 
@@ -195,7 +198,6 @@ public class Playtime extends JavaPlugin {
         this.reloaded = true;
         this.onDisable();
         Bukkit.getScheduler().runTaskLater(this, new Runnable() {
-            
             public void run() {
                 plugin.debug = 0;
                 plugin.execmanager = null;
