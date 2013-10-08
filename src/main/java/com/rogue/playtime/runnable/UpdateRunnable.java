@@ -41,7 +41,7 @@ public class UpdateRunnable implements Runnable {
 
     public UpdateRunnable(Playtime plugin) {
         this.plugin = plugin;
-        version = plugin.getDescription().getVersion();
+        this.version = plugin.getDescription().getVersion();
     }
 
     public void run() {

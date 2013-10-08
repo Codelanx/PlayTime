@@ -42,14 +42,17 @@ public class UpdateListener implements Listener {
      * Sends a notification to ops/players with all of the plugin's permissions
      *
      * @since 1.2.0
-     * @versino 1.4.1
+     * @version 1.4.1
      *
      * @param e The join event
      */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent e) {
+        e.getPlayer().sendMessage("Outside perm check");
         if (e.getPlayer().hasPermission("playtime.updatenotice")) {
+            e.getPlayer().sendMessage("Outside update check");
             if (this.plugin.isUpdateAvailable()) {
+                e.getPlayer().sendMessage(_("Sending &formatted message"));
                 e.getPlayer().sendMessage(_(this.plugin.getCipher().getString("listener.update")));
             }
         }
