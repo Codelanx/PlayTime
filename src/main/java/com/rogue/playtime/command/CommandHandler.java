@@ -77,9 +77,6 @@ public class CommandHandler implements CommandExecutor {
             if (command != null) {
                 return command.execute(sender, cmd, commandLabel, args);
             }
-            if (this.commands.containsKey(commandLabel)) {
-                return this.commands.get(commandLabel).execute(sender, cmd, commandLabel, args);
-            }
         } else {
             sender.sendMessage(_(this.plugin.getCipher().getString("command.handler.busy")));
         }
