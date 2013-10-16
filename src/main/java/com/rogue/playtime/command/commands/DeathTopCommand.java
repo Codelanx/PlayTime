@@ -74,7 +74,7 @@ public class DeathTopCommand implements CommandBase {
             Player p = (Player)sender;
             ScoreboardManager sbm = Bukkit.getScoreboardManager();
             Scoreboard scoreBoard = sbm.getNewScoreboard();
-            Objective objv = scoreBoard.registerNewObjective(this.plugin.getCipher().getString("command.commands.deathtop.title"), "dummy");
+            Objective objv = scoreBoard.registerNewObjective("deathtimetop", "dummy");
             objv.setDisplaySlot(DisplaySlot.SIDEBAR);
             objv.setDisplayName(this.plugin.getCipher().getString("command.commands.deathtop.title-shown"));
             Score score;

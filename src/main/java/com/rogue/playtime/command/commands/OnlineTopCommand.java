@@ -74,7 +74,7 @@ public class OnlineTopCommand implements CommandBase {
             Player p = (Player)sender;
             ScoreboardManager sbm = Bukkit.getScoreboardManager();
             Scoreboard scoreBoard = sbm.getNewScoreboard();
-            Objective objv = scoreBoard.registerNewObjective(this.plugin.getCipher().getString("command.commands.onlinetop.title"), "dummy");
+            Objective objv = scoreBoard.registerNewObjective("onlinetop", "dummy");
             objv.setDisplaySlot(DisplaySlot.SIDEBAR);
             objv.setDisplayName(this.plugin.getCipher().getString("command.commands.onlinetop.title-shown"));
             Score score;

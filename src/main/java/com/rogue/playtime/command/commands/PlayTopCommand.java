@@ -74,7 +74,7 @@ public class PlayTopCommand implements CommandBase {
             Player p = (Player)sender;
             ScoreboardManager sbm = Bukkit.getScoreboardManager();
             Scoreboard scoreBoard = sbm.getNewScoreboard();
-            Objective objv = scoreBoard.registerNewObjective(this.plugin.getCipher().getString("command.commands.playtop.title"), "dummy");
+            Objective objv = scoreBoard.registerNewObjective("playtimetop", "dummy");
             objv.setDisplaySlot(DisplaySlot.SIDEBAR);
             objv.setDisplayName(this.plugin.getCipher().getString("command.commands.playtop.title-shown"));
             Score score;
