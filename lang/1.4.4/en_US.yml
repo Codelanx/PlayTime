@@ -1,0 +1,128 @@
+version: 4
+command:
+  commands:
+    death:
+      console: 'You cannot check the survival time of a non-player!'
+      playtime-hours: '{0} has been alive for {1} hour{2} and {3} minute{4}.'
+      playtime-minutes: '{0} has been alive for {1} minute{2}.'
+      disabled: 'Tracking player deaths is disabled!'
+      noperm: 'You do not have permission to do that!'
+    deathtop:
+      disabled-flatfile: '&e/deathtimetop&6 is disabled with &eflatfile&6 data!'
+      title-shown: 'Top survival times (in hours):'
+      clear: 'Use &e/deathtimetop clear&6 to remove the leaderboard.'
+      console-title: 'Top {0} players for Deathtime (in hours):'
+    online:
+      console: 'You cannot check the online time of a non-player!'
+      playtime-hours: '{0} has been online for {1} hour{2} and {3} minute{4}.'
+      playtime-minutes: '{0} has been online for {1} minute{2}.'
+      disabled: 'Tracking online time is disabled!'
+      noperm: 'You do not have permission to do that!'
+    onlinetop:
+      disabled-flatfile: '&e/onlinetimetop&6 is disabled with &eflatfile&6 data!'
+      title-shown: 'Top online times (in hours):'
+      clear: 'Use &e/onlinetimetop clear&6 to remove the leaderboard.'
+      console-title: 'Top {0} players for Onlinetime (in hours):'
+    play:
+      console: 'You cannot check the play time of a non-player!'
+      playtime-hours: '{0} has played for {1} hour{2} and {3} minute{4}.'
+      playtime-minutes: '{0} has played for {1} minute{2}.'
+      noperm: 'You do not have permission to do that!'
+    playtop:
+      disabled-flatfile: '&e/playtimetop&6 is disabled with &eflatfile&6 data!'
+      title-shown: 'Top playtimes (in hours):'
+      clear: 'Use &e/playtimetop clear&6 to remove the leaderboard.'
+      console-title: 'Top {0} players for Playtime (in hours):'
+    pt:
+      longtime: 'Please note that this may take up to 1 minute to complete, depending on the size of your database.'
+      datainuse: 'Data Manager already in use!'
+      convert: 'Converting from data type ''{0}'' to ''{1}''!'
+      swap: 'Swapping from data type ''{0}'' to ''{1}''!'
+      confirm: 'You will need to either confirm this action with &e/pt &6confirm or cancel it using &e/pt cancel'
+      flatfile: 'Converting data to flatfiles is not allowed!'
+      baddata: 'Unknown data type ''{0}'''
+      version: 'Version &e{0}&f - &6Developed by 1Rogue'
+  handler:
+    busy: 'Playtime is currently busy with an operation, try again in a minute!'
+data:
+  mysql:
+    main:
+      connecting: 'Connecting to MySQL database...'
+      connect-success: 'Successfully connected to database!'
+      create-table: 'Creating table ''playTime'' in database ''{0}'''
+      missing-user: 'Missing username column! Recreating table...'
+      missing-playtime: 'Missing playtime column! Repairing...'
+      reset-column: 'Resetting column {0}'
+      updating-table: 'Updating SQL table for {0}'
+      setting-defaults: 'Setting defaults for column {0}'
+      uptodate: 'SQL table is up to date!'
+      error: 'Error connecting to MySQL database... shutting down!'
+    instance:
+      open: 'Open MySQL connections: {0}'
+      close-error: 'Attempted to close an open database instance!'
+  sqlite:
+    main:
+      connecting: '"Connecting to SQLite database..."'
+      connect-success: 'Successfully connected to database!'
+      create-table: 'Creating table ''playTime'' in database'
+      reset-column: 'Resetting column {0}'
+      error: 'Error in SQLite database, shutting down!'
+    instance:
+      open: 'Open SQLite connections: {0}'
+      close-error: 'Attempted to close an open database instance!'
+      error: 'Error loading SQLite connection, disabling!'
+  yaml:
+    instance:
+      error-create: 'Error creating user YAML file!'
+      error-save: 'Error saving user YAML configuration!'
+  manager:
+    no-flat: 'Flatfile storage is currently broken! Using SQLite...'
+listener:
+  update: 'An update is available for Playtime!'
+player:
+  set-afk: 'Setting {0} as AFK!'
+runnable:
+  afk:
+    check: 'AFK check initiated'
+    time: 'Time incremented for {0}!'
+    location: 'Updating location for {0}!'
+  add:
+    none: 'No players to update.'
+    query: 'SQL Query for update:\n{0}'
+    update: 'Updating values for {0}!'
+    values: 'Players updated!'
+  convertto:
+    rows: 'Adding {0} rows to SQLite database. Estimated time: {1}'
+    complete: 'Conversion complete!'
+    noflat: 'You cannot convert to flat file storage!'
+  reset:
+    error: 'Error updating time for {0}'
+  startconvert:
+    mysql:
+      download: 'Downloading MySQL database...'
+  update:
+    dev: 'You are using a dev build, update checks are disabled'
+    version-error: 'Version check was not completed'
+    error: 'Error occured while checking for an update'
+main:
+  debug: 'Debug level set to {0}!'
+  metrics: 'Enabling Metrics...'
+  update: 'Update checks disabled!'
+  execs: 'Enabling executable manager...'
+  data: 'Enabling Data Manager...'
+  command: 'Enabling Command Handler...'
+  player: 'Enabling Player Handler...'
+  afk: 'AFK checking disabled!'
+  listener: 'Enabling listener manager...'
+  event: 'Enabling event system...'
+  event-disabled: 'Disabling event system!'
+  enabled: 'Enabled! ({0})'
+  reloaded: 'Playtime reloaded!'
+variables:
+  second: 'second'
+  seconds: 'seconds'
+  minute: 'minute'
+  minutes: 'minutes'
+  hour: 'hour'
+  hours: 'hours'
+  and: 'and'
