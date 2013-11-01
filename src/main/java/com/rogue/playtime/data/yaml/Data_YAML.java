@@ -52,7 +52,7 @@ public class Data_YAML implements DataHandler {
         return this.yaml.getFile().getInt("users." + this.plugin.getBestPlayer(username) + "." + data);
     }
 
-    public Map<String, Integer> getTopPlayers(String data, int amount) {
+    public Map<String, Integer> getTopPlayers(String data, byte amount) {
         return new HashMap<String, Integer>();
     }
 

@@ -36,7 +36,7 @@ import org.bukkit.Bukkit;
  */
 public class SQLite {
 
-    private static int connections = 0;
+    private static byte connections = 0;
     private Connection con = null;
     private Playtime plugin;
     
@@ -85,9 +85,9 @@ public class SQLite {
      */
     public boolean checkTable(String tablename) throws SQLException {
         ResultSet count = query("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='" + tablename + "'");
-        int i = 0;
+        byte i = 0;
         if (count.next()) {
-            i = count.getInt(1);
+            i = count.getByte(1);
         }
         count.close();
         return (i == 1) ? true : false;

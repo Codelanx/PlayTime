@@ -34,7 +34,7 @@ import java.util.logging.Level;
  */
 public class MySQL {
 
-    private static int connections = 0;
+    private static byte connections = 0;
     private static String HOST = "";
     private static String USER = "";
     private static String PASS = "";
@@ -77,6 +77,14 @@ public class MySQL {
         this.setMain(plugins);
     }
     
+    /**
+     * Sets the main {@link Playtime} instance
+     * 
+     * @since 1.4.3
+     * @version 1.4.3
+     * 
+     * @param plugins An array containing the main instance, only the first is relevant
+     */
     private void setMain(Playtime... plugins) {
         if (this.plugin == null) {
             if (plugins.length > 0) {
@@ -122,9 +130,9 @@ public class MySQL {
      */
     public boolean checkTable(String tablename) throws SQLException {
         ResultSet count = query("SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = '" + DATABASE + "') AND (TABLE_NAME = '" + tablename + "')");
-        int i = 0;
+        byte i = 0;
         if (count.next()) {
-            i = count.getInt(1);
+            i = count.getByte(1);
         }
         count.close();
         return (i == 1) ? true : false;

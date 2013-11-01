@@ -141,7 +141,7 @@ public class Cipher {
         if (back == null) {
             back = "&cUnable to find path &6" + path + " &cin lang file &6" + this.language;
         }
-        for (int i = 0; i < vars.length; i++) {
+        for (byte i = 0; i < vars.length; i++) {
             back = back.replace("{" + i + "}", vars[i].toString());
         }
         return ChatColor.translateAlternateColorCodes('&', back);

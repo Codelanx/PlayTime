@@ -49,7 +49,7 @@ public class PlayTopCommand implements CommandBase {
         if (sender instanceof Player) {
             scoreboard = true;
         }
-        int i = 5;
+        byte i = 5;
         if (args.length > 0) {
             if (args[0].equalsIgnoreCase("clear") && scoreboard) {
                 Player p = (Player) sender;
@@ -57,13 +57,14 @@ public class PlayTopCommand implements CommandBase {
                 return true;
             }
             try {
-                i = Integer.parseInt(args[0]);
-                if (i < 1) {
-                    i = 1;
+                int temp = Integer.parseInt(args[0]);
+                if (temp < 1) {
+                    temp = 1;
                 }
-                if (i > 10) {
-                    i = 10;
+                if (temp > 10) {
+                    temp = 10;
                 }
+                i = Byte.parseByte(temp + "");
             } catch (NumberFormatException e) {}
         }
         Map<String, Integer> players = this.plugin.getDataManager().getDataHandler().getTopPlayers("playtime", i);

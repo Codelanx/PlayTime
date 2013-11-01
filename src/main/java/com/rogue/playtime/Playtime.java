@@ -47,7 +47,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Playtime extends JavaPlugin {
 
-    protected int debug = 0;
+    protected byte debug = 0;
     protected ExecutiveManager execmanager;
     protected ListenerManager listener;
     protected PlayerHandler phandler;
@@ -100,13 +100,14 @@ public class Playtime extends JavaPlugin {
             this.reloaded = true;
         }
 
-        this.debug = this.cloader.getInt("general.debug-level");
-        if (this.debug > 3) {
-            this.debug = 3;
+        int temp = this.cloader.getInt("general.debug-level");
+        if (temp > 3) {
+            temp = 3;
         }
-        if (this.debug < 0) {
-            this.debug = 0;
+        if (temp < 0) {
+            temp = 0;
         }
+        this.debug = Byte.parseByte(temp + "");
         if (this.debug >= 1) {
             this.getLogger().info(this.lang.getString("main.debug", this.debug));
         }
@@ -229,7 +230,7 @@ public class Playtime extends JavaPlugin {
      * @return Readable String of the time
      */
     private String readableProfile(long time) {
-        int i;
+        byte i;
         String[] units = new String[]{"ms", "s", "m", "hr", "day", "week", "mnth", "yr"};
         int[] metric = new int[]{1000, 60, 60, 24, 7, 30, 12};
         long current = TimeUnit.MILLISECONDS.convert(time, TimeUnit.NANOSECONDS);
@@ -271,7 +272,7 @@ public class Playtime extends JavaPlugin {
      *
      * @return The debug level
      */
-    public int getDebug() {
+    public byte getDebug() {
         return this.debug;
     }
 

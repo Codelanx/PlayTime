@@ -70,7 +70,7 @@ public class Data_SQLite implements DataHandler {
         return ret;
     }
 
-    public Map<String, Integer> getTopPlayers(String data, int amount) {
+    public Map<String, Integer> getTopPlayers(String data, byte amount) {
         this.db = new SQLite();
         Map<String, Integer> players = new HashMap();
         try {

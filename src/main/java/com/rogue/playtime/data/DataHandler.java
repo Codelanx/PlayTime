@@ -59,7 +59,7 @@ public interface DataHandler {
      * 
      * @return A map object containing the strings for the top players, and an integer value of their time
      */
-    public abstract Map<String, Integer> getTopPlayers(String data, int amount);
+    public abstract Map<String, Integer> getTopPlayers(String data, byte amount);
     
     /**
      * Gets the players within a range of a timer.
