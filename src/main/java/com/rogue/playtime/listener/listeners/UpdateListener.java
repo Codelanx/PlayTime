@@ -17,7 +17,7 @@
 package com.rogue.playtime.listener.listeners;
 
 import com.rogue.playtime.Playtime;
-import static com.rogue.playtime.Playtime._;
+import static com.rogue.playtime.Playtime.__;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -50,7 +50,7 @@ public class UpdateListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e) {
         if (e.getPlayer().hasPermission("playtime.updatenotice")) {
             if (this.plugin.isUpdateAvailable()) {
-                e.getPlayer().sendMessage(_(this.plugin.getCipher().getString("listener.update")));
+                e.getPlayer().sendMessage(__(this.plugin.getCipher().getString("listener.update")));
             }
         }
     }

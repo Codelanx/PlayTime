@@ -16,7 +16,7 @@
  */
 package com.rogue.playtime.event;
 
-import static com.rogue.playtime.Playtime._;
+import static com.rogue.playtime.Playtime.__;
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.runnable.EventRunnable;
 import java.io.File;
@@ -156,7 +156,7 @@ public class EventHandler {
         for (String s : fire) {
             for (String c : this.events.get(s).getCommands()) {
                 if (this.isMessage(c)) {
-                    Bukkit.getPlayer(username).sendMessage(_(this.replaceMessage(c).replace("%u", username).replace("%t", this.plugin.getDataManager().getDataHandler().getValue(this.events.get(s).getType(), username) + "")));
+                    Bukkit.getPlayer(username).sendMessage(__(this.replaceMessage(c).replace("%u", username).replace("%t", this.plugin.getDataManager().getDataHandler().getValue(this.events.get(s).getType(), username) + "")));
                 } else {
                     Bukkit.dispatchCommand(ccs, c.replace("%u", username).replace("%t", this.plugin.getDataManager().getDataHandler().getValue(this.events.get(s).getType(), username) + ""));
                 }
@@ -178,7 +178,7 @@ public class EventHandler {
             if (e.isLoginEvent()) {
                 for (String c : e.getCommands()) {
                     if (this.isMessage(c.split(" ")[0])) {
-                        Bukkit.getPlayer(username).sendMessage(_(this.replaceMessage(c).replace("%u", username).replace("%t", this.toReadable(this.plugin.getDataManager().getDataHandler().getValue(e.getType(), username)))));
+                        Bukkit.getPlayer(username).sendMessage(__(this.replaceMessage(c).replace("%u", username).replace("%t", this.toReadable(this.plugin.getDataManager().getDataHandler().getValue(e.getType(), username)))));
                     } else {
                         Bukkit.dispatchCommand(ccs, c.replace("%u", username).replace("%t", this.plugin.getDataManager().getDataHandler().getValue(e.getType(), username) + ""));
                     }

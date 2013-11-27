@@ -18,7 +18,7 @@ package com.rogue.playtime.command.commands;
 
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.command.CommandBase;
-import static com.rogue.playtime.Playtime._;
+import static com.rogue.playtime.Playtime.__;
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -69,7 +69,7 @@ public class PlayTopCommand implements CommandBase {
         }
         Map<String, Integer> players = this.plugin.getDataManager().getDataHandler().getTopPlayers("playtime", i);
         if (players == null) {
-            sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.playtop.disabled-flatfile")));
+            sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.playtop.disabled-flatfile")));
         }
         if (scoreboard) {
             Player p = (Player)sender;
@@ -84,7 +84,7 @@ public class PlayTopCommand implements CommandBase {
                 score.setScore(players.get(s)/60);
             }
             p.setScoreboard(scoreBoard);
-            p.sendMessage(_(this.plugin.getCipher().getString("command.commands.playtop.clear")));
+            p.sendMessage(__(this.plugin.getCipher().getString("command.commands.playtop.clear")));
             
         } else {
             StringBuilder sb = new StringBuilder(this.plugin.getCipher().getString("command.commands.playtop.console-title", i));

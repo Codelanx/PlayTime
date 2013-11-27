@@ -213,7 +213,7 @@ public class Playtime extends JavaPlugin {
                 plugin.onEnable();
                 plugin.getLogger().info(reloadDone);
                 for (String s : names) {
-                    plugin.getServer().getPlayer(s).sendMessage(_(reloadDone));
+                    plugin.getServer().getPlayer(s).sendMessage(__(reloadDone));
                 }
             }
         }, 10L);
@@ -341,7 +341,7 @@ public class Playtime extends JavaPlugin {
      * @param encoded String with unconverted color codes
      * @return string with correct chat colors included
      */
-    public static String _(String encoded) {
+    public static String __(String encoded) {
         return ChatColor.translateAlternateColorCodes('&', "[&e" + Playtime.getPlugin().getDescription().getName() + "&f] &6" + encoded);
     }
 

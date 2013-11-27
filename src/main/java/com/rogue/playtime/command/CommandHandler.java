@@ -16,7 +16,7 @@
  */
 package com.rogue.playtime.command;
 
-import static com.rogue.playtime.Playtime._;
+import static com.rogue.playtime.Playtime.__;
 import com.rogue.playtime.command.commands.*;
 import com.rogue.playtime.Playtime;
 import java.util.HashMap;
@@ -78,7 +78,7 @@ public class CommandHandler implements CommandExecutor {
                 return command.execute(sender, cmd, commandLabel, args);
             }
         } else {
-            sender.sendMessage(_(this.plugin.getCipher().getString("command.handler.busy")));
+            sender.sendMessage(__(this.plugin.getCipher().getString("command.handler.busy")));
         }
         return false;
     }

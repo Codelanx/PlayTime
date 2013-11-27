@@ -18,7 +18,7 @@ package com.rogue.playtime.command.commands;
 
 import com.rogue.playtime.Playtime;
 import com.rogue.playtime.command.CommandBase;
-import static com.rogue.playtime.Playtime._;
+import static com.rogue.playtime.Playtime.__;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.command.Command;
@@ -60,7 +60,7 @@ public class PTCommand implements CommandBase {
                             this.plugin.getDataManager().convertData(converters.get(sender));
                         }
                         converters.remove(sender);
-                        sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.pt.longtime")));
+                        sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.longtime")));
                         this.plugin.setBusy(true);
                     } else if (swappers.get(sender) != null) {
                         this.plugin.getConfigurationLoader().getConfig().set("data.manager", swappers.get(sender));
@@ -87,34 +87,34 @@ public class PTCommand implements CommandBase {
                     args[1] = args[1].toLowerCase();
                     if (args[1].equals("mysql") || args[1].equals("sqlite")) {
                         if (args[1].equals(this.plugin.getDataManager().getDataHandler().getName())) {
-                            sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.pt.datainuse")));
+                            sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.datainuse")));
                             return true;
                         }
                         converters.put(sender, args[1]);
-                        sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.pt.convert", this.plugin.getDataManager().getDataHandler().getName(), args[1])));
-                        sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.pt.confirm")));
+                        sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.convert", this.plugin.getDataManager().getDataHandler().getName(), args[1])));
+                        sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.confirm")));
                     } else if (args[1].equals("flatfile")) {
-                        sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.pt.flatfile")));
+                        sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.flatfile")));
                     } else {
-                        sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.pt.baddata", args[0])));
+                        sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.baddata", args[0])));
                     }
                 } else if (args[0].equalsIgnoreCase("swap") && sender.hasPermission("playtime.swap")) {
                     args[1] = args[1].toLowerCase();
                     if (args[1].equals("mysql") || args[1].equals("sqlite") || args[1].equals("flatfile")) {
                         if (args[1].equals(this.plugin.getDataManager().getDataHandler().getName())) {
-                            sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.pt.datainuse")));
+                            sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.datainuse")));
                             return true;
                         }
                         swappers.put(sender, args[1]);
-                        sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.pt.swap", this.plugin.getDataManager().getDataHandler().getName(), args[1])));
-                        sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.pt.confirm")));
+                        sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.swap", this.plugin.getDataManager().getDataHandler().getName(), args[1])));
+                        sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.confirm")));
                     } else {
-                        sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.pt.baddata", args[0])));
+                        sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.baddata", args[0])));
                     }
                 }
                 break;
             default:
-                sender.sendMessage(_(this.plugin.getCipher().getString("command.commands.pt.version", this.plugin.getDescription().getVersion())));
+                sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.version", this.plugin.getDescription().getVersion())));
                 break;
         }
         return false;
