@@ -158,7 +158,7 @@ public class Playtime extends JavaPlugin {
         this.listener = new ListenerManager(this);
 
         final long endTime = System.nanoTime();
-        if (this.reloaded) {
+        if (this.reloaded && this.phandler != null) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 this.phandler.putPlayer(p.getName(), 0, p.getLocation());
             }
