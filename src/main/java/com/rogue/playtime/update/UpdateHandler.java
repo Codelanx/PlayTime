@@ -17,7 +17,6 @@
 package com.rogue.playtime.update;
 
 import com.rogue.playtime.Playtime;
-import static com.rogue.playtime.Playtime.__;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,7 +55,8 @@ public class UpdateHandler {
     }
 
     protected void runUpdateListener() {
-        this.plugin.getListenerManager().registerListener("update", new UpdateListener(this.plugin));
+        this.plugin.getListenerManager().registerListener("update", 
+                new UpdateListener(Playtime.__(this.plugin.getCipher().getString("listener.update"))));
     }
 
 }
@@ -143,10 +143,10 @@ class UpdateRunnable extends UpdateHandler implements Runnable {
  */
 class UpdateListener implements Listener {
 
-    private final Playtime plugin;
+    private final String message;
 
-    public UpdateListener(Playtime plugin) {
-        this.plugin = plugin;
+    public UpdateListener(String message) {
+        this.message = message;
     }
 
     /**
@@ -160,7 +160,7 @@ class UpdateListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent e) {
         if (e.getPlayer().hasPermission("playtime.updatenotice")) {
-            e.getPlayer().sendMessage(__(this.plugin.getCipher().getString("listener.update")));
+            e.getPlayer().sendMessage(this.message);
         }
     }
 
