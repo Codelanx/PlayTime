@@ -31,9 +31,12 @@ import org.bukkit.event.Listener;
  */
 public class ListenerManager {
     
+    private final Playtime plugin;
     private final Map<String, Listener> listeners = new HashMap();
     
     public ListenerManager(Playtime plugin) {
+        
+        this.plugin = plugin;
         
         if (plugin.getPlayerHandler() != null) {
             this.listeners.put("afk", new AFKListener(plugin, plugin.getConfigurationLoader().getBoolean("afk.check-chat")));
@@ -46,9 +49,6 @@ public class ListenerManager {
         }
         if (plugin.getConfigurationLoader().getBoolean("check.online-time")) {
             this.listeners.put("online", new OnlineListener(plugin));
-        }
-        if (plugin.getConfigurationLoader().getBoolean("general.update-check")) {
-            this.listeners.put("update", new UpdateListener(plugin));
         }
         for (Listener l : this.listeners.values()) {
             plugin.getServer().getPluginManager().registerEvents(l, plugin);
@@ -69,6 +69,20 @@ public class ListenerManager {
      */
     public Listener getListener(String name) {
         return this.listeners.get(name);
+    }
+    
+    /**
+     * Registers a Listener under Playtime
+     * 
+     * @since 1.4.4
+     * @version 1.4.4
+     * 
+     * @param name The name of the listener
+     * @param l The listener to register
+     */
+    public void registerListener(String name, Listener l) {
+        this.listeners.put(name, l);
+        this.plugin.getServer().getPluginManager().registerEvents(l, this.plugin);
     }
 
 }
