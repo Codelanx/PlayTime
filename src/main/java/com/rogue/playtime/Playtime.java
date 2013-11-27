@@ -138,7 +138,6 @@ public class Playtime extends JavaPlugin {
         boolean deathEnabled = this.cloader.getBoolean("check.death-time");
         boolean onlineEnabled = this.cloader.getBoolean("check.online-time");
 
-
         if (this.cloader.getBoolean("afk.enabled")) {
             this.getLogger().info(this.lang.getString("main.player"));
             this.phandler = new PlayerHandler(this, this.cloader.getInt("afk.interval"), this.cloader.getInt("afk.timeout"));
@@ -240,10 +239,6 @@ public class Playtime extends JavaPlugin {
         }
 
         return current + " " + units[i] + ((current > 1 && i > 1) ? "s" : "");
-    }
-
-    public String readableHours(long time) {
-        return null;
     }
 
     /**
