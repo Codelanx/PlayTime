@@ -31,7 +31,7 @@ import java.util.logging.Level;
  */
 public class ResetRunnable implements Runnable {
 
-    private Playtime plugin;
+    private final Playtime plugin;
     private final String username;
     private final String column;
 

@@ -32,7 +32,7 @@ public class PlayerHandler {
     private final Playtime plugin;
     private final int interval;
     private final int timeout;
-    private ConcurrentHashMap<String, PlaytimePlayer> players = new ConcurrentHashMap();
+    private final ConcurrentHashMap<String, PlaytimePlayer> players = new ConcurrentHashMap();
 
     public PlayerHandler(Playtime plugin, int interval, int timeout) {
         this.plugin = plugin;

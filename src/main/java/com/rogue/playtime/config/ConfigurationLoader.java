@@ -32,9 +32,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public class ConfigurationLoader {
 
-    private Playtime plugin;
+    private final Playtime plugin;
+    private final File file;
     private YamlConfiguration yaml = null;
-    private File file;
 
     public ConfigurationLoader(Playtime plugin) {
         this.plugin = plugin;

@@ -38,7 +38,7 @@ import org.bukkit.Bukkit;
  */
 public class Data_SQLite implements DataHandler {
 
-    private Playtime plugin;
+    private final Playtime plugin;
     private SQLite db;
     
     public Data_SQLite(Playtime plugin) {

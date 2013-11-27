@@ -36,10 +36,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public class EventHandler {
 
-    private Playtime plugin;
+    private final Playtime plugin;
+    private final File file;
+    private final Map<String, Event> events = new HashMap();
     private YamlConfiguration yaml = null;
-    private File file;
-    private Map<String, Event> events = new HashMap();
 
     public EventHandler(Playtime plugin) {
         this.plugin = plugin;

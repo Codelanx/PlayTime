@@ -39,14 +39,13 @@ import org.bukkit.entity.Player;
  */
 public class EventRunnable implements Runnable {
 
-    private Playtime plugin;
+    private final Playtime plugin;
     private final String eventName;
     private final Integer minimum;
     private final Integer maximum;
     private final String timer;
     private final List<String> commands;
     private final boolean repeat;
-    private static byte counter = 0;
 
     public EventRunnable(Playtime plugin, String eventName, String timer, Integer minimum, Integer maximum, List<String> commands, boolean repeat) {
         this.plugin = plugin;

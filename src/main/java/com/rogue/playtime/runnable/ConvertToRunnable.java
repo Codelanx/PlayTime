@@ -32,7 +32,7 @@ import java.util.logging.Level;
  */
 public class ConvertToRunnable implements Runnable {
 
-    private Playtime plugin;
+    private final Playtime plugin;
     private final String[] players;
     private final String query;
     private final String newType;

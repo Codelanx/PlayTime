@@ -34,8 +34,8 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class Data_YAML implements DataHandler {
 
+    private final Playtime plugin;
     private YAML yaml;
-    private Playtime plugin;
     
     public Data_YAML(Playtime plugin) {
         this.plugin = plugin;

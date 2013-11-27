@@ -37,7 +37,7 @@ import org.bukkit.Bukkit;
  */
 public class Data_MySQL implements DataHandler {
 
-    private Playtime plugin;
+    private final Playtime plugin;
     private MySQL db;
     
     public Data_MySQL(Playtime plugin) {

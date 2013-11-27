@@ -34,9 +34,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class ExecutiveManager {
     
-    private Playtime plugin;
-    private ScheduledExecutorService es;
-    private List<ScheduledFuture<?>> executives = new ArrayList();
+    private final Playtime plugin;
+    private final ScheduledExecutorService es;
+    private final List<ScheduledFuture<?>> executives = new ArrayList();
     
     public ExecutiveManager(Playtime plugin) {
         this.plugin = plugin;

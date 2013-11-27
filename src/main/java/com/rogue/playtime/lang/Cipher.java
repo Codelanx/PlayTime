@@ -39,11 +39,11 @@ import org.bukkit.plugin.Plugin;
 public class Cipher {
 
     private final Plugin plugin;
-    private YamlConfiguration langFile;
     private final String langFileLocGithub = "https://raw.github.com/1Rogue/Playtime/master/lang/<version>/<lang>.yml";
     private final String langFileLocJar = "<lang>.yml";
     private final String langFileLocFolder = "<plugin>" + File.separatorChar + "lang" + File.separatorChar + "<lang>.yml";
     private final String language;
+    private YamlConfiguration langFile;
 
     /**
      * Cipher Constructor. Loads files from either a local folder, github, or

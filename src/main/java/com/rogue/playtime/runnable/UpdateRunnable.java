@@ -36,7 +36,7 @@ public class UpdateRunnable implements Runnable {
     private static final String VERSION_URL = "https://raw.github.com/1Rogue/Playtime/master/VERSION";
     private Boolean isLatest = null;
     private String latest;
-    private String version;
+    private final String version;
     private final Playtime plugin;
 
     public UpdateRunnable(Playtime plugin) {

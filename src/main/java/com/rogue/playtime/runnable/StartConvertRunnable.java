@@ -34,7 +34,7 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class StartConvertRunnable implements Runnable {
 
-    private Playtime plugin;
+    private final Playtime plugin;
     private final String newType;
     private final String[] players;
 

@@ -35,7 +35,7 @@ public class AddRunnable implements Runnable {
 
     private final Playtime plugin;
     private final boolean afkEnabled;
-    private ArrayList<String> timers;
+    private final ArrayList<String> timers;
 
     public AddRunnable(Playtime plugin) {
         this.plugin = plugin;
