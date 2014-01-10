@@ -120,6 +120,15 @@ public class Playtime extends JavaPlugin {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        if (this.cloader.getBoolean("afk.enabled")) {
+            this.getLogger().info(this.lang.getString("main.player"));
+            this.phandler = new PlayerHandler(this, this.cloader.getInt("afk.interval"), this.cloader.getInt("afk.timeout"));
+            this.execmanager.runAsyncTaskRepeat(new AFKRunnable(this), this.phandler.getAFKCheckInterval(), this.phandler.getAFKCheckInterval());
+        } else {
+            this.getLogger().info(this.lang.getString("main.afk"));
+            this.phandler = null;
+        }
+
         this.getLogger().info(this.lang.getString("main.execs"));
         this.execmanager = new ExecutiveManager(this);
 
@@ -137,15 +146,6 @@ public class Playtime extends JavaPlugin {
 
         boolean deathEnabled = this.cloader.getBoolean("check.death-time");
         boolean onlineEnabled = this.cloader.getBoolean("check.online-time");
-
-        if (this.cloader.getBoolean("afk.enabled")) {
-            this.getLogger().info(this.lang.getString("main.player"));
-            this.phandler = new PlayerHandler(this, this.cloader.getInt("afk.interval"), this.cloader.getInt("afk.timeout"));
-            this.execmanager.runAsyncTaskRepeat(new AFKRunnable(this), this.phandler.getAFKCheckInterval(), this.phandler.getAFKCheckInterval());
-        } else {
-            this.getLogger().info(this.lang.getString("main.afk"));
-            this.phandler = null;
-        }
 
         if (this.cloader.getBoolean("events.enabled")) {
             this.getLogger().info(this.lang.getString("main.event"));
