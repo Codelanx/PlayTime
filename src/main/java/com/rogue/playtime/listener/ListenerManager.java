@@ -50,6 +50,9 @@ public class ListenerManager {
         if (plugin.getConfigurationLoader().getBoolean("check.online-time")) {
             this.listeners.put("online", new OnlineListener(plugin));
         }
+        if (plugin.getConfigurationLoader().getBoolean("general.update-check")) {
+            this.listeners.put("update", new UpdateListener(plugin));
+        }
         for (Listener l : this.listeners.values()) {
             plugin.getServer().getPluginManager().registerEvents(l, plugin);
         }
