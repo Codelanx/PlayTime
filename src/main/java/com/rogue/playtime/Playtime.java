@@ -120,6 +120,9 @@ public class Playtime extends JavaPlugin {
             Logger.getLogger(Playtime.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        this.getLogger().info(this.lang.getString("main.execs"));
+        this.execmanager = new ExecutiveManager(this);
+
         if (this.cloader.getBoolean("afk.enabled")) {
             this.getLogger().info(this.lang.getString("main.player"));
             this.phandler = new PlayerHandler(this, this.cloader.getInt("afk.interval"), this.cloader.getInt("afk.timeout"));
@@ -128,9 +131,6 @@ public class Playtime extends JavaPlugin {
             this.getLogger().info(this.lang.getString("main.afk"));
             this.phandler = null;
         }
-
-        this.getLogger().info(this.lang.getString("main.execs"));
-        this.execmanager = new ExecutiveManager(this);
 
         if (this.cloader.getBoolean("general.update-check")) {
             this.execmanager.runAsyncTask(new UpdateRunnable(this), 10L);
