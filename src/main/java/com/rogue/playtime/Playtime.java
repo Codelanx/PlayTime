@@ -26,7 +26,8 @@ import com.rogue.playtime.listener.ListenerManager;
 import com.rogue.playtime.metrics.Metrics;
 import com.rogue.playtime.player.PlayerHandler;
 import com.rogue.playtime.runnable.AFKRunnable;
-import com.rogue.playtime.runnable.UpdateRunnable;
+import com.rogue.playtime.update.Choice;
+import com.rogue.playtime.update.UpdateHandler;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -56,6 +57,7 @@ public class Playtime extends JavaPlugin {
     protected ConfigurationLoader cloader;
     protected EventHandler ehandler;
     protected Cipher lang;
+    protected UpdateHandler updater;
     private boolean isUpdate = false;
     private boolean isBusy = true;
     private boolean reloaded = false;
@@ -133,7 +135,11 @@ public class Playtime extends JavaPlugin {
         }
 
         if (this.cloader.getBoolean("general.update-check")) {
-            this.execmanager.runAsyncTask(new UpdateRunnable(this), 10L);
+            boolean check = this.cloader.getBoolean("update.check");
+            boolean dl = this.cloader.getBoolean("update.download");
+            this.updater = new UpdateHandler(this, Choice.getChoice(check, dl), 43083, this.getFile().getName());
+            this.updater.setDebug(this.debug);
+            this.updater.runCheck();
         } else {
             this.getLogger().info(this.lang.getString("main.update"));
         }

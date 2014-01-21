@@ -58,7 +58,8 @@ public class ConfigurationLoader {
         } else {
             this.yaml = YamlConfiguration.loadConfiguration(this.file);
             if (!this.yaml.isSet("general.debug-level")) { this.yaml.set("general.debug-level", 0); }
-            if (!this.yaml.isSet("general.update-check")) { this.yaml.set("general.update-check", true); }
+            if (!this.yaml.isSet("update.check")) { this.yaml.set("update.check", true); }
+            if (!this.yaml.isSet("update.download")) { this.yaml.set("update.download", true); }
             if (!this.yaml.isSet("language.use-github")) { this.yaml.set("language.use-github", true); }
             if (!this.yaml.isSet("language.locale")) { this.yaml.set("language.locale", "en_US"); }
             if (!this.yaml.isSet("check.death-time")) { this.yaml.set("check.death-time", true); }
