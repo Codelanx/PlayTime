@@ -1,6 +1,8 @@
 general:
   debug-level: 0
-  update-check: true
+update:
+  check: true
+  download: true
 language:
   use-github: true
   locale: en_US

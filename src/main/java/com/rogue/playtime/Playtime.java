@@ -48,6 +48,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Playtime extends JavaPlugin {
 
+    private final int ID = 43083;
     protected byte debug = 0;
     protected ExecutiveManager execmanager;
     protected ListenerManager listener;
@@ -134,15 +135,11 @@ public class Playtime extends JavaPlugin {
             this.phandler = null;
         }
 
-        if (this.cloader.getBoolean("general.update-check")) {
-            boolean check = this.cloader.getBoolean("update.check");
-            boolean dl = this.cloader.getBoolean("update.download");
-            this.updater = new UpdateHandler(this, Choice.getChoice(check, dl), 43083, this.getFile().getName());
-            this.updater.setDebug(this.debug);
-            this.updater.runCheck();
-        } else {
-            this.getLogger().info(this.lang.getString("main.update"));
-        }
+        boolean check = this.cloader.getBoolean("update.check");
+        boolean dl = this.cloader.getBoolean("update.download");
+        this.updater = new UpdateHandler(this, Choice.getChoice(check, dl), this.ID, this.getFile().getName());
+        this.updater.setDebug(this.debug);
+        this.updater.runCheck();
 
         this.getLogger().info(this.lang.getString("main.data"));
         this.dmanager = new DataManager(this, true);
