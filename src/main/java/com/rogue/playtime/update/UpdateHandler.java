@@ -106,7 +106,9 @@ public class UpdateHandler {
      */
     protected final void registerNewNotifier() {
         this.plugin.getListenerManager().registerListener("update",
-                new UpdateListener(this.plugin.getCipher().getString("listener.update")));
+                new UpdateListener("A new update is available for "
+                        + this.plugin.getDescription().getFullName()
+                        + "!"));
     }
     
     /**

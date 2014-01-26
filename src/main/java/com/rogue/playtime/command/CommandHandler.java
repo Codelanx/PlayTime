@@ -17,8 +17,8 @@
 package com.rogue.playtime.command;
 
 import static com.rogue.playtime.Playtime.__;
-import com.rogue.playtime.command.commands.*;
 import com.rogue.playtime.Playtime;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.command.CommandExecutor;
@@ -34,31 +34,35 @@ import org.bukkit.command.CommandSender;
  */
 public class CommandHandler implements CommandExecutor {
 
+    /** Private {$link Playtime} instance */
     private final Playtime plugin;
-    private final Map<String, CommandBase> commands = new HashMap();
+    /** Private {@link HashMap} of subcommands */
+    private final Map<String, SubCommand> commands = new HashMap<String, SubCommand>();
 
+    /**
+     * {@link CommandHandler} constructor
+     * 
+     * @since 2.0.0
+     * @version 2.0.0
+     * 
+     * @param plugin The main {@link Playtime} instance
+     */
     public CommandHandler(Playtime plugin) {
         this.plugin = plugin;
         
-        CommandBase[] cmds = new CommandBase[] {
-            new PlayCommand(this.plugin),
-            new DeathCommand(this.plugin),
-            new OnlineCommand(this.plugin),
-            new PlayTopCommand(this.plugin),
-            new DeathTopCommand(this.plugin),
-            new OnlineTopCommand(this.plugin),
-            new PTCommand(this.plugin)
+        SubCommand[] cmds = new SubCommand[] {
+            new HelpCommand(this.plugin)
         };
         
         final CommandHandler chand = this;
-        for (CommandBase cmd : cmds) {
+        for (SubCommand cmd : cmds) {
             this.commands.put(cmd.getName(), cmd);
-            this.plugin.getCommand(cmd.getName()).setExecutor(chand);
+            this.plugin.getCommand(cmd.getName()).setExecutor(chand);  //TODO: This registers main commands
         }
     }
 
     /**
-     * Executes the proper command within Playtime
+     * Executes the proper {@link SubCommand}
      *
      * @since 1.3.0
      * @version 1.4.2
@@ -72,30 +76,45 @@ public class CommandHandler implements CommandExecutor {
      */
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (this.isReload(commandLabel, args) || !this.plugin.isBusy()) {
-            CommandBase command = this.commands.get(commandLabel);
-            if (command != null) {
-                return command.execute(sender, cmd, commandLabel, args);
+        SubCommand command = this.getCommand(cmd.getName());
+        if (command != null) {
+            String[] newArgs = new String[args.length - 1];
+            for (int i = 0; i < newArgs.length; i++) {
+                newArgs[i] = args[i + 1];
             }
-        } else {
-            sender.sendMessage(__(this.plugin.getCipher().getString("command.handler.busy")));
+            if (command.execute(sender, newArgs)) {
+                return true;
+            } else {
+                sender.sendMessage(__("Usage: " + command.helpInfo()[0]));
+                sender.sendMessage(__(command.helpInfo()[1]));
+            }
         }
         return false;
     }
-
+    
     /**
-     * Returns whether or not the command is a reload.
-     *
-     * Ex. /pt reload
-     *
-     * @since 1.4.2
-     * @version 1.4.2
-     *
-     * @param cmd The command name
-     * @param args The command arguments
-     * @return True if reload, false otherwise
+     * Returns a subcommand, or <code>null</code> if none exists.
+     * 
+     * @since 2.0.0
+     * @version 2.0.0
+     * 
+     * @param name The name of the subcommand
+     * @return A relevant {@link Succommand}, or null if it does not exist
      */
-    private boolean isReload(String cmd, String[] args) {
-        return cmd.equalsIgnoreCase("pt") && args.length == 1 && args[0].equalsIgnoreCase("reload");
+    public SubCommand getCommand(String name) {
+        return this.commands.get(name);
     }
+    
+    /**
+     * Returns all subcommands as a {@link Collection}.
+     * 
+     * @since 2.0.0
+     * @version 2.0.0
+     * 
+     * @return A {@link Collection} of all registered {@link SubCommand}
+     */
+    public Collection<SubCommand> getCommands() {
+        return this.commands.values();
+    }
+    
 }

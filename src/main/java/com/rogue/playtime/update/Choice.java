@@ -19,9 +19,9 @@ package com.rogue.playtime.update;
 /**
  * Provides the updater with the correct update options based on configuration
  *
- * @since 1.0.0
+ * @since 2.0.0
  * @author 1Rogue
- * @version 1.0.0
+ * @version 2.0.0
  */
 public enum Choice {
     
@@ -42,8 +42,8 @@ public enum Choice {
     /**
      * Private enum constructor for {@link Choice}
      * 
-     * @since 1.0.0
-     * @version 1.0.0
+     * @since 2.0.0
+     * @version 2.0.0
      * 
      * @param check Whether or not to check for an update
      * @param download Whether or not to download the update
@@ -56,8 +56,8 @@ public enum Choice {
     /**
      * Static getter for a {@link Choice} based on options
      * 
-     * @since 1.0.0
-     * @version 1.0.0
+     * @since 2.0.0
+     * @version 2.0.0
      * 
      * @param check Whether or not to check for an update
      * @param download Whether or not to download the update
@@ -75,8 +75,8 @@ public enum Choice {
     /**
      * Compares two {@link Choice} enums
      * 
-     * @since 1.0.0
-     * @version 1.0.0
+     * @since 2.0.0
+     * @version 2.0.0
      * 
      * @param comp The {@link Choice} to compare to
      * @return True if same options, false otherwise
@@ -88,8 +88,8 @@ public enum Choice {
     /**
      * Compares this {@link Choice} to two booleans based on settings
      * 
-     * @since 1.0.0
-     * @version 1.0.0
+     * @since 2.0.0
+     * @version 2.0.0
      * 
      * @param check Whether or not to check for an update
      * @param download Whether or not to download the update
@@ -102,8 +102,8 @@ public enum Choice {
     /**
      * Returns whether or not to check for an update
      * 
-     * @since 1.0.0
-     * @version 1.0.0
+     * @since 2.0.0
+     * @version 2.0.0
      * 
      * @return True if checking, false otherwise
      */
@@ -114,8 +114,8 @@ public enum Choice {
     /**
      * Returns whether or not to download an update
      * 
-     * @since 1.0.0
-     * @version 1.0.0
+     * @since 2.0.0
+     * @version 2.0.0
      * 
      * @return True if downloading, false otherwise
      */

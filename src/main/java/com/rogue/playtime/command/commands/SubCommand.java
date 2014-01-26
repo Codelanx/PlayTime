@@ -14,43 +14,50 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.command;
+package com.rogue.playtime.command.commands;
 
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 /**
  *
- * @since 1.3.0
+ * @since 2.0.0
  * @author 1Rogue
- * @version 1.3.0
+ * @version 2.0.0
  */
-public interface CommandBase {
+public interface SubCommand {
 
     /**
      * Executes a relevant command grabbed from the CommandHandler.
      * 
-     * @since 1.3.0
-     * @version 1.3.0
+     * @since 2.0.0
+     * @version 2.0.0
      * 
      * @param sender The command executor
-     * @param cmd The Command object
-     * @param commandLabel The string name of the command executed
-     * @param args The command arguments
+     * @param args The command arguments, starting after the command name
      * 
      * @return true on success, false if failed
      */
-    public abstract boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args);
+    public abstract boolean execute(CommandSender sender, String[] args);
     
     /**
      * Returns the name of the command, used for storing a hashmap of the
      * commands
      * 
-     * @since 1.3.0
-     * @version 1.3.0
+     * @since 2.0.0
+     * @version 2.0.0
      * 
      * @return The command's name
      */
     public abstract String getName();
+    
+    /**
+     * Represents data put out by the help menu, or incorrect usage
+     * 
+     * @since 2.0.0
+     * @version 2.0.0
+     * 
+     * @return 
+     */
+    public abstract String[] helpInfo();
     
 }

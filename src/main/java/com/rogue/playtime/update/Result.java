@@ -22,9 +22,9 @@ import java.util.logging.Logger;
 /**
  * Result return type for the update checker
  *
- * @since 1.0.0
+ * @since 2.0.0
  * @author 1Rogue
- * @version 1.0.0
+ * @version 2.0.0
  */
 public enum Result {
     
@@ -51,8 +51,8 @@ public enum Result {
     /**
      * Private constructor for {@link Result}
      * 
-     * @since 1.0.0
-     * @version 1.0.0
+     * @since 2.0.0
+     * @version 2.0.0
      * 
      * @param level The level to log messages at
      * @param message The message to log
@@ -65,8 +65,8 @@ public enum Result {
     /**
      * Logs the appropriate message
      * 
-     * @since 1.0.0
-     * @version 1.0.0
+     * @since 2.0.0
+     * @version 2.0.0
      * 
      * @param log The logger to log to
      */
@@ -77,8 +77,8 @@ public enum Result {
     /**
      * The message this Result is represented by
      * 
-     * @since 1.0.0
-     * @version 1.0.0
+     * @since 2.0.0
+     * @version 2.0.0
      * 
      * @return The message for this {@link Result}
      */
@@ -89,8 +89,8 @@ public enum Result {
     /**
      * The {@link Level} for this message, used in the logging process
      * 
-     * @since 1.0.0
-     * @version 1.0.0
+     * @since 2.0.0
+     * @version 2.0.0
      * 
      * @return The {@link Level} for this message
      */

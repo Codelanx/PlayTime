@@ -16,37 +16,12 @@
  */
 package com.rogue.playtime.listener.listeners;
 
-import com.rogue.playtime.Playtime;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 /**
- * Actions to take if the event system is enabled
- * 
- * @since 1.4.1
+ *
+ * @since
  * @author 1Rogue
- * @version 1.4.1
+ * @version
  */
-public class EventListener implements Listener {
-
-    private final Playtime plugin;
-
-    public EventListener(Playtime plugin) {
-        this.plugin = plugin;
-    }
-
-    /**
-     * Fires any login events registered by the player.
-     *
-     * @since 1.2.0
-     * @versino 1.4.1
-     *
-     * @param e The join event
-     */
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerJoin(PlayerJoinEvent e) {
-        this.plugin.getEventHandler().fireLoginEvents(e.getPlayer().getName());
-    }
-}
+public class SomeListener implements Listener {}

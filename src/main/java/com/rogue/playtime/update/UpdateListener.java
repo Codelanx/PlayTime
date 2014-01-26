@@ -26,20 +26,12 @@ import org.bukkit.event.player.PlayerJoinEvent;
  *
  * @since 1.4.1
  * @author 1Rogue
- * @version 1.4.5
+ * @version 1.4.1
  */
 class UpdateListener implements Listener {
 
     private final String message;
 
-    /**
-     * {@link UpdateListener} constructor
-     * 
-     * @since 1.4.1
-     * @version 1.4.5
-     * 
-     * @param message 
-     */
     public UpdateListener(String message) {
         this.message = message;
     }
@@ -48,7 +40,7 @@ class UpdateListener implements Listener {
      * Sends a notification to ops/players with all of the plugin's permissions
      *
      * @since 1.2.0
-     * @version 1.4.5
+     * @version 1.4.1
      *
      * @param e The join event
      */

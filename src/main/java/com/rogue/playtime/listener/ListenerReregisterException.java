@@ -14,27 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.callable;
-
-import java.util.concurrent.Callable;
-import org.bukkit.Bukkit;
+package com.rogue.playtime.listener;
 
 /**
+ * Exception thrown when a listener is attempted to be registered under the same key
  *
- * @since 1.4.0
+ * @since 2.0.0
  * @author 1Rogue
- * @version 1.4.0
+ * @version 2.0.0
  */
-public class ConsoleCommandCallable implements Callable {
+public class ListenerReregisterException extends RuntimeException {
     
-    private final String command;
-    
-    public ConsoleCommandCallable(String cmd) {
-        command = cmd;
-    }
-
-    public Object call() throws Exception {
-        return Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+    /**
+     * The exception constructor
+     * 
+     * @since 2.0.0
+     * @version 2.0.0
+     * 
+     * @param message The message to convey
+     */
+    public ListenerReregisterException(String message) {
+        super(message);
     }
 
 }
