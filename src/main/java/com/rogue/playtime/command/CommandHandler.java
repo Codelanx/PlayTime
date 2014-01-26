@@ -17,6 +17,7 @@
 package com.rogue.playtime.command;
 
 import static com.rogue.playtime.Playtime.__;
+import com.rogue.playtime.command.commands.*;
 import com.rogue.playtime.Playtime;
 import java.util.Collection;
 import java.util.HashMap;
