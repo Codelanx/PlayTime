@@ -27,7 +27,8 @@ public enum ConfigValues {
 
     DEBUG_LEVEL("general.debug-level", 0),
     UPDATE_CHECK("update.check", true),
-    UPDATE_DOWNLOAD("update.download", true);
+    UPDATE_DOWNLOAD("update.download", true),
+    DATA_MANAGER("data.manager", "sqlite");
     
     private final String key;
     private final Object def;

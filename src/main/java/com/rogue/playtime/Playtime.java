@@ -69,8 +69,9 @@ public class Playtime extends JavaPlugin {
     @Override
     public void onEnable() {
         try {
-            Metrics metrics = new Metrics(this);
             this.getLogger().log(Level.INFO, "Enabling Metrics...");
+            Metrics metrics = new Metrics(this);
+            metrics.registerDataGraph();
             metrics.start();
         } catch (IOException ex) {
             this.getLogger().log(Level.SEVERE, "Error enabling metrics!", ex);
