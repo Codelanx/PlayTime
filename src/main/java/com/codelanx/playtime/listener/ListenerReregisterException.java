@@ -14,14 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.listener.listeners;
-
-import org.bukkit.event.Listener;
+package com.codelanx.playtime.listener;
 
 /**
+ * Exception thrown when a listener is attempted to be registered under the same key
  *
- * @since
+ * @since 2.0.0
  * @author 1Rogue
- * @version
+ * @version 2.0.0
  */
-public class SomeListener implements Listener {}
+public class ListenerReregisterException extends RuntimeException {
+    
+    /**
+     * The exception constructor
+     * 
+     * @since 2.0.0
+     * @version 2.0.0
+     * 
+     * @param message The message to convey
+     */
+    public ListenerReregisterException(String message) {
+        super(message);
+    }
+
+}

@@ -14,15 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime;
+package com.codelanx.playtime;
 
-import com.rogue.playtime.command.CommandHandler;
-import com.rogue.playtime.config.ConfigValues;
-import com.rogue.playtime.config.ConfigurationLoader;
-import com.rogue.playtime.listener.ListenerManager;
-import com.rogue.playtime.metrics.Metrics;
-import com.rogue.playtime.update.Choice;
-import com.rogue.playtime.update.UpdateHandler;
+import com.codelanx.playtime.command.CommandHandler;
+import com.codelanx.playtime.config.ConfigValues;
+import com.codelanx.playtime.config.ConfigurationLoader;
+import com.codelanx.playtime.listener.ListenerManager;
+import com.codelanx.playtime.metrics.Metrics;
+import com.codelanx.playtime.update.Choice;
+import com.codelanx.playtime.update.UpdateHandler;
 import java.io.IOException;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;

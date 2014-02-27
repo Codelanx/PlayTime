@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.listener;
+package com.codelanx.playtime.listener;
 
-import com.rogue.playtime.listener.listeners.*;
-import com.rogue.playtime.Playtime;
+import com.codelanx.playtime.listener.listeners.*;
+import com.codelanx.playtime.Playtime;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.event.HandlerList;

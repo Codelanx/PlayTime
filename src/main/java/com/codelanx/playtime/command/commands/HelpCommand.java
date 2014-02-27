@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.command.commands;
+package com.codelanx.playtime.command.commands;
 
-import com.rogue.playtime.Playtime;
+import com.codelanx.playtime.Playtime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;

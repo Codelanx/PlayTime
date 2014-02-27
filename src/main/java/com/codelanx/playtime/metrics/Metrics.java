@@ -25,10 +25,10 @@
  * authors and contributors and should not be interpreted as representing official policies,
  * either expressed or implied, of anybody else.
  */
-package com.rogue.playtime.metrics;
+package com.codelanx.playtime.metrics;
 
-import com.rogue.playtime.Playtime;
-import com.rogue.playtime.config.ConfigValues;
+import com.codelanx.playtime.Playtime;
+import com.codelanx.playtime.config.ConfigValues;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;

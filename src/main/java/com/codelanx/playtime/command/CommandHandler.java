@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.command;
+package com.codelanx.playtime.command;
 
-import static com.rogue.playtime.Playtime.__;
-import com.rogue.playtime.command.commands.*;
-import com.rogue.playtime.Playtime;
+import static com.codelanx.playtime.Playtime.__;
+import com.codelanx.playtime.command.commands.*;
+import com.codelanx.playtime.Playtime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;

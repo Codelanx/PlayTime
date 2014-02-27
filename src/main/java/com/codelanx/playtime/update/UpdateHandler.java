@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.playtime.update;
+package com.codelanx.playtime.update;
 
-import com.rogue.playtime.Playtime;
+import com.codelanx.playtime.Playtime;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
