@@ -132,11 +132,11 @@ public class Data_MySQL implements DataHandler {
                         this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.reset-column", "`playtime`"));
                     } catch (SQLException e) {
                     }
-                    try {
+                    /*try {
                         this.db.update("ALTER TABLE `playTime` ADD UNIQUE INDEX `username` (`username`)");
                         this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.updating-table", "1.1"));
                     } catch (SQLException e) {
-                    }
+                    }*/
                     try {
                         this.db.update("ALTER TABLE `playTime` ADD deathtime int NOT NULL AFTER `playtime`");
                         this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.updating-table", "1.2.0"));
@@ -168,6 +168,12 @@ public class Data_MySQL implements DataHandler {
                         }
                     } catch (SQLException e) {
                     }
+                    try {
+                        this.db.update("ALTER TABLE `playTime` DROP INDEX `username`");
+                    } catch (SQLException e) {}
+                    try {
+                        this.db.update("ALTER TABLE `playTime` ADD `uuid` VARCHAR(80) NOT NULL AFTER `id`");
+                    } catch (SQLException e) {}
                     if (this.plugin.firstRun()) {
                         try {
                             this.db.update("UPDATE `playTime` SET `onlinetime`=0");
