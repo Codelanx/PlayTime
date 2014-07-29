@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.rogue</groupId>
-  <artifactId>Playtime</artifactId>
-  <version>1.4.5</version>
-  <name>Playtime</name>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.rogue</groupId>
+    <artifactId>Playtime</artifactId>
+    <version>1.5.0-SNAPSHOT</version>
+    <name>Playtime</name>
   
-  <repositories>
+    <repositories>
         <repository>
             <id>bukkit-repo</id>
             <url>http://repo.bukkit.org/content/groups/public/</url>
@@ -19,9 +19,22 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-  <packaging>jar</packaging>
-  
-  <build>
+    <packaging>jar</packaging>
+    <distributionManagement>
+        <repository>
+            <id>cl-deployment</id>
+            <name>Internal Releases</name>
+            <url>http://repo.codelanx.com/content/repositories/releases/</url>
+            <uniqueVersion>false</uniqueVersion>
+        </repository>
+        <snapshotRepository>
+            <id>cl-deployment</id>
+            <name>Internal Releases</name>
+            <url>http://repo.codelanx.com/content/repositories/snapshots/</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
+    <build>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -35,9 +48,9 @@
             </resource>
         </resources>
         <finalName>${project.name}-${project.version}</finalName>
-  </build>
+    </build>
   
-  <dependencies>
+    <dependencies>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
@@ -46,8 +59,8 @@
         </dependency>
     </dependencies>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
   
 </project>
