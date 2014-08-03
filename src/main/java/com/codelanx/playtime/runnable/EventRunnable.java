@@ -58,7 +58,8 @@ public class EventRunnable implements Runnable {
     }
 
     public void run() {
-        Map<String, Integer> users;
+        this.plugin.getLogger().log(Level.SEVERE, "{0} was called, but is disabled!", this.getClass().getSimpleName());
+        /*Map<String, Integer> users;
         EventHandler event = this.plugin.getEventHandler();
         if (this.repeat) {
             String data = this.plugin.getDataManager().getDataHandler().getName();
@@ -161,6 +162,6 @@ public class EventRunnable implements Runnable {
                     }
                 }
             }
-        }
+        }*/
     }
 }

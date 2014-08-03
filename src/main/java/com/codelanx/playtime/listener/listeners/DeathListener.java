@@ -48,6 +48,6 @@ public class DeathListener implements Listener {
      */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerDeath(PlayerDeathEvent e) {
-        this.plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(this.plugin, e.getEntity().getName(), "deathtime"), 0L);
+        this.plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(this.plugin, e.getEntity().getUniqueId(), "deathtime"), 0L);
     }
 }

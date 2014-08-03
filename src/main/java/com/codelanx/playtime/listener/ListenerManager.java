@@ -44,9 +44,9 @@ public class ListenerManager {
         if (plugin.getConfigurationLoader().getBoolean("check.death-time")) {
             this.listeners.put("death", new DeathListener(plugin));
         }
-        if (plugin.getEventHandler() != null) {
+        /*if (plugin.getEventHandler() != null) {
             this.listeners.put("event", new EventListener(plugin));
-        }
+        }*/
         if (plugin.getConfigurationLoader().getBoolean("check.online-time")) {
             this.listeners.put("online", new OnlineListener(plugin));
         }

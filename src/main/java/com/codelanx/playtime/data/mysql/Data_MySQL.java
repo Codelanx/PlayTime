@@ -24,6 +24,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
@@ -48,16 +49,16 @@ public class Data_MySQL implements DataHandler {
         return "mysql";
     }
 
-    public int getValue(String data, String username) {
-        username = this.plugin.getBestPlayer(username);
-        if (data.equals("onlinetime") && !Bukkit.getPlayer(username).isOnline()) {
+    public int getValue(String data, UUID user) {
+        if (Bukkit.getPlayer(user) == null
+                || (data.equals("onlinetime") && !Bukkit.getPlayer(user).isOnline())) {
             return -1;
         }
         this.db = new MySQL();
         int ret = 0;
         try {
             this.db.open();
-            ResultSet result = this.db.query("SELECT `" + data + "` FROM `playTime` WHERE `username`='" + username + "'");
+            ResultSet result = this.db.query("SELECT `" + data + "` FROM `playTime` WHERE `uuid`='" + user + "'");
             if (result.next()) {
                 ret = result.getInt(1);
             }
@@ -117,7 +118,7 @@ public class Data_MySQL implements DataHandler {
                 this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.connect-success"));
                 if (!this.db.checkTable("playTime")) {
                     this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("data.mysql.main.create-table", this.plugin.getConfig().getString("managers.mysql.database")));
-                    int result = this.db.update("CREATE TABLE `playTime` ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL DEFAULT 0, deathtime int NOT NULL DEFAULT 0, onlinetime int NOT NULL DEFAULT 0, PRIMARY KEY (id), UNIQUE KEY (username)) ENGINE=MyISAM;");
+                    int result = this.db.update("CREATE TABLE `playTime` ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, uuid VARCHAR(36) NOT NULL, playtime int NOT NULL DEFAULT 0, deathtime int NOT NULL DEFAULT 0, onlinetime int NOT NULL DEFAULT 0, PRIMARY KEY (id), UNIQUE KEY (username)) ENGINE=MyISAM;");
                 } else {
                     try {
                         this.db.update("ALTER TABLE `playTime` ADD COLUMN `username` VARCHAR(32) NULL DEFAULT NULL AFTER `id`, ADD UNIQUE INDEX `username` (`username`)");
@@ -145,6 +146,11 @@ public class Data_MySQL implements DataHandler {
                     try {
                         this.db.update("ALTER TABLE `playTime` ADD onlinetime int NOT NULL DEFAULT 1 AFTER `deathtime`");
                         this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.updating-table", "1.3.0"));
+                    } catch (SQLException e) {
+                    }
+                    try {
+                        this.db.update("ALTER TABLE `playTime` ADD `uuid` NOT NULL VARCHAR(36) AFTER `username`");
+                        this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.updating-table", "1.5.0"));
                     } catch (SQLException e) {
                     }
                     try {

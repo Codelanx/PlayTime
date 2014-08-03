@@ -19,6 +19,8 @@ package com.codelanx.playtime.command.commands;
 import com.codelanx.playtime.Playtime;
 import com.codelanx.playtime.command.CommandBase;
 import static com.codelanx.playtime.Playtime.__;
+import java.util.UUID;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -39,12 +41,18 @@ public class OnlineCommand implements CommandBase {
 
     @Override
     public boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        String check;
+        String name = null;
+        UUID check = null;
         String perm = "playtime.online";
         if (args.length == 0 && sender instanceof Player) {
-            check = sender.getName();
+            check = ((Player) sender).getUniqueId();
+            name = sender.getName();
         } else if (args.length == 1) {
-            check = this.plugin.getBestPlayer(args[0]);
+            OfflinePlayer o = this.plugin.getServer().getOfflinePlayer(args[0]);
+            if (o != null) {
+                check = o.getUniqueId();
+                name = o.getName();
+            }
             perm += ".others";
         } else {
             sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.online.console")));
@@ -56,9 +64,9 @@ public class OnlineCommand implements CommandBase {
                 int minutes = time % 60;
                 if (time >= 60) {
                     int hours = time / 60;
-                    sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.online.playtime-hours", check, hours, (hours == 1 ? "" : "s"), minutes, (minutes == 1 ? "" : "s"))));
+                    sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.online.playtime-hours", name, hours, (hours == 1 ? "" : "s"), minutes, (minutes == 1 ? "" : "s"))));
                 } else {
-                    sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.online.playtime-minutes", check, minutes, (minutes == 1 ? "" : "s"))));
+                    sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.online.playtime-minutes", name, minutes, (minutes == 1 ? "" : "s"))));
                 }
             } else {
                 sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.online.disabled")));

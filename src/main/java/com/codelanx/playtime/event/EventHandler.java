@@ -152,7 +152,7 @@ public class EventHandler {
      * @param username The user to fire events for
      */
     public void fireEvents(List<String> fire, String username) {
-        ConsoleCommandSender ccs = Bukkit.getConsoleSender();
+        /*ConsoleCommandSender ccs = Bukkit.getConsoleSender();
         for (String s : fire) {
             for (String c : this.events.get(s).getCommands()) {
                 if (this.isMessage(c)) {
@@ -161,7 +161,7 @@ public class EventHandler {
                     Bukkit.dispatchCommand(ccs, c.replace("%u", username).replace("%t", this.plugin.getDataManager().getDataHandler().getValue(this.events.get(s).getType(), username) + ""));
                 }
             }
-        }
+        }*/
     }
     
     /**
@@ -173,7 +173,7 @@ public class EventHandler {
      * @param username The user to fire events for
      */
     public void fireLoginEvents(String username) {
-        ConsoleCommandSender ccs = Bukkit.getConsoleSender();
+        /*ConsoleCommandSender ccs = Bukkit.getConsoleSender();
         for (Event e : this.events.values()) {
             if (e.isLoginEvent()) {
                 for (String c : e.getCommands()) {
@@ -184,7 +184,7 @@ public class EventHandler {
                     }
                 }
             }
-        }
+        }*/
     }
 
     /**

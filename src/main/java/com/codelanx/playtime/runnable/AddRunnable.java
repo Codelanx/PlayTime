@@ -22,6 +22,7 @@ import com.codelanx.playtime.data.sqlite.SQLite;
 import com.codelanx.playtime.data.yaml.YAML;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.logging.Level;
 import org.bukkit.entity.Player;
 
@@ -53,13 +54,13 @@ public class AddRunnable implements Runnable {
     public void run() {
         String current = this.plugin.getDataManager().getDataHandler().getName();
         if (current.equals("mysql")) {
-            Player[] players = this.plugin.getServer().getOnlinePlayers();
+            Collection<? extends Player> players = this.plugin.getServer().getOnlinePlayers();
             MySQL db = new MySQL();
-            StringBuilder sb = new StringBuilder("INSERT INTO `playTime` (`username`) VALUES ");
-            if (players.length > 0) {
+            StringBuilder sb = new StringBuilder("INSERT INTO `playTime` (`username`, `uuid`) VALUES ");
+            if (players.size() > 0) {
                 for (Player p : players) {
                     if (!this.afkEnabled || !this.plugin.getPlayerHandler().isAFK(p.getName())) {
-                        sb.append("('").append(p.getName()).append("'), ");
+                        sb.append("('").append(p.getName()).append("', '").append(p.getUniqueId()).append("'), ");
                     }
                 }
                 if (sb.toString().endsWith(" VALUES ")) {
@@ -95,23 +96,23 @@ public class AddRunnable implements Runnable {
                 db.close();
             }
         } else if (current.equals("sqlite")) {
-            Player[] players = this.plugin.getServer().getOnlinePlayers();
-            if (players.length > 0) {
+            Collection<? extends Player> players = this.plugin.getServer().getOnlinePlayers();
+            if (players.size() > 0) {
                 StringBuilder sb = new StringBuilder("INSERT OR IGNORE INTO `playTime` ");
                 StringBuilder sb2 = new StringBuilder("UPDATE `playTime` SET ");
                 for (String timer : this.timers) {
                     sb2.append("`").append(timer).append("`=`").append(timer).append("`+1, ");
                 }
                 sb2 = new StringBuilder(sb2.substring(0, sb2.length() - 2));
-                sb2.append(" WHERE `username` IN (");
+                sb2.append(" WHERE `uuid` IN (");
                 int i = 0;
                 for (Player p : players) {
                     if (!this.afkEnabled || !this.plugin.getPlayerHandler().isAFK(p.getName())) {
-                        sb2.append("'").append(p.getName()).append("', ");
+                        sb2.append("'").append(p.getUniqueId()).append("', ");
                         if (i > 0) {
-                            sb.append("UNION SELECT NULL, '").append(p.getName()).append("', 0, 0, 0 ");
+                            sb.append("UNION SELECT NULL, '").append(p.getName()).append("', '").append(p.getUniqueId()).append("', 0, 0, 0 ");
                         } else {
-                            sb.append("SELECT NULL AS 'column1', '").append(p.getName()).append("' AS 'column2', 0 AS 'column3', 0 AS 'column4', 0 AS 'column5' ");
+                            sb.append("SELECT NULL AS 'column1', '").append(p.getName()).append("' AS 'column2', '").append(p.getUniqueId()).append("' AS 'column3', 0 AS 'column4', 0 AS 'column5', 0 AS 'column6' ");
                             i++;
                         }
                     }
@@ -143,7 +144,8 @@ public class AddRunnable implements Runnable {
                 }
             }
         } else if (current.equals("flatfile")) {
-            YAML yaml = new YAML();
+            this.plugin.getLogger().log(Level.SEVERE, "{0} attempted to run YML check, which is broken!", this.getClass().getSimpleName());
+            /*YAML yaml = new YAML();
             Player[] players = this.plugin.getServer().getOnlinePlayers();
             for (Player p : players) {
                 if (!this.afkEnabled || !this.plugin.getPlayerHandler().isAFK(p.getName())) {
@@ -158,7 +160,7 @@ public class AddRunnable implements Runnable {
             if (this.plugin.getDebug() >= 1) {
                 this.plugin.getLogger().info(this.plugin.getCipher().getString("runnable.add.update"));
             }
-            yaml.forceSave();
+            yaml.forceSave();*/
         }
     }
 }

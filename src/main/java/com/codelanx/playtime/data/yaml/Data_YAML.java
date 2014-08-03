@@ -18,10 +18,11 @@ package com.codelanx.playtime.data.yaml;
 
 import com.codelanx.playtime.Playtime;
 import com.codelanx.playtime.data.DataHandler;
-import com.codelanx.playtime.runnable.StartConvertRunnable;
 import com.codelanx.playtime.runnable.AddRunnable;
+import com.codelanx.playtime.runnable.StartConvertRunnable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -45,11 +46,13 @@ public class Data_YAML implements DataHandler {
         return "flatfile";
     }
 
-    public int getValue(String data, String username) {
-        if (data.equals("onlinetime") && !Bukkit.getPlayer(username).isOnline()) {
+    public int getValue(String data, UUID user) {
+        return -1;
+        /*if (Bukkit.getPlayer(user) == null
+                || (data.equals("onlinetime") && !Bukkit.getPlayer(user).isOnline())) {
             return -1;
         }
-        return this.yaml.getFile().getInt("users." + this.plugin.getBestPlayer(username) + "." + data);
+        return this.yaml.getFile().getInt("users." + this.plugin.getBestPlayer(uuid) + "." + data);*/
     }
 
     public Map<String, Integer> getTopPlayers(String data, byte amount) {

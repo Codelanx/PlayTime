@@ -48,6 +48,6 @@ public class OnlineListener implements Listener {
      */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerQuit(PlayerQuitEvent e) {
-        this.plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(this.plugin, e.getPlayer().getName(), "onlinetime"), 0L);
+        this.plugin.getExecutiveManager().runAsyncTask(new ResetRunnable(this.plugin, e.getPlayer().getUniqueId(), "onlinetime"), 0L);
     }
 }

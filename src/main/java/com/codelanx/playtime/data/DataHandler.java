@@ -17,6 +17,7 @@
 package com.codelanx.playtime.data;
 
 import java.util.Map;
+import java.util.UUID;
 
 /**
  *
@@ -43,10 +44,10 @@ public interface DataHandler {
      * @version 1.3.0
      * 
      * @param data In SQL, this would be the column. In YAML, this is the key under the pertinent user.
-     * @param username The username to look for
+     * @param user The user UUID to look for
      * @return The integer value, or 0 if it is not found
      */
-    public abstract int getValue(String data, String username);
+    public abstract int getValue(String data, UUID user);
     
     /**
      * Gets the top players within a data category (e.g. deathtime)

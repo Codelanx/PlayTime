@@ -88,9 +88,10 @@ public class ConvertToRunnable implements Runnable {
                 this.plugin.getExecutiveManager().runCallable(new SendMessageCallable(p, this.plugin.getCipher().getString("runnable.convertto.complete")), 0L);
             }
         } else if (this.newType.equals("flatfile")) {
-            for (String s : this.players) {
+            this.plugin.getLogger().log(Level.SEVERE, "{0} attempted to run YML check, which is broken!", this.getClass().getSimpleName());
+            /*for (String s : this.players) {
                 this.plugin.getExecutiveManager().runCallable(new SendMessageCallable(s, this.plugin.getCipher().getString("runnable.convertto.noflat")), 0L);
-            }
+            }*/
         }
         this.plugin.getConfigurationLoader().getConfig().set("data.manager", this.newType);
         this.plugin.getConfigurationLoader().saveConfig();

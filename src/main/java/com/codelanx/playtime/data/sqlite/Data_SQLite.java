@@ -18,13 +18,14 @@ package com.codelanx.playtime.data.sqlite;
 
 import com.codelanx.playtime.Playtime;
 import com.codelanx.playtime.data.DataHandler;
-import com.codelanx.playtime.runnable.StartConvertRunnable;
 import com.codelanx.playtime.runnable.AddRunnable;
+import com.codelanx.playtime.runnable.StartConvertRunnable;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
@@ -40,7 +41,7 @@ public class Data_SQLite implements DataHandler {
 
     private final Playtime plugin;
     private SQLite db;
-    
+
     public Data_SQLite(Playtime plugin) {
         this.plugin = plugin;
     }
@@ -49,16 +50,16 @@ public class Data_SQLite implements DataHandler {
         return "sqlite";
     }
 
-    public int getValue(String data, String username) {
-        username = this.plugin.getBestPlayer(username);
-        if (data.equals("onlinetime") && !Bukkit.getPlayer(username).isOnline()) {
+    public int getValue(String data, UUID user) {
+        if (Bukkit.getPlayer(user) == null
+                || (data.equals("onlinetime") && !Bukkit.getPlayer(user).isOnline())) {
             return -1;
         }
         this.db = new SQLite();
         int ret = 0;
         try {
             this.db.open();
-            ResultSet result = this.db.query("SELECT `" + data + "` FROM `playTime` WHERE `username`='" + username + "'");
+            ResultSet result = this.db.query("SELECT `" + data + "` FROM `playTime` WHERE `uuid`='" + user + "'");
             if (result.next()) {
                 ret = result.getInt(1);
             }
@@ -117,8 +118,13 @@ public class Data_SQLite implements DataHandler {
             this.plugin.getLogger().info(this.plugin.getCipher().getString("data.sqlite.main.connect-success"));
             if (!this.db.checkTable("playTime")) {
                 this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("data.sqlite.main.create-table"));
-                this.db.update("CREATE TABLE playTime ( id INTEGER NOT NULL PRIMARY KEY, username VARCHAR(32) NOT NULL UNIQUE, playtime INTEGER NOT NULL DEFAULT 0, deathtime INTEGER NOT NULL DEFAULT 0, onlinetime INTEGER NOT NULL DEFAULT 0)");
+                this.db.update("CREATE TABLE playTime ( id INTEGER NOT NULL PRIMARY KEY, username VARCHAR(32) NOT NULL, uuid VARCHAR(36) NOT NULL UNIQUE, playtime INTEGER NOT NULL DEFAULT 0, deathtime INTEGER NOT NULL DEFAULT 0, onlinetime INTEGER NOT NULL DEFAULT 0)");
             } else {
+                try {
+                    this.db.update("ALTER TABLE `playTime` ADD COLUMN `uuid` NOT NULL VARCHAR(36) AFTER `username`");
+                    this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.updating-table", "1.5.0"));
+                } catch (SQLException e) {
+                }
                 if (this.plugin.firstRun()) {
                     try {
                         this.db.update("UPDATE `playTime` SET `onlinetime`=0");

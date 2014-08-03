@@ -39,7 +39,7 @@ public class AFKRunnable implements Runnable {
 
     public void run() {
         Map<String, PlaytimePlayer> players = this.plugin.getPlayerHandler().getPlayers();
-        if (Bukkit.getOnlinePlayers().length > 0) {
+        if (Bukkit.getOnlinePlayers().size() > 0) {
             if (this.plugin.getDebug() >= 1) {
                 this.plugin.getLogger().info(this.plugin.getCipher().getString("runnable.afk.check"));
             }

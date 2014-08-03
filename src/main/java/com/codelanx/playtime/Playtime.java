@@ -99,7 +99,7 @@ public class Playtime extends JavaPlugin {
     public void onEnable() {
         final long startTime = System.nanoTime();
 
-        if (!this.reloaded && Bukkit.getOnlinePlayers().length > 0) {
+        if (!this.reloaded && Bukkit.getOnlinePlayers().size() > 0) {
             this.reloaded = true;
         }
 
@@ -152,7 +152,8 @@ public class Playtime extends JavaPlugin {
 
         if (this.cloader.getBoolean("events.enabled")) {
             this.getLogger().info(this.lang.getString("main.event"));
-            this.ehandler = new EventHandler(this);
+            this.getLogger().warning("Events forcibly disabled! They will return in the next update");
+            //this.ehandler = new EventHandler(this);
         } else {
             this.getLogger().info(this.lang.getString("main.event-disabled"));
         }

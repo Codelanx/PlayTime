@@ -21,6 +21,7 @@ import com.codelanx.playtime.data.mysql.MySQL;
 import com.codelanx.playtime.data.sqlite.SQLite;
 import com.codelanx.playtime.data.yaml.YAML;
 import java.sql.SQLException;
+import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -32,12 +33,12 @@ import java.util.logging.Level;
 public class ResetRunnable implements Runnable {
 
     private final Playtime plugin;
-    private final String username;
+    private final UUID uuid;
     private final String column;
 
-    public ResetRunnable(Playtime plugin, String username, String column) {
+    public ResetRunnable(Playtime plugin, UUID uuid, String column) {
         this.plugin = plugin;
-        this.username = username;
+        this.uuid = uuid;
         this.column = column;
     }
 
@@ -47,7 +48,7 @@ public class ResetRunnable implements Runnable {
             MySQL db = new MySQL();
             try {
                 db.open();
-                db.update("UPDATE `playTime` SET `" + this.column + "`=0 WHERE `username`='" + this.username + "'");
+                db.update("UPDATE `playTime` SET `" + this.column + "`=0 WHERE `uuid`='" + this.uuid + "'");
             } catch (SQLException ex) {
                 this.plugin.getLogger().log(Level.SEVERE, this.plugin.getCipher().getString("runnable.reset.error", this.column.substring(0, this.column.length() - 5)), this.plugin.getDebug() >= 3 ? ex : "");
             } finally {
@@ -57,16 +58,17 @@ public class ResetRunnable implements Runnable {
             SQLite db = new SQLite();
             try {
                 db.open();
-                db.update("UPDATE `playTime` SET `" + this.column + "`=0 WHERE `username`='" + this.username + "'");
+                db.update("UPDATE `playTime` SET `" + this.column + "`=0 WHERE `uuid`='" + this.uuid + "'");
             } catch (SQLException ex) {
                 this.plugin.getLogger().log(Level.SEVERE, this.plugin.getCipher().getString("runnable.reset.error", this.column.substring(0, this.column.length() - 5)), this.plugin.getDebug() >= 3 ? ex : "");
             } finally {
                 db.close();
             }
         } else if (current.equals("flatfile")) {
-            YAML yaml = new YAML();
+            this.plugin.getLogger().log(Level.SEVERE, "{0} attempted to run YML check, which is broken!", this.getClass().getSimpleName());
+            /*YAML yaml = new YAML();
             yaml.getFile().set("users." + this.username + "." + this.column, 0);
-            yaml.forceSave();
+            yaml.forceSave();*/
         }
     }
 }

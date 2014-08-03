@@ -59,7 +59,9 @@ public class StartConvertRunnable implements Runnable {
                 ResultSet ret = db.query("SELECT * FROM `playTime`");
                 int i = 1;
                 while (ret.next()) {
-                    sb.append("INSERT OR IGNORE INTO `playTime` (`id`, `username`, `playtime`, `deathtime`, `onlinetime`) VALUES (").append(i++).append(", '").append(ret.getString(2)).append("', ").append(ret.getInt(3)).append(", ").append(ret.getInt(4)).append(", ").append(ret.getInt(5)).append(");\n");
+                    sb.append("INSERT OR IGNORE INTO `playTime` (`id`, `username`, `uuid`, `playtime`, `deathtime`, `onlinetime`) VALUES (")
+                            .append(i++).append(", '").append(ret.getString(2)).append("', '").append(ret.getString(3)).append("', ")
+                            .append(ret.getInt(4)).append(", ").append(ret.getInt(5)).append(", ").append(ret.getInt(6)).append(");\n");
                 }
             } catch (SQLException e) {
                 this.plugin.getLogger().log(Level.SEVERE, "{0}", this.plugin.getDebug() >= 3 ? e : "null");
@@ -69,13 +71,14 @@ public class StartConvertRunnable implements Runnable {
             this.plugin.getDataManager().convertTo(this.newType, sb.substring(0, sb.length() - 1), this.players);
         } else if (current.equals("sqlite")) {
             SQLite db = new SQLite();
-            StringBuilder sb = new StringBuilder("INSERT INTO `playTime` (`username`, `playtime`, `deathtime`, `onlinetime`) VALUES ");
+            StringBuilder sb = new StringBuilder("INSERT INTO `playTime` (`username`, `uuid`, `playtime`, `deathtime`, `onlinetime`) VALUES ");
             try {
                 db.open();
                 ResultSet ret = db.query("SELECT * FROM `playTime`");
                 int i = 1;
                 while (ret.next()) {
-                    sb.append("('").append(ret.getString(2)).append("', ").append(ret.getInt(3)).append(", ").append(ret.getInt(4)).append(", ").append(ret.getInt(5)).append("), ");
+                    sb.append("('").append(ret.getString(2)).append("', '").append(ret.getString(3)).append("', ")
+                            .append(ret.getInt(4)).append(", ").append(ret.getInt(5)).append(", ").append(ret.getInt(6)).append("), ");
                 }
                 ret.close();
             } catch (SQLException e) {
@@ -85,7 +88,8 @@ public class StartConvertRunnable implements Runnable {
             }
             this.plugin.getDataManager().convertTo(this.newType, sb.substring(0, sb.length() - 2) + " ON DUPLICATE KEY UPDATE `playtime`=`playtime`", this.players);
         } else if (current.equals("flatfile")) {
-            YAML yaml = new YAML();
+            this.plugin.getLogger().log(Level.SEVERE, "{0} attempted to run YML check, which is broken!", this.getClass().getSimpleName());
+            /*YAML yaml = new YAML();
 
             ConfigurationSection users = yaml.getFile().getConfigurationSection("users");
             int i = 1;
@@ -107,7 +111,7 @@ public class StartConvertRunnable implements Runnable {
             }
             if (!out.equals("null")) {
                 this.plugin.getDataManager().convertTo(this.newType, out, this.players);
-            }
+            }*/
         }
     }
 }
