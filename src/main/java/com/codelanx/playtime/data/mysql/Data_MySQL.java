@@ -118,13 +118,13 @@ public class Data_MySQL implements DataHandler {
                 this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.connect-success"));
                 if (!this.db.checkTable("playTime")) {
                     this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("data.mysql.main.create-table", this.plugin.getConfig().getString("managers.mysql.database")));
-                    int result = this.db.update("CREATE TABLE `playTime` ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, uuid VARCHAR(36) NOT NULL, playtime int NOT NULL DEFAULT 0, deathtime int NOT NULL DEFAULT 0, onlinetime int NOT NULL DEFAULT 0, PRIMARY KEY (id), UNIQUE KEY (username)) ENGINE=MyISAM;");
+                    int result = this.db.update("CREATE TABLE `playTime` ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, uuid VARCHAR(36) NOT NULL, playtime int NOT NULL DEFAULT 0, deathtime int NOT NULL DEFAULT 0, onlinetime int NOT NULL DEFAULT 0, PRIMARY KEY (id), UNIQUE KEY (username)) ENGINE=InnoDB;");
                 } else {
                     try {
                         this.db.update("ALTER TABLE `playTime` ADD COLUMN `username` VARCHAR(32) NULL DEFAULT NULL AFTER `id`, ADD UNIQUE INDEX `username` (`username`)");
                         this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.missing-user"));
                         this.db.update("DROP TABLE `playTime`");
-                        this.db.update("CREATE TABLE playTime ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL, deathtime int NOT NULL, PRIMARY KEY (id), UNIQUE KEY (username)) ENtestingGINE=MyISAM;");
+                        this.db.update("CREATE TABLE playTime ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, playtime int NOT NULL, deathtime int NOT NULL, PRIMARY KEY (id), UNIQUE KEY (username)) ENGINE=InnoDB;");
                     } catch (SQLException e) {
                     }
                     try {
