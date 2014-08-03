@@ -30,7 +30,7 @@ import java.util.logging.Level;
  *
  * @since 1.1
  * @author 1Rogue
- * @version 1.4.1
+ * @version 1.5.0
  */
 public class MySQL {
 
@@ -122,7 +122,7 @@ public class MySQL {
      * Checks if a table exists within the set database
      *
      * @since 1.1
-     * @version 1.4.0
+     * @version 1.5.0
      *
      * @param tablename Name of the table to check for
      * @return true if exists, false otherwise
@@ -135,7 +135,7 @@ public class MySQL {
             i = count.getByte(1);
         }
         count.close();
-        return (i == 1) ? true : false;
+        return i == 1;
     }
 
     /**

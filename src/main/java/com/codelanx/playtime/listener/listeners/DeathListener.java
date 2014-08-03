@@ -28,7 +28,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
  *
  * @since 1.4.1
  * @author 1Rogue
- * @version 1.4.1
+ * @version 1.5.0
  */
 public class DeathListener implements Listener {
 
@@ -42,7 +42,7 @@ public class DeathListener implements Listener {
      * Resets a player's death timer on death.
      *
      * @since 1.2.0
-     * @version 1.4.1
+     * @version 1.5.0
      *
      * @param e The death event
      */

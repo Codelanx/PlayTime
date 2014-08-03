@@ -35,7 +35,7 @@ import org.bukkit.Bukkit;
  *
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.4.0
+ * @version 1.5.0
  */
 public class Data_SQLite implements DataHandler {
 
@@ -73,7 +73,7 @@ public class Data_SQLite implements DataHandler {
 
     public Map<String, Integer> getTopPlayers(String data, byte amount) {
         this.db = new SQLite();
-        Map<String, Integer> players = new HashMap();
+        Map<String, Integer> players = new HashMap<String, Integer>();
         try {
             this.db.open();
             ResultSet result = this.db.query("SELECT * FROM `playTime` ORDER BY `" + data + "` DESC LIMIT " + amount);
@@ -95,7 +95,7 @@ public class Data_SQLite implements DataHandler {
 
     public Map<String, Integer> getPlayersInRange(String timer, int minimum, int maximum) {
         this.db = new SQLite();
-        Map<String, Integer> back = new HashMap();
+        Map<String, Integer> back = new HashMap<String, Integer>();
         try {
             this.db.open();
             ResultSet ret = this.db.query("SELECT `username` FROM `playTime` WHERE `" + timer + "` BETWEEN " + minimum + " AND " + maximum);

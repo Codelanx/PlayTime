@@ -27,7 +27,7 @@ import org.bukkit.entity.Player;
  *
  * @since 1.2.0
  * @author 1Rogue
- * @version 1.4.0
+ * @version 1.5.0
  */
 public class AFKRunnable implements Runnable {
 

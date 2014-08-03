@@ -25,14 +25,14 @@ import org.bukkit.Location;
  *
  * @since 1.2.0
  * @author 1Rogue
- * @version 1.4.1
+ * @version 1.5.0
  */
 public class PlayerHandler {
 
     private final Playtime plugin;
     private final int interval;
     private final int timeout;
-    private final ConcurrentHashMap<String, PlaytimePlayer> players = new ConcurrentHashMap();
+    private final ConcurrentHashMap<String, PlaytimePlayer> players = new ConcurrentHashMap<String, PlaytimePlayer>();
 
     public PlayerHandler(Playtime plugin, int interval, int timeout) {
         this.plugin = plugin;

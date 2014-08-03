@@ -31,7 +31,7 @@ import org.bukkit.configuration.ConfigurationSection;
  *
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.4.0
+ * @version 1.5.0
  */
 public class Data_YAML implements DataHandler {
 

@@ -34,7 +34,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
  *
  * @since 1.4.0
  * @author 1Rogue
- * @version 1.4.0
+ * @version 1.5.0
  */
 public class OnlineTopCommand implements CommandBase {
     
@@ -70,6 +70,7 @@ public class OnlineTopCommand implements CommandBase {
         Map<String, Integer> players = this.plugin.getDataManager().getDataHandler().getTopPlayers("onlinetime", i);
         if (players == null) {
             sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.onlinetop.disabled-flatfile")));
+            return true;
         }
         if (scoreboard) {
             Player p = (Player)sender;

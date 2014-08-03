@@ -28,7 +28,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
  *
  * @since 1.4.1
  * @author 1Rogue
- * @version 1.4.1
+ * @version 1.5.0
  */
 public class OnlineListener implements Listener {
 
@@ -42,7 +42,7 @@ public class OnlineListener implements Listener {
      * Resets a player's online timer upon logging out
      *
      * @since 1.2.0
-     * @version 1.4.1
+     * @version 1.5.0
      *
      * @param e The quit event
      */

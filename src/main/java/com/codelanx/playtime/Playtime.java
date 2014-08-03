@@ -93,7 +93,7 @@ public class Playtime extends JavaPlugin {
      * Registers debug, metrics, commands, data management, and listeners.
      *
      * @since 1.0
-     * @version 1.4.1
+     * @version 1.5.0
      */
     @Override
     public void onEnable() {

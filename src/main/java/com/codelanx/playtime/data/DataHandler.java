@@ -23,7 +23,7 @@ import java.util.UUID;
  *
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.4.0
+ * @version 1.5.0
  */
 public interface DataHandler {
     
@@ -41,7 +41,7 @@ public interface DataHandler {
      * Gets a value based on name of a particular user
      * 
      * @since 1.3.0
-     * @version 1.3.0
+     * @version 1.5.0
      * 
      * @param data In SQL, this would be the column. In YAML, this is the key under the pertinent user.
      * @param user The user UUID to look for

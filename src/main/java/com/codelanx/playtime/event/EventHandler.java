@@ -32,13 +32,13 @@ import org.bukkit.configuration.file.YamlConfiguration;
  *
  * @since 1.4.0
  * @author 1Rogue
- * @version 1.4.0
+ * @version 1.5.0
  */
 public class EventHandler {
 
     private final Playtime plugin;
     private final File file;
-    private final Map<String, Event> events = new HashMap();
+    private final Map<String, Event> events = new HashMap<String, Event>();
     private YamlConfiguration yaml = null;
 
     public EventHandler(Playtime plugin) {
@@ -146,7 +146,7 @@ public class EventHandler {
      * Fires static events manually for a provided user
      * 
      * @since 1.4.0
-     * @version 1.4.0
+     * @version 1.5.0
      * 
      * @param fire A list of names for events to fire
      * @param username The user to fire events for
@@ -168,7 +168,7 @@ public class EventHandler {
      * Fires login events for a particular user
      * 
      * @since 1.4.0
-     * @version 1.4.0
+     * @version 1.5.0
      * 
      * @param username The user to fire events for
      */

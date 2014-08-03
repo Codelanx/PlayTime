@@ -30,7 +30,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
  *
  * @since 1.3.0
  * @author 1Rogue
- * @version 1.4.0
+ * @version 1.5.0
  */
 public class YAML {
 
@@ -68,7 +68,7 @@ public class YAML {
      * "users.[username].[value]"
      *
      * @since 1.3.0
-     * @version 1.4.0
+     * @version 1.5.0
      *
      * @param key The path to the data to edit
      */
@@ -77,7 +77,7 @@ public class YAML {
         i++;
         if (plugin.getEventHandler() != null) {
             boolean eventFired = false;
-            List<String> fire = new ArrayList();
+            List<String> fire = new ArrayList<String>();
             for (Event e : plugin.getEventHandler().getEvents().values()) {
                 if (!e.isLoginEvent() && i == e.getTrigger()) {
                     eventFired = true;

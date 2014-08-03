@@ -172,7 +172,7 @@ class UpdateRunnable extends UpdateHandler implements Runnable {
      * Runs the update process
      *
      * @since 1.4.5
-     * @version 1.4.5
+     * @version 1.5.0
      */
     public void run() {
         boolean current = false;
@@ -267,7 +267,7 @@ class UpdateRunnable extends UpdateHandler implements Runnable {
      * second example was "1.2.3.0", it would still be considered newer.</p>
      * 
      * @since 1.4.5
-     * @version 1.4.5
+     * @version 1.5.0
      * 
      * @param v1 The original version
      * @param v2 The new version to compare

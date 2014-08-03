@@ -30,7 +30,7 @@ import org.bukkit.entity.Player;
  *
  * @since 1.4.0
  * @author 1Rogue
- * @version 1.4.2
+ * @version 1.5.0
  */
 public class AddRunnable implements Runnable {
 
@@ -41,7 +41,7 @@ public class AddRunnable implements Runnable {
     public AddRunnable(Playtime plugin) {
         this.plugin = plugin;
         this.afkEnabled = this.plugin.getPlayerHandler() != null;
-        this.timers = new ArrayList();
+        this.timers = new ArrayList<String>();
         this.timers.add("playtime");
         if (this.plugin.getConfigurationLoader().getBoolean("check.death-time")) {
             this.timers.add("deathtime");
