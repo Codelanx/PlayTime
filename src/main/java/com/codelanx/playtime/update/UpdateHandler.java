@@ -148,6 +148,7 @@ class UpdateRunnable extends UpdateHandler implements Runnable {
     private final String DL_URL = "downloadUrl";
     private final String DL_FILE = "fileName";
     private final String DL_NAME = "name";
+    private boolean majorVersionChange = false;
     private JSONObject latest;
 
     /**
@@ -181,7 +182,8 @@ class UpdateRunnable extends UpdateHandler implements Runnable {
                 if (this.choice.doCheck()) {
                     this.result = this.checkVersion();
                 }
-                if (this.choice.doDownload() && this.result == Result.UPDATE_AVAILABLE) {
+                if (this.choice.doDownload() && this.result == Result.UPDATE_AVAILABLE
+                        && !this.majorVersionChange) {
                     this.result = this.download();
                 }
             }
@@ -272,14 +274,14 @@ class UpdateRunnable extends UpdateHandler implements Runnable {
      * @return True if v2 is newer, false otherwise
      */
     private boolean newVersion(String v1, String v2) {
-        this.plugin.getLogger().log(Level.INFO, "Original version: {0}", v1);
-        this.plugin.getLogger().log(Level.INFO, "New version: {0}", v2);
         String[] v1tot = v1.split("\\.");
         String[] v2tot = v2.split("\\.");
-        this.plugin.getLogger().log(Level.INFO, "Running check loop...");
         for (int i = 0; i < v1tot.length && i < v2tot.length; i++) {
             this.plugin.getLogger().log(Level.INFO, "Comparing {0} to {1}", new String[]{v1tot[i], v2tot[i]});
             if (this.getInt(v1tot[i]) < this.getInt(v2tot[i])) {
+                if (i == 0) {
+                    this.majorVersionChange = true;
+                }
                 return true;
             }
         }
