@@ -34,14 +34,14 @@ import java.util.logging.Level;
  */
 public class MySQL {
 
-    private static byte connections = 0;
-    private static String HOST = "";
-    private static String USER = "";
-    private static String PASS = "";
-    private static String DATABASE = "";
-    private static String PORT = "";
-    private Playtime plugin;
-    private Connection con = null;
+    protected static byte connections = 0;
+    protected static String HOST = "";
+    protected static String USER = "";
+    protected static String PASS = "";
+    protected static String DATABASE = "";
+    protected static String PORT = "";
+    protected Playtime plugin;
+    protected Connection con = null;
 
     /**
      * Sets the static variables to use in future MySQL connections
@@ -200,4 +200,9 @@ public class MySQL {
         count.close();
         return give;
     }
+
+    public Connection getConnection() {
+        return this.con;
+    }
+
 }

@@ -36,9 +36,9 @@ import org.bukkit.Bukkit;
  */
 public class SQLite {
 
-    private static byte connections = 0;
-    private Connection con = null;
-    private Playtime plugin;
+    protected static byte connections = 0;
+    protected Connection con = null;
+    protected Playtime plugin;
     
     public SQLite(Playtime plugin) {
         this.plugin = plugin;
@@ -141,4 +141,9 @@ public class SQLite {
             this.plugin.getLogger().log(Level.WARNING, this.plugin.getCipher().getString("data.sqlite.instance.close-error"), this.plugin.getDebug() >= 3 ? e : "");
         }
     }
+
+    public Connection getConnection() {
+        return this.con;
+    }
+
 }
