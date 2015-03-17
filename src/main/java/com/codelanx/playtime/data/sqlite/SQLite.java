@@ -14,9 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.data.sqlite;
+package main.java.com.codelanx.playtime.data.sqlite;
 
-import com.codelanx.playtime.Playtime;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,6 +24,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import main.java.com.codelanx.playtime.Playtime;
+
 import org.bukkit.Bukkit;
 
 /**

@@ -14,12 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.command.commands;
+package main.java.com.codelanx.playtime.command.commands;
 
-import com.codelanx.playtime.Playtime;
-import com.codelanx.playtime.command.CommandBase;
-import static com.codelanx.playtime.Playtime.__;
 import java.util.UUID;
+
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.callable.UUIDFetcher;
+import main.java.com.codelanx.playtime.command.CommandBase;
+
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -39,23 +42,40 @@ public class OnlineCommand implements CommandBase {
         this.plugin = plugin;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         String name = null;
         UUID check = null;
         String perm = "playtime.online";
         if (args.length == 0 && sender instanceof Player) {
-            check = ((Player) sender).getUniqueId();
+        	if(Bukkit.getMaxPlayers() < this.plugin.maxplayersuuid){
+        		try {
+					check = UUIDFetcher.getUUIDOf(((Player) sender).getName());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+        	} else {
+        		check = ((Player) sender).getUniqueId();
+        	}
             name = sender.getName();
         } else if (args.length == 1) {
             OfflinePlayer o = this.plugin.getServer().getOfflinePlayer(args[0]);
             if (o != null) {
-                check = o.getUniqueId();
+            	if(Bukkit.getMaxPlayers() < this.plugin.maxplayersuuid){
+            		try {
+    					check = UUIDFetcher.getUUIDOf(o.getName());
+    				} catch (Exception e) {
+    					e.printStackTrace();
+    				}
+            	} else {
+            		check = o.getUniqueId();
+            	}
                 name = o.getName();
             }
             perm += ".others";
         } else {
-            sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.online.console")));
+            sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.online.console")));
             return true;
         }
         if (sender.hasPermission(perm)) {
@@ -64,16 +84,16 @@ public class OnlineCommand implements CommandBase {
                 int minutes = time % 60;
                 if (time >= 60) {
                     int hours = time / 60;
-                    sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.online.playtime-hours", name, hours, (hours == 1 ? "" : "s"), minutes, (minutes == 1 ? "" : "s"))));
+                    sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.online.playtime-hours", name, hours, (hours == 1 ? "" : "s"), minutes, (minutes == 1 ? "" : "s"))));
                 } else {
-                    sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.online.playtime-minutes", name, minutes, (minutes == 1 ? "" : "s"))));
+                    sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.online.playtime-minutes", name, minutes, (minutes == 1 ? "" : "s"))));
                 }
             } else {
-                sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.online.disabled")));
+                sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.online.disabled")));
             }
 
         } else {
-            sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.online.noperm")));
+            sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.online.noperm")));
         }
         return false;
     }

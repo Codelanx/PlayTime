@@ -14,12 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.data.sqlite;
+package main.java.com.codelanx.playtime.data.sqlite;
 
-import com.codelanx.playtime.Playtime;
-import com.codelanx.playtime.data.DataHandler;
-import com.codelanx.playtime.runnable.AddRunnable;
-import com.codelanx.playtime.runnable.StartConvertRunnable;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,6 +24,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.data.DataHandler;
+import main.java.com.codelanx.playtime.runnable.AddRunnable;
+import main.java.com.codelanx.playtime.runnable.StartConvertRunnable;
+
 import org.bukkit.Bukkit;
 
 /**

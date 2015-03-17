@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.lang;
+package main.java.com.codelanx.playtime.lang;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,6 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -38,7 +39,8 @@ import org.bukkit.plugin.Plugin;
  */
 public class Cipher {
 
-    private final Plugin plugin;
+    @SuppressWarnings("unused")
+	private final Plugin plugin;
     private final String langFileLocGithub = "https://raw.github.com/1Rogue/Playtime/master/lang/<version>/<lang>.yml";
     private final String langFileLocJar = "<lang>.yml";
     private final String langFileLocFolder = "<plugin>" + File.separatorChar + "lang" + File.separatorChar + "<lang>.yml";
@@ -176,7 +178,8 @@ public class Cipher {
      * @param lang The lang file to use
      * @return The lang file as a YamlConfiguration
      */
-    private YamlConfiguration getFromJar(Plugin plugin, String lang) {
+    @SuppressWarnings("deprecation")
+	private YamlConfiguration getFromJar(Plugin plugin, String lang) {
         InputStream jarStream = plugin.getResource(this.langFileLocJar.replace("<lang>", lang));
         if (jarStream != null) {
             return YamlConfiguration.loadConfiguration(jarStream);
@@ -195,7 +198,8 @@ public class Cipher {
      * @param lang The lang file to use
      * @return The lang file as a YamlConfiguration
      */
-    private YamlConfiguration getFromGithub(Plugin plugin, String lang) throws MalformedURLException, IOException {
+    @SuppressWarnings("deprecation")
+	private YamlConfiguration getFromGithub(Plugin plugin, String lang) throws MalformedURLException, IOException {
         YamlConfiguration pluginyml = YamlConfiguration.loadConfiguration(plugin.getResource("plugin.yml"));
 
         URL upstr = new URL(this.langFileLocGithub.replace("<version>", pluginyml.getString("version")).replace("<lang>", lang));

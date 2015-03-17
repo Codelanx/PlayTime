@@ -14,9 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.executables;
+package main.java.com.codelanx.playtime.executables;
 
-import com.codelanx.playtime.Playtime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -24,6 +23,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
+import main.java.com.codelanx.playtime.Playtime;
 
 /**
  * Wink wink. I'm so punny
@@ -34,7 +35,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class ExecutiveManager {
     
-    private final Playtime plugin;
+    @SuppressWarnings("unused")
+	private final Playtime plugin;
     private final ScheduledExecutorService es;
     private final List<ScheduledFuture<?>> executives = new ArrayList<ScheduledFuture<?>>();
     

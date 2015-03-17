@@ -14,15 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.command;
+package main.java.com.codelanx.playtime.command;
 
-import static com.codelanx.playtime.Playtime.__;
-import com.codelanx.playtime.command.commands.*;
-import com.codelanx.playtime.Playtime;
 import java.util.HashMap;
 import java.util.Map;
-import org.bukkit.command.CommandExecutor;
+
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.command.commands.DeathCommand;
+import main.java.com.codelanx.playtime.command.commands.DeathTopCommand;
+import main.java.com.codelanx.playtime.command.commands.OnlineCommand;
+import main.java.com.codelanx.playtime.command.commands.OnlineTopCommand;
+import main.java.com.codelanx.playtime.command.commands.PTCommand;
+import main.java.com.codelanx.playtime.command.commands.PlayCommand;
+import main.java.com.codelanx.playtime.command.commands.PlayTopCommand;
+
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -35,7 +42,7 @@ import org.bukkit.command.CommandSender;
 public class CommandHandler implements CommandExecutor {
 
     private final Playtime plugin;
-    private final Map<String, CommandBase> commands = new HashMap();
+    private final Map<String, CommandBase> commands = new HashMap<String, CommandBase>();
 
     public CommandHandler(Playtime plugin) {
         this.plugin = plugin;
@@ -78,7 +85,7 @@ public class CommandHandler implements CommandExecutor {
                 return command.execute(sender, cmd, commandLabel, args);
             }
         } else {
-            sender.sendMessage(__(this.plugin.getCipher().getString("command.handler.busy")));
+            sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.handler.busy")));
         }
         return false;
     }

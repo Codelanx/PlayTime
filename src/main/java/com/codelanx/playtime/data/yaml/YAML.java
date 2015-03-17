@@ -14,16 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.data.yaml;
+package main.java.com.codelanx.playtime.data.yaml;
 
-import com.codelanx.playtime.Playtime;
-import com.codelanx.playtime.event.Event;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.event.Event;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
@@ -50,7 +52,7 @@ public class YAML {
     }
 
     public YAML() {
-        this.plugin = Playtime.getPlugin();
+        this.plugin = Playtime.getUsedPlugin();
         path = plugin.getDataFolder() + File.separator + "users.yml";
         File users = new File(path);
         try {
@@ -65,7 +67,7 @@ public class YAML {
      * triggered
      *
      * For the users yml file, the key should be in the format:
-     * "users.[username].[value]"
+     * "users.[uuid].[value]"
      *
      * @since 1.3.0
      * @version 1.5.0
@@ -110,11 +112,13 @@ public class YAML {
      * @version 1.3.0
      */
     public void forceSave() {
-        try {
-            yaml.save(path);
-        } catch (IOException ex) {
-            Logger.getLogger(YAML.class.getName()).log(Level.SEVERE, plugin.getCipher().getString("data.yaml.instance.error-save"), ex);
-        }
+    	if(yaml.contains("users")){
+	        try {
+	            yaml.save(path);
+	        } catch (IOException ex) {
+	            Logger.getLogger(YAML.class.getName()).log(Level.SEVERE, plugin.getCipher().getString("data.yaml.instance.error-save"), ex);
+	        }
+    	}
     }
 
     /**

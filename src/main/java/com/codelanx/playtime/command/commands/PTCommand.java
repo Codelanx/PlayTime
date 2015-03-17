@@ -14,13 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.command.commands;
+package main.java.com.codelanx.playtime.command.commands;
 
-import com.codelanx.playtime.Playtime;
-import com.codelanx.playtime.command.CommandBase;
-import static com.codelanx.playtime.Playtime.__;
 import java.util.HashMap;
 import java.util.Map;
+
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.command.CommandBase;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -39,8 +40,8 @@ public class PTCommand implements CommandBase {
         this.plugin = plugin;
     }
 
-    private static Map<CommandSender, String> converters = new HashMap();
-    private static Map<CommandSender, String> swappers = new HashMap();
+    private static Map<CommandSender, String> converters = new HashMap<CommandSender, String>();
+    private static Map<CommandSender, String> swappers = new HashMap<CommandSender, String>();
 
     public boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         switch (args.length) {
@@ -60,7 +61,7 @@ public class PTCommand implements CommandBase {
                             this.plugin.getDataManager().convertData(converters.get(sender));
                         }
                         converters.remove(sender);
-                        sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.longtime")));
+                        sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.pt.longtime")));
                         this.plugin.setBusy(true);
                     } else if (swappers.get(sender) != null) {
                         this.plugin.getConfigurationLoader().getConfig().set("data.manager", swappers.get(sender));
@@ -87,34 +88,34 @@ public class PTCommand implements CommandBase {
                     args[1] = args[1].toLowerCase();
                     if (args[1].equals("mysql") || args[1].equals("sqlite")) {
                         if (args[1].equals(this.plugin.getDataManager().getDataHandler().getName())) {
-                            sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.datainuse")));
+                            sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.pt.datainuse")));
                             return true;
                         }
                         converters.put(sender, args[1]);
-                        sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.convert", this.plugin.getDataManager().getDataHandler().getName(), args[1])));
-                        sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.confirm")));
+                        sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.pt.convert", this.plugin.getDataManager().getDataHandler().getName(), args[1])));
+                        sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.pt.confirm")));
                     } else if (args[1].equals("flatfile")) {
-                        sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.flatfile")));
+                        sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.pt.flatfile")));
                     } else {
-                        sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.baddata", args[0])));
+                        sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.pt.baddata", args[0])));
                     }
                 } else if (args[0].equalsIgnoreCase("swap") && sender.hasPermission("playtime.swap")) {
                     args[1] = args[1].toLowerCase();
                     if (args[1].equals("mysql") || args[1].equals("sqlite") || args[1].equals("flatfile")) {
                         if (args[1].equals(this.plugin.getDataManager().getDataHandler().getName())) {
-                            sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.datainuse")));
+                            sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.pt.datainuse")));
                             return true;
                         }
                         swappers.put(sender, args[1]);
-                        sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.swap", this.plugin.getDataManager().getDataHandler().getName(), args[1])));
-                        sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.confirm")));
+                        sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.pt.swap", this.plugin.getDataManager().getDataHandler().getName(), args[1])));
+                        sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.pt.confirm")));
                     } else {
-                        sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.baddata", args[0])));
+                        sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.pt.baddata", args[0])));
                     }
                 }
                 break;
             default:
-                sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.pt.version", this.plugin.getDescription().getVersion())));
+                sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.pt.version", this.plugin.getDescription().getVersion())));
                 break;
         }
         return false;

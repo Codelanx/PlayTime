@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.callable;
+package main.java.com.codelanx.playtime.callable;
 
 import java.util.concurrent.Callable;
+
 import org.bukkit.Bukkit;
 
 /**
@@ -25,6 +26,7 @@ import org.bukkit.Bukkit;
  * @author 1Rogue
  * @version 1.4.0
  */
+@SuppressWarnings("rawtypes")
 public class ConsoleCommandCallable implements Callable {
     
     private final String command;

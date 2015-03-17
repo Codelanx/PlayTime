@@ -14,9 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.update;
+package main.java.com.codelanx.playtime.update;
 
-import com.codelanx.playtime.Playtime;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,6 +27,9 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.logging.Level;
+
+import main.java.com.codelanx.playtime.Playtime;
+
 import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -146,7 +148,8 @@ class UpdateRunnable extends UpdateHandler implements Runnable {
 
     private final String VERSION_URL;
     private final String DL_URL = "downloadUrl";
-    private final String DL_FILE = "fileName";
+    @SuppressWarnings("unused")
+	private final String DL_FILE = "fileName";
     private final String DL_NAME = "name";
     private boolean majorVersionChange = false;
     private JSONObject latest;
@@ -175,7 +178,8 @@ class UpdateRunnable extends UpdateHandler implements Runnable {
      * @version 1.5.0
      */
     public void run() {
-        boolean current = false;
+        @SuppressWarnings("unused")
+		boolean current = false;
         if (!this.choice.equals(Choice.NO_UPDATE)) {
             this.getJSON();
             if (this.latest != null) {

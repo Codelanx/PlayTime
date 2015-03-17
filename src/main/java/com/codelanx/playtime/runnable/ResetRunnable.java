@@ -14,15 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.runnable;
+package main.java.com.codelanx.playtime.runnable;
 
-import com.codelanx.playtime.Playtime;
-import com.codelanx.playtime.data.mysql.MySQL;
-import com.codelanx.playtime.data.sqlite.SQLite;
-import com.codelanx.playtime.data.yaml.YAML;
 import java.sql.SQLException;
 import java.util.UUID;
 import java.util.logging.Level;
+
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.data.mysql.MySQL;
+import main.java.com.codelanx.playtime.data.sqlite.SQLite;
+import main.java.com.codelanx.playtime.data.yaml.YAML;
 
 /**
  *
@@ -65,10 +66,13 @@ public class ResetRunnable implements Runnable {
                 db.close();
             }
         } else if (current.equals("flatfile")) {
-            this.plugin.getLogger().log(Level.SEVERE, "{0} attempted to run YML check, which is broken!", this.getClass().getSimpleName());
-            /*YAML yaml = new YAML();
-            yaml.getFile().set("users." + this.username + "." + this.column, 0);
-            yaml.forceSave();*/
+            YAML yaml = new YAML();
+            if(yaml.getFile().isSet("users")){
+	            for(String key : yaml.getFile().getConfigurationSection("users").getKeys(false)){
+		            yaml.getFile().set("users." + key + "." + this.column, 0);
+	            }
+	            yaml.forceSave();
+            }
         }
     }
 }

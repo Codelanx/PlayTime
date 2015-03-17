@@ -14,16 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.event;
+package main.java.com.codelanx.playtime.event;
 
-import static com.codelanx.playtime.Playtime.__;
-import com.codelanx.playtime.Playtime;
-import com.codelanx.playtime.runnable.EventRunnable;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.callable.UUIDFetcher;
+import main.java.com.codelanx.playtime.runnable.EventRunnable;
+
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandException;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -125,8 +128,8 @@ public class EventHandler {
             return;
         }
         Integer minutes = this.yaml.getInt("events." + name + ".time");
-        boolean repeat = this.yaml.getBoolean("events." + name + ".repeat");
-        this.events.put(name, new Event(name, timer, minutes, commands, this.yaml.getBoolean("events." + name + ".repeat"), login));
+		boolean repeat = this.yaml.getBoolean("events." + name + ".repeat");
+        this.events.put(name, new Event(name, timer, minutes, commands, repeat, login));
     }
 
     /**
@@ -151,17 +154,24 @@ public class EventHandler {
      * @param fire A list of names for events to fire
      * @param username The user to fire events for
      */
-    public void fireEvents(List<String> fire, String username) {
-        /*ConsoleCommandSender ccs = Bukkit.getConsoleSender();
+    @SuppressWarnings("deprecation")
+	public void fireEvents(List<String> fire, String username) {
+        ConsoleCommandSender ccs = Bukkit.getConsoleSender();
         for (String s : fire) {
             for (String c : this.events.get(s).getCommands()) {
-                if (this.isMessage(c)) {
-                    Bukkit.getPlayer(username).sendMessage(__(this.replaceMessage(c).replace("%u", username).replace("%t", this.plugin.getDataManager().getDataHandler().getValue(this.events.get(s).getType(), username) + "")));
-                } else {
-                    Bukkit.dispatchCommand(ccs, c.replace("%u", username).replace("%t", this.plugin.getDataManager().getDataHandler().getValue(this.events.get(s).getType(), username) + ""));
-                }
+                try {
+					if (this.isMessage(c)) {
+					    Bukkit.getPlayer(username).sendMessage(Playtime.__(this.replaceMessage(c).replace("%u", username).replace("%t", this.plugin.getDataManager().getDataHandler().getValue(this.events.get(s).getType(), UUIDFetcher.getUUIDOf(username)) + "")));
+					} else {
+					    Bukkit.dispatchCommand(ccs, c.replace("%u", username).replace("%t", this.plugin.getDataManager().getDataHandler().getValue(this.events.get(s).getType(), UUIDFetcher.getUUIDOf(username)) + ""));
+					}
+				} catch (CommandException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
             }
-        }*/
+        }
     }
     
     /**
@@ -172,19 +182,26 @@ public class EventHandler {
      * 
      * @param username The user to fire events for
      */
-    public void fireLoginEvents(String username) {
-        /*ConsoleCommandSender ccs = Bukkit.getConsoleSender();
+    @SuppressWarnings("deprecation")
+	public void fireLoginEvents(String username) {
+        ConsoleCommandSender ccs = Bukkit.getConsoleSender();
         for (Event e : this.events.values()) {
             if (e.isLoginEvent()) {
                 for (String c : e.getCommands()) {
-                    if (this.isMessage(c.split(" ")[0])) {
-                        Bukkit.getPlayer(username).sendMessage(__(this.replaceMessage(c).replace("%u", username).replace("%t", this.toReadable(this.plugin.getDataManager().getDataHandler().getValue(e.getType(), username)))));
-                    } else {
-                        Bukkit.dispatchCommand(ccs, c.replace("%u", username).replace("%t", this.plugin.getDataManager().getDataHandler().getValue(e.getType(), username) + ""));
-                    }
+                    try {
+						if (this.isMessage(c.split(" ")[0])) {
+						    Bukkit.getPlayer(username).sendMessage(Playtime.__(this.replaceMessage(c).replace("%u", username).replace("%t", this.toReadable(this.plugin.getDataManager().getDataHandler().getValue(e.getType(), UUIDFetcher.getUUIDOf(username))))));
+						} else {
+						    Bukkit.dispatchCommand(ccs, c.replace("%u", username).replace("%t", this.plugin.getDataManager().getDataHandler().getValue(e.getType(), UUIDFetcher.getUUIDOf(username)) + ""));
+						}
+					} catch (CommandException e1) {
+						e1.printStackTrace();
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
                 }
             }
-        }*/
+        }
     }
 
     /**

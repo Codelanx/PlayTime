@@ -14,16 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.runnable;
+package main.java.com.codelanx.playtime.runnable;
 
-import com.codelanx.playtime.Playtime;
-import com.codelanx.playtime.data.mysql.MySQL;
-import com.codelanx.playtime.data.sqlite.SQLite;
-import com.codelanx.playtime.data.yaml.YAML;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
+
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.callable.UUIDFetcher;
+import main.java.com.codelanx.playtime.data.mysql.MySQL;
+import main.java.com.codelanx.playtime.data.sqlite.SQLite;
+import main.java.com.codelanx.playtime.data.yaml.Data_YAML;
+import main.java.com.codelanx.playtime.data.yaml.YAML;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -144,13 +149,24 @@ public class AddRunnable implements Runnable {
                 }
             }
         } else if (current.equals("flatfile")) {
-            this.plugin.getLogger().log(Level.SEVERE, "{0} attempted to run YML check, which is broken!", this.getClass().getSimpleName());
-            /*YAML yaml = new YAML();
-            Player[] players = this.plugin.getServer().getOnlinePlayers();
+            YAML yaml = ((Data_YAML) this.plugin.getDataManager().getDataHandler()).getYaml();
+            Collection<? extends Player> players = this.plugin.getServer().getOnlinePlayers();
             for (Player p : players) {
                 if (!this.afkEnabled || !this.plugin.getPlayerHandler().isAFK(p.getName())) {
                     for (String timer : this.timers) {
-                        yaml.incrementValue("users." + p.getName() + "." + timer);
+                    	if(Bukkit.getMaxPlayers() < this.plugin.maxplayersuuid){
+	                        try {
+								yaml.incrementValue("users." + UUIDFetcher.getUUIDOf(p.getName()) + "." + timer);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+                    	} else {
+	                        try {
+								yaml.incrementValue("users." + p.getUniqueId() + "." + timer);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+                    	}
                     }
                     if (this.plugin.getDebug() == 3) {
                         this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("runnable.add.update", p.getName()));
@@ -160,7 +176,7 @@ public class AddRunnable implements Runnable {
             if (this.plugin.getDebug() >= 1) {
                 this.plugin.getLogger().info(this.plugin.getCipher().getString("runnable.add.update"));
             }
-            yaml.forceSave();*/
+            yaml.forceSave();
         }
     }
 }
