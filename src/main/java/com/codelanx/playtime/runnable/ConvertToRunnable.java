@@ -14,15 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.runnable;
+package main.java.com.codelanx.playtime.runnable;
 
-import com.codelanx.playtime.Playtime;
-import com.codelanx.playtime.callable.SendMessageCallable;
-import com.codelanx.playtime.data.DataManager;
-import com.codelanx.playtime.data.mysql.MySQL;
-import com.codelanx.playtime.data.sqlite.SQLite;
 import java.sql.SQLException;
 import java.util.logging.Level;
+
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.callable.SendMessageCallable;
+import main.java.com.codelanx.playtime.data.DataManager;
+import main.java.com.codelanx.playtime.data.mysql.MySQL;
+import main.java.com.codelanx.playtime.data.sqlite.SQLite;
 
 /**
  *
@@ -88,10 +89,9 @@ public class ConvertToRunnable implements Runnable {
                 this.plugin.getExecutiveManager().runCallable(new SendMessageCallable(p, this.plugin.getCipher().getString("runnable.convertto.complete")), 0L);
             }
         } else if (this.newType.equals("flatfile")) {
-            this.plugin.getLogger().log(Level.SEVERE, "{0} attempted to run YML check, which is broken!", this.getClass().getSimpleName());
-            /*for (String s : this.players) {
+            for (String s : this.players) {
                 this.plugin.getExecutiveManager().runCallable(new SendMessageCallable(s, this.plugin.getCipher().getString("runnable.convertto.noflat")), 0L);
-            }*/
+            }
         }
         this.plugin.getConfigurationLoader().getConfig().set("data.manager", this.newType);
         this.plugin.getConfigurationLoader().saveConfig();

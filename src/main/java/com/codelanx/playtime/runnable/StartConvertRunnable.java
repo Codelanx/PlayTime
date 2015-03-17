@@ -14,17 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.runnable;
+package main.java.com.codelanx.playtime.runnable;
 
-import com.codelanx.playtime.Playtime;
-import com.codelanx.playtime.callable.SendMessageCallable;
-import com.codelanx.playtime.data.mysql.MySQL;
-import com.codelanx.playtime.data.sqlite.SQLite;
-import com.codelanx.playtime.data.yaml.YAML;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
-import org.bukkit.configuration.ConfigurationSection;
+
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.callable.SendMessageCallable;
+import main.java.com.codelanx.playtime.data.mysql.MySQL;
+import main.java.com.codelanx.playtime.data.sqlite.SQLite;
 
 /**
  *
@@ -75,7 +74,8 @@ public class StartConvertRunnable implements Runnable {
             try {
                 db.open();
                 ResultSet ret = db.query("SELECT * FROM `playTime`");
-                int i = 1;
+                @SuppressWarnings("unused")
+				int i = 1;
                 while (ret.next()) {
                     sb.append("('").append(ret.getString(2)).append("', '").append(ret.getString(3)).append("', ")
                             .append(ret.getInt(4)).append(", ").append(ret.getInt(5)).append(", ").append(ret.getInt(6)).append("), ");

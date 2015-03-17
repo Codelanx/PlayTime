@@ -14,12 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.runnable;
+package main.java.com.codelanx.playtime.runnable;
 
-import com.codelanx.playtime.Playtime;
-import com.codelanx.playtime.player.PlaytimePlayer;
 import java.util.Map;
 import java.util.logging.Level;
+
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.player.PlaytimePlayer;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

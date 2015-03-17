@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.update;
+package main.java.com.codelanx.playtime.update;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

@@ -14,12 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.listener;
+package main.java.com.codelanx.playtime.listener;
 
-import com.codelanx.playtime.Playtime;
-import com.codelanx.playtime.listener.listeners.*;
 import java.util.HashMap;
 import java.util.Map;
+
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.listener.listeners.AFKListener;
+import main.java.com.codelanx.playtime.listener.listeners.DeathListener;
+import main.java.com.codelanx.playtime.listener.listeners.EventListener;
+import main.java.com.codelanx.playtime.listener.listeners.OnlineListener;
+
 import org.bukkit.event.Listener;
 
 /**
@@ -32,7 +37,7 @@ import org.bukkit.event.Listener;
 public class ListenerManager {
     
     private final Playtime plugin;
-    private final Map<String, Listener> listeners = new HashMap();
+    private final Map<String, Listener> listeners = new HashMap<String, Listener>();
     
     public ListenerManager(Playtime plugin) {
         
@@ -44,9 +49,9 @@ public class ListenerManager {
         if (plugin.getConfigurationLoader().getBoolean("check.death-time")) {
             this.listeners.put("death", new DeathListener(plugin));
         }
-        /*if (plugin.getEventHandler() != null) {
+        if (plugin.getConfigurationLoader().getBoolean("events.enabled")) {
             this.listeners.put("event", new EventListener(plugin));
-        }*/
+        }
         if (plugin.getConfigurationLoader().getBoolean("check.online-time")) {
             this.listeners.put("online", new OnlineListener(plugin));
         }

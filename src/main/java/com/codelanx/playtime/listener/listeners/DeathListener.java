@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.listener.listeners;
+package main.java.com.codelanx.playtime.listener.listeners;
 
-import com.codelanx.playtime.Playtime;
-import com.codelanx.playtime.runnable.ResetRunnable;
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.runnable.ResetRunnable;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

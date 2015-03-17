@@ -14,12 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.data.mysql;
+package main.java.com.codelanx.playtime.data.mysql;
 
-import com.codelanx.playtime.Playtime;
-import com.codelanx.playtime.data.DataHandler;
-import com.codelanx.playtime.runnable.AddRunnable;
-import com.codelanx.playtime.runnable.StartConvertRunnable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -27,6 +23,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.data.DataHandler;
+import main.java.com.codelanx.playtime.runnable.AddRunnable;
+import main.java.com.codelanx.playtime.runnable.StartConvertRunnable;
+
 import org.bukkit.Bukkit;
 
 /**
@@ -118,7 +120,8 @@ public class Data_MySQL implements DataHandler {
                 this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.connect-success"));
                 if (!this.db.checkTable("playTime")) {
                     this.plugin.getLogger().log(Level.INFO, this.plugin.getCipher().getString("data.mysql.main.create-table", this.plugin.getConfig().getString("managers.mysql.database")));
-                    int result = this.db.update("CREATE TABLE `playTime` ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, uuid VARCHAR(36) NOT NULL, playtime int NOT NULL DEFAULT 0, deathtime int NOT NULL DEFAULT 0, onlinetime int NOT NULL DEFAULT 0, PRIMARY KEY (id), UNIQUE KEY (username)) ENGINE=InnoDB;");
+                    @SuppressWarnings("unused")
+					int result = this.db.update("CREATE TABLE `playTime` ( id int NOT NULL AUTO_INCREMENT, username VARCHAR(32) NOT NULL, uuid VARCHAR(36) NOT NULL, playtime int NOT NULL DEFAULT 0, deathtime int NOT NULL DEFAULT 0, onlinetime int NOT NULL DEFAULT 0, PRIMARY KEY (id), UNIQUE KEY (username)) ENGINE=InnoDB;");
                 } else {
                     try {
                         this.db.update("ALTER TABLE `playTime` ADD COLUMN `username` VARCHAR(32) NULL DEFAULT NULL AFTER `id`, ADD UNIQUE INDEX `username` (`username`)");
@@ -133,11 +136,11 @@ public class Data_MySQL implements DataHandler {
                         this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.reset-column", "`playtime`"));
                     } catch (SQLException e) {
                     }
-                    /*try {
+                    try {
                         this.db.update("ALTER TABLE `playTime` ADD UNIQUE INDEX `username` (`username`)");
                         this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.updating-table", "1.1"));
                     } catch (SQLException e) {
-                    }*/
+                    }
                     try {
                         this.db.update("ALTER TABLE `playTime` ADD deathtime int NOT NULL AFTER `playtime`");
                         this.plugin.getLogger().info(this.plugin.getCipher().getString("data.mysql.main.updating-table", "1.2.0"));

@@ -14,9 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.data.mysql;
+package main.java.com.codelanx.playtime.data.mysql;
 
-import com.codelanx.playtime.Playtime;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -24,6 +23,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 import java.util.logging.Level;
+
+import main.java.com.codelanx.playtime.Playtime;
 
 /**
  * Instantiable MySQL connector

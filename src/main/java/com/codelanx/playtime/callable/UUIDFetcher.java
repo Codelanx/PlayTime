@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.callable;
+package main.java.com.codelanx.playtime.callable;
 
 import com.google.common.collect.ImmutableList;
 import java.io.InputStreamReader;
@@ -40,6 +40,7 @@ import org.json.simple.parser.JSONParser;
  * @author evilmidget38
  * @version 1.0.0
  */
+
 public class UUIDFetcher implements Callable<Map<String, UUID>> {
     private static final double PROFILES_PER_REQUEST = 100;
     private static final String PROFILE_URL = "https://api.mojang.com/profiles/minecraft";

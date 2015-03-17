@@ -14,24 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime;
+package main.java.com.codelanx.playtime;
 
-import com.codelanx.playtime.command.CommandHandler;
-import com.codelanx.playtime.config.ConfigurationLoader;
-import com.codelanx.playtime.data.DataManager;
-import com.codelanx.playtime.event.EventHandler;
-import com.codelanx.playtime.executables.ExecutiveManager;
-import com.codelanx.playtime.lang.Cipher;
-import com.codelanx.playtime.listener.ListenerManager;
-import com.codelanx.playtime.metrics.Metrics;
-import com.codelanx.playtime.player.PlayerHandler;
-import com.codelanx.playtime.runnable.AFKRunnable;
-import com.codelanx.playtime.update.Choice;
-import com.codelanx.playtime.update.UpdateHandler;
 import java.io.IOException;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import main.java.com.codelanx.playtime.command.CommandHandler;
+import main.java.com.codelanx.playtime.config.ConfigurationLoader;
+import main.java.com.codelanx.playtime.data.DataManager;
+import main.java.com.codelanx.playtime.event.EventHandler;
+import main.java.com.codelanx.playtime.executables.ExecutiveManager;
+import main.java.com.codelanx.playtime.lang.Cipher;
+import main.java.com.codelanx.playtime.listener.ListenerManager;
+import main.java.com.codelanx.playtime.metrics.Metrics;
+import main.java.com.codelanx.playtime.player.PlayerHandler;
+import main.java.com.codelanx.playtime.runnable.AFKRunnable;
+import main.java.com.codelanx.playtime.update.Choice;
+import main.java.com.codelanx.playtime.update.UpdateHandler;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -62,7 +64,17 @@ public class Playtime extends JavaPlugin {
     private boolean isUpdate = false;
     private boolean isBusy = true;
     private boolean reloaded = false;
-
+    private static Playtime playtime;
+    
+    /*
+     * Max player allowed before the plugin will use Bukkit local UUID instead of Minecraft Online UUID
+     * Must be bigger than Bukkit.getMaxPlayers()
+     * (To avoid "Too many requests exception")
+     * 
+     * Set to 0 to use Bukkit UUID and not Minecraft UUID
+     */
+    public int maxplayersuuid = 200;
+    
     /**
      * Registers the plugin configuration file and language system.
      *
@@ -98,6 +110,7 @@ public class Playtime extends JavaPlugin {
     @Override
     public void onEnable() {
         final long startTime = System.nanoTime();
+        playtime = this;
 
         if (!this.reloaded && Bukkit.getOnlinePlayers().size() > 0) {
             this.reloaded = true;
@@ -147,13 +160,9 @@ public class Playtime extends JavaPlugin {
         this.getLogger().info(this.lang.getString("main.command"));
         this.chandler = new CommandHandler(this);
 
-        boolean deathEnabled = this.cloader.getBoolean("check.death-time");
-        boolean onlineEnabled = this.cloader.getBoolean("check.online-time");
-
         if (this.cloader.getBoolean("events.enabled")) {
             this.getLogger().info(this.lang.getString("main.event"));
-            this.getLogger().warning("Events forcibly disabled! They will return in the next update");
-            //this.ehandler = new EventHandler(this);
+            this.ehandler = new EventHandler(this);
         } else {
             this.getLogger().info(this.lang.getString("main.event-disabled"));
         }
@@ -202,7 +211,8 @@ public class Playtime extends JavaPlugin {
         this.reloaded = true;
         this.onDisable();
         Bukkit.getScheduler().runTaskLater(this, new Runnable() {
-            public void run() {
+            @SuppressWarnings("deprecation")
+			public void run() {
                 plugin.debug = 0;
                 plugin.execmanager = null;
                 plugin.listener = null;
@@ -250,17 +260,48 @@ public class Playtime extends JavaPlugin {
      * there is no good match.
      *
      * @since 1.1
-     * @version 1.1
+     * @version 1.4.6
      *
      * @param username The player to look up
      * @return A potential match for a player
      */
-    public String getBestPlayer(String username) {
-        Player player = Bukkit.getPlayer(username);
-        if (player != null) {
-            username = player.getName();
-        }
+    @SuppressWarnings("deprecation")
+	public String getBestPlayer(String username) {
+    	if(!isUUID(username)){
+	        Player player = Bukkit.getPlayer(username);
+	        if (player != null) {
+	            return player.getName();
+	        }
+    	} else {
+    		UUID uuid = UUID.fromString(username);
+    		if(Bukkit.getMaxPlayers() < maxplayersuuid){
+    			return uuid.toString();
+    		} else {
+    			Player player = Bukkit.getPlayer(uuid);
+		        if (player != null) {
+		            return player.getUniqueId().toString();
+		        }
+    		}
+	        
+    	}
         return username;
+    }
+    
+    /**
+     * Gets if a string match to an uuid
+     *
+     * @since 1.4.6
+     * @version 1.4.6
+     *
+     * @return UUID type or not
+     */
+    public boolean isUUID(String test) {
+        try {
+        	UUID.fromString(test);
+        	return true;
+        } catch(Exception e){
+        	return false;
+        }
     }
 
     /**
@@ -285,6 +326,18 @@ public class Playtime extends JavaPlugin {
      */
     public static Playtime getPlugin() {
         return (Playtime) Bukkit.getPluginManager().getPlugin("Playtime");
+    }
+    
+    /**
+     * Returns the used instance of the Playtime Plugin
+     *
+     * @since 1.4.6
+     * @version 1.4.6
+     *
+     * @return The used Playtime plugin instance
+     */
+    public static Playtime getUsedPlugin() {
+        return playtime;
     }
 
     /**
@@ -346,7 +399,7 @@ public class Playtime extends JavaPlugin {
      * @return string with correct chat colors included
      */
     public static String __(String encoded) {
-        return ChatColor.translateAlternateColorCodes('&', "[&e" + Playtime.getPlugin().getDescription().getName() + "&f] &6" + encoded);
+        return ChatColor.translateAlternateColorCodes('&', "[&e" + Playtime.getUsedPlugin().getDescription().getName() + "&f] &6" + encoded);
     }
 
     /**

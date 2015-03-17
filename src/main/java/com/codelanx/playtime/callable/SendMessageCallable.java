@@ -14,10 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.callable;
+package main.java.com.codelanx.playtime.callable;
 
-import static com.codelanx.playtime.Playtime.__;
 import java.util.concurrent.Callable;
+
+import main.java.com.codelanx.playtime.Playtime;
+
 import org.bukkit.Bukkit;
 
 /**
@@ -26,6 +28,7 @@ import org.bukkit.Bukkit;
  * @author 1Rogue
  * @version 1.4.0
  */
+@SuppressWarnings("rawtypes")
 public class SendMessageCallable implements Callable {
 
     private final String player;
@@ -36,8 +39,9 @@ public class SendMessageCallable implements Callable {
         message = messagetext;
     }
 
-    public Object call() {
-        Bukkit.getPlayer(player).sendMessage(__(message));
+    @SuppressWarnings("deprecation")
+	public Object call() {
+        Bukkit.getPlayer(player).sendMessage(Playtime.__(message));
         return null;
     }
 }

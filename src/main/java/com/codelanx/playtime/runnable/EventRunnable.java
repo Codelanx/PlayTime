@@ -14,20 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.runnable;
+package main.java.com.codelanx.playtime.runnable;
 
-import com.codelanx.playtime.Playtime;
-import com.codelanx.playtime.callable.ConsoleCommandCallable;
-import com.codelanx.playtime.callable.SendMessageCallable;
-import com.codelanx.playtime.data.mysql.MySQL;
-import com.codelanx.playtime.data.sqlite.SQLite;
-import com.codelanx.playtime.event.EventHandler;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
+
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.callable.ConsoleCommandCallable;
+import main.java.com.codelanx.playtime.callable.SendMessageCallable;
+import main.java.com.codelanx.playtime.data.mysql.MySQL;
+import main.java.com.codelanx.playtime.data.sqlite.SQLite;
+import main.java.com.codelanx.playtime.event.EventHandler;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -40,12 +43,13 @@ import org.bukkit.entity.Player;
 public class EventRunnable implements Runnable {
 
     private final Playtime plugin;
-    private final String eventName;
-    private final Integer minimum;
-    private final Integer maximum;
-    private final String timer;
-    private final List<String> commands;
-    private final boolean repeat;
+	@SuppressWarnings("unused")
+	private final String eventName;
+	private final Integer minimum;
+	private final Integer maximum;
+	private final String timer;
+	private final List<String> commands;
+	private final boolean repeat;
 
     public EventRunnable(Playtime plugin, String eventName, String timer, Integer minimum, Integer maximum, List<String> commands, boolean repeat) {
         this.plugin = plugin;
@@ -57,13 +61,13 @@ public class EventRunnable implements Runnable {
         this.repeat = repeat;
     }
 
-    public void run() {
-        this.plugin.getLogger().log(Level.SEVERE, "{0} was called, but is disabled!", this.getClass().getSimpleName());
-        /*Map<String, Integer> users;
+    @SuppressWarnings("deprecation")
+	public void run() {
+        Map<String, Integer> users;
         EventHandler event = this.plugin.getEventHandler();
         if (this.repeat) {
             String data = this.plugin.getDataManager().getDataHandler().getName();
-            users = new HashMap();
+            users = new HashMap<String, Integer>();
             if (data.equals("sqlite")) {
                 SQLite db = new SQLite();
                 try {
@@ -117,7 +121,12 @@ public class EventRunnable implements Runnable {
             }
             if (!users.isEmpty()) {
                 for (String user : users.keySet()) {
-                    Player p = Bukkit.getPlayer(user);
+                	Player p;
+                    if(plugin.isUUID(user)){
+                    	p = Bukkit.getPlayer(UUID.fromString(user));
+                    } else {
+                    	p = Bukkit.getPlayer(user);
+                    }
                     if (p.isOnline()) {
                         for (String cmd : this.commands) {
                             if (event.isMessage(cmd.split(" ")[0])) {
@@ -141,7 +150,12 @@ public class EventRunnable implements Runnable {
             users = this.plugin.getDataManager().getDataHandler().getPlayersInRange(this.timer, this.minimum, this.maximum);
             if (!users.isEmpty()) {
                 for (String user : users.keySet()) {
-                    Player p = Bukkit.getPlayer(user);
+                    Player p;
+                    if(plugin.isUUID(user)){
+                    	p = Bukkit.getPlayer(UUID.fromString(user));
+                    } else {
+                    	p = Bukkit.getPlayer(user);
+                    }
                     if (p.isOnline()) {
                         for (String cmd : this.commands) {
                             if (event.isMessage(cmd.split(" ")[0])) {
@@ -162,6 +176,6 @@ public class EventRunnable implements Runnable {
                     }
                 }
             }
-        }*/
+        }
     }
 }

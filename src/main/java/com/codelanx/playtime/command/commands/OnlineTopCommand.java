@@ -14,13 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.command.commands;
+package main.java.com.codelanx.playtime.command.commands;
 
-import com.codelanx.playtime.Playtime;
-import com.codelanx.playtime.command.CommandBase;
-import static com.codelanx.playtime.Playtime.__;
 import java.util.Map;
+
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.command.CommandBase;
+
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -44,7 +46,7 @@ public class OnlineTopCommand implements CommandBase {
         this.plugin = plugin;
     }
 
-    public boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean execute(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         boolean scoreboard = false;
         if (sender instanceof Player) {
             scoreboard = true;
@@ -69,7 +71,7 @@ public class OnlineTopCommand implements CommandBase {
         }
         Map<String, Integer> players = this.plugin.getDataManager().getDataHandler().getTopPlayers("onlinetime", i);
         if (players == null) {
-            sender.sendMessage(__(this.plugin.getCipher().getString("command.commands.onlinetop.disabled-flatfile")));
+            sender.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.onlinetop.disabled-flatfile")));
             return true;
         }
         if (scoreboard) {
@@ -80,12 +82,17 @@ public class OnlineTopCommand implements CommandBase {
             objv.setDisplaySlot(DisplaySlot.SIDEBAR);
             objv.setDisplayName(this.plugin.getCipher().getString("command.commands.onlinetop.title-shown"));
             Score score;
+            int count = 0;
             for (String s : players.keySet()) {
-                score = objv.getScore(Bukkit.getOfflinePlayer(s));
-                score.setScore(players.get(s)/60);
+            	int time = players.get(s);
+            	int hours = time / 60;
+            	int minutes = time % 60;
+                score = objv.getScore(ChatColor.GREEN + s + ": " + ChatColor.GOLD + hours + "h" + minutes + "min");
+                score.setScore(count);
+                count++;
             }
             p.setScoreboard(scoreBoard);
-            p.sendMessage(__(this.plugin.getCipher().getString("command.commands.onlinetop.clear")));
+            p.sendMessage(Playtime.__(this.plugin.getCipher().getString("command.commands.onlinetop.clear")));
             
         } else {
             StringBuilder sb = new StringBuilder(this.plugin.getCipher().getString("command.commands.onlinetop.console-title", i));

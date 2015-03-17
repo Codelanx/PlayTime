@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.data;
+package main.java.com.codelanx.playtime.data;
 
-import com.codelanx.playtime.Playtime;
-import com.codelanx.playtime.data.mysql.Data_MySQL;
-import com.codelanx.playtime.data.sqlite.Data_SQLite;
-import com.codelanx.playtime.runnable.ConvertToRunnable;
-import java.util.logging.Level;
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.data.mysql.Data_MySQL;
+import main.java.com.codelanx.playtime.data.sqlite.Data_SQLite;
+import main.java.com.codelanx.playtime.data.yaml.Data_YAML;
+import main.java.com.codelanx.playtime.runnable.ConvertToRunnable;
 
 /**
  *
@@ -82,11 +82,10 @@ public class DataManager {
         type = type.toLowerCase();
         if (type.equals("mysql")) {
             this.data = new Data_MySQL(this.plugin);
-        } else {
+        } else if (type.equals("sqlite")) {
             this.data = new Data_SQLite(this.plugin);
-        }
-        if (type.equals("flatfile")) {
-            this.plugin.getLogger().log(Level.SEVERE, this.plugin.getCipher().getString("data.manager.no-flat"));
+        } else {
+        	this.data = new Data_YAML(this.plugin);
         }
     }
 

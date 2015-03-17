@@ -14,12 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.codelanx.playtime.runnable;
+package main.java.com.codelanx.playtime.runnable;
 
-import com.codelanx.playtime.Playtime;
-import com.codelanx.playtime.callable.UUIDFetcher;
-import com.codelanx.playtime.data.sqlite.SQLite;
-import java.io.File;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -35,6 +32,11 @@ import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import main.java.com.codelanx.playtime.Playtime;
+import main.java.com.codelanx.playtime.callable.UUIDFetcher;
+import main.java.com.codelanx.playtime.data.sqlite.SQLite;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
@@ -53,7 +55,8 @@ public class UUIDRunnable implements Runnable {
         this.plugin = plugin;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void run() {
         List<String> names = new LinkedList<String>();
         String type = this.plugin.getDataManager().getDataHandler().getName();
@@ -91,7 +94,12 @@ public class UUIDRunnable implements Runnable {
 
         for (Iterator<String> itr = names.iterator(); itr.hasNext();) {
             String name = itr.next();
-            OfflinePlayer p = Bukkit.getOfflinePlayer(name);
+            OfflinePlayer p;
+            if(plugin.isUUID(name)){
+            	p = Bukkit.getPlayer(UUID.fromString(name));
+            } else {
+            	p = Bukkit.getPlayer(name);
+            }
             if (p.hasPlayedBefore()) {
                 converted.put(name, p.getUniqueId());
                 itr.remove();
@@ -152,7 +160,7 @@ public class UUIDRunnable implements Runnable {
         }
     }
 
-    private class MySQL extends com.codelanx.playtime.data.mysql.MySQL {
+    private class MySQL extends main.java.com.codelanx.playtime.data.mysql.MySQL {
 
         public MySQL(Playtime... plugins) {
             super(plugins);
